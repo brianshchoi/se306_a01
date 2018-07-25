@@ -1,6 +1,6 @@
 package app;
 
-public class Main {
+public class CLI {
     public static void main(String[] args) {
         System.out.println("Test commit");
     }
