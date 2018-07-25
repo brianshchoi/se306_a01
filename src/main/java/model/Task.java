@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A Task class represents a node in the task graph.  It is concerned with
+ * packaging up task-relevant information such as the time (weight) of the task,
+ * the task name (e.g. "A", "B") and the parent tasks and children tasks.
+ * Parent tasks are tasks that this task depends on, and children tasks are
+ * tasks that depend on this task.
+ */
 public class Task {
     private Map<Task, Integer> parents = new HashMap<>();
     private Map<Task, Integer> children = new HashMap<>();
@@ -33,7 +40,7 @@ public class Task {
     }
 
     /**
-     * Maps parent task and cost to the parent together
+     * Maps parent task and cost from the parent together
      * @param parent
      * @param cost
      */
@@ -66,14 +73,28 @@ public class Task {
         return this.parents.keySet();
     }
 
+    /**
+     * Given a parent task, retrieve the link cost from that parent task
+     * @param parent
+     * @return
+     */
     public int getParentLinkCost(Task parent) {
         return parents.get(parent);
     }
 
+    /**
+     * Given a child task, retrieve the link cost to that child task
+     * @param child
+     * @return
+     */
     public int getChildLinkCost(Task child) {
         return children.get(child);
     }
 
+    /**
+     * Get name of task
+     * @return
+     */
     @Override
     public String toString() {
         return this.name;
