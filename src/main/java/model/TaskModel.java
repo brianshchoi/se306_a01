@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TaskModel {
-    private TaskModel instance = null;
+    private static TaskModel instance = null;
     private Set<Task> tasks = new HashSet<>();
     private Set<Task> entryTasks = new HashSet<>();
 
     private TaskModel() {}
 
-    public  TaskModel getInstance() {
+    public  static TaskModel getInstance() {
         if (instance == null) {
             instance = new TaskModel();
         }
