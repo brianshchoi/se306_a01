@@ -40,6 +40,10 @@ public class CLI {
         
         // TODO: 25/07/2018 check if list contains "-o" and if so, do same thing as above (lookup indexOf("-o")+1 to get OUTPUT)
 
-        // TODO: 25/07/2018 set outputFilename accordingly if you need to 
+        // TODO: 25/07/2018 set outputFilename accordingly if you need to
+
+        // TODO: 25/07/2018 instantiate FileParser and pass filename into constructor.
+
+        // TODO: 25/07/2018 invoke appropriate method on FileParser object to get TaskModel object.  Store this in local variable
     }
 }
