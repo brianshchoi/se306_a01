@@ -8,16 +8,16 @@ public class Task {
     private Map<Task, Integer> parents = new HashMap<>();
     private Map<Task, Integer> children = new HashMap<>();
 
-    private int time;
+    private int weight;
     private String name;
 
-    public Task(String name, int time) {
+    public Task(String name, int weight) {
         this.name = name;
-        this.time = time;
+        this.weight = weight;
     }
 
-    public int getTime() {
-        return time;
+    public int getWeight() {
+        return weight;
     }
 
     public String getName() {
