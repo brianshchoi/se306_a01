@@ -18,7 +18,7 @@ public class TaskModel {
      * Get singleton instance
      * @return
      */
-    public  static TaskModel getInstance() {
+    public static TaskModel getInstance() {
         if (instance == null) {
             instance = new TaskModel();
         }
