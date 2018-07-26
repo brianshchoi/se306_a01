@@ -8,7 +8,7 @@ import java.util.Map;
 public class Processor {
     private Map<Integer, Task> timeTaskMap = new HashMap<>();
 
-    public int addAtTime(int time) {
+    public int addAtTime(int time, Task task) {
         return 0;
     }
 
