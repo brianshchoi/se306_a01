@@ -2,11 +2,21 @@ package schedule;
 
 import model.Task;
 
-public interface Processor {
+import java.util.HashMap;
+import java.util.Map;
 
-    int addAtTime(int time, Task task);
+public class Processor {
+    private Map<Integer, Task> timeTaskMap = new HashMap<>();
 
-    int getMakespan();
+    public int addAtTime(int time, Task task) {
+        return 0;
+    }
 
-    Task getLatestTask();
+    public int getMakespan() {
+        return 0;
+    }
+
+    public Task getLatestTask() {
+        return null;
+    }
 }
