@@ -2,11 +2,17 @@ package schedule;
 
 import model.Task;
 
-public interface Processor {
+public class Processor {
 
-    int addAtTime(int time);
+    public int addAtTime(int time) {
+        return 0;
+    }
 
-    int getMakespan();
+    public int getMakespan() {
+        return 0;
+    }
 
-    Task getLatestTask();
+    public Task getLatestTask() {
+        return null;
+    }
 }
