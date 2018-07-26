@@ -1,5 +1,6 @@
 package app;
 
+import model.TaskModel;
 import org.apache.commons.cli.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class CLI {
         numOfProcessors = Integer.parseInt(argsList.get(1));
 
         // TODO: 25/07/2018 check if list contains "-v" flag and set boolean field accordingly
-        if (argsList.contains("-v")){
+        if (argsList.contains("-v")) {
             visualisation = true;
         }
 
@@ -60,12 +61,12 @@ public class CLI {
 //                i++;
 //            }
 //        }
-        if (argsList.contains("-p")){
+        if (argsList.contains("-p")) {
             String N = argsList.get(argsList.indexOf("-p") + 1);
             // TODO: 25/07/2018 set algorithmCores appropriately if you need to
-            try{
+            try {
                 algorithmCores = Integer.parseInt(N);
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
@@ -73,21 +74,19 @@ public class CLI {
 
         // TODO: 25/07/2018 check if list contains "-o" and if so, do same thing as above (lookup indexOf("-o")+1 to get OUTPUT)
 
-        if (argsList.contains("-o")){
+        if (argsList.contains("-o")) {
             outputFilename = argsList.get(argsList.indexOf("-o") + 1);
-        }
-        else{
-            outputFilename = inputFilename.replace(".dot","") + "-output.dot";
+        } else {
+            outputFilename = inputFilename.replace(".dot", "") + "-output.dot";
         }
         // TODO: 25/07/2018 instantiate FileParser and pass filename into constructor.
         FileParser fileParser = new FileParser(inputFilename);
-    }
+
 
         // TODO: 25/07/2018 set outputFilename accordingly if you need to
 
 
-
-
         // TODO: 25/07/2018 invoke appropriate method on FileParser object to get TaskModel object.  Store this in local variable
-
+        TaskModel taskModel = fileParser.getTaskModelFromFile();
+    }
 }
