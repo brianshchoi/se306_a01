@@ -24,9 +24,8 @@ public class FileParser {
 
 //    public TaskModel getTaskModelFromFile() throws IOException {
     public void getTaskModelFromFile() {
-        // Read .dot file from file directory
+        BufferedReader br = new BufferedReader(fr);
         try {
-            BufferedReader br = new BufferedReader(fr);
             String currentLine;
 
             // While there is another line, do shit
@@ -41,6 +40,14 @@ public class FileParser {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
         //TODO:  get TaskModelInstance
