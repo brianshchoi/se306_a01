@@ -1,5 +1,6 @@
 package app;
 
+import model.Task;
 import model.TaskModel;
 
 import java.io.*;
@@ -23,7 +24,7 @@ public class FileParser {
     }
 
 //    public TaskModel getTaskModelFromFile() throws IOException {
-    public void getTaskModelFromFile() {
+    public TaskModel getTaskModelFromFile() {
         BufferedReader br = new BufferedReader(fr);
         try {
             String currentLine;
@@ -58,6 +59,7 @@ public class FileParser {
         * Then iterate through the the dependencies and create them by invoking
          * addDependency() on the TaskModel object*/
 //        return null;
+        return null;
     }
 
     /**

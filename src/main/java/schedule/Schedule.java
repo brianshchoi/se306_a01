@@ -8,8 +8,6 @@ public class Schedule {
 
     Map<Integer, Processor> processors;
 
-    Map<>
-
     public int getMakeSpan() {
 
 
