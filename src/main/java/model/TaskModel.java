@@ -1,6 +1,8 @@
 package model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Set;
  * method for creating dependencies.
  */
 public class TaskModel {
-    private Set<Task> tasks = new HashSet<>();
+    private Map<String, Task> tasks = new HashMap<>();
     private Set<Task> entryTasks = new HashSet<>();
 
     /**
@@ -16,8 +18,14 @@ public class TaskModel {
      * @param task
      */
     public void addTask(Task task) {
-        tasks.add(task);
+        tasks.put(task.getName(), task);
         entryTasks.add(task);
+    }
+
+    public Task get(String taskName) {
+        if (!tasks.containsKey(taskName)) throw new TaskNotFoundException();
+
+        return tasks.get(taskName);
     }
 
     /**
@@ -41,6 +49,12 @@ public class TaskModel {
     }
 
     public Set<Task> getTasks() {
-        return tasks;
+        Set<Task> output = new HashSet<>();
+
+        for (Task task: tasks.values()) {
+            output.add(task);
+        }
+
+        return output;
     }
 }
