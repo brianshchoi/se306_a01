@@ -7,16 +7,18 @@ import java.util.Map;
 
 public class Schedule {
 
-    Map<Integer, Processor> processors = new HashMap<>();
+    private Map<Integer, Processor> processors = new HashMap<>();
     public int getMakeSpan() {
+        int max = 0;
+        for (Processor processor: processors.values()) {
+            int current = processor.getMakespan();
+            max = current > max ? current : max;
+        }
 
-
-        return 0;
+        return max;
     }
 
     public void scheduleOnProcessor(int processor, Task task, int scheduleTime) {
-
-
         Processor proc = processors.get(processor);
         proc.addAtTime(scheduleTime, task);
     }
