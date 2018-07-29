@@ -1,6 +1,9 @@
 package app;
 
 import model.TaskModel;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,11 +32,17 @@ public class CLI {
 
     public static void main(String[] args) {
         List<String> argsList = Arrays.asList(args);
+
+        // Get mandatory arguments
         inputFilename = argsList.get(0);
         numOfProcessors = Integer.parseInt(argsList.get(1));
+
+        // Check for visualisation (off by default)
         if (argsList.contains("-v")) {
             visualisation = true;
         }
+
+        // Check for number of cores to run algorithm on (1 by default)
         if (argsList.contains("-p")) {
             String N = argsList.get(argsList.indexOf("-p") + 1);
             try {
@@ -43,13 +52,23 @@ public class CLI {
             }
         }
 
+        // Configure output filename
         if (argsList.contains("-o")) {
             outputFilename = argsList.get(argsList.indexOf("-o") + 1);
         } else {
             outputFilename = inputFilename.replace(".dot", "") + "-output.dot";
         }
 
-        FileParser fileParser = new FileParser(inputFilename);
+
+        // Create file parser
+        FileParser fileParser = null;
+        try {
+            fileParser = new FileParser(new File(System.getProperty("user.dir") + inputFilename));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Parse the file
         TaskModel taskModel = fileParser.getTaskModelFromFile();
     }
 }
