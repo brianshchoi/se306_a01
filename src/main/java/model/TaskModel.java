@@ -4,27 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Singleton class that stores all the tasks and provides
+ * Class that stores all the tasks and provides
  * method for creating dependencies.
  */
 public class TaskModel {
-    private static TaskModel instance = null;
     private Set<Task> tasks = new HashSet<>();
     private Set<Task> entryTasks = new HashSet<>();
-
-    private TaskModel() {}
-
-    /**
-     * Get singleton instance
-     * @return
-     */
-    public static TaskModel getInstance() {
-        if (instance == null) {
-            instance = new TaskModel();
-        }
-
-        return instance;
-    }
 
     /**
      * Add a task to the TaskModel
