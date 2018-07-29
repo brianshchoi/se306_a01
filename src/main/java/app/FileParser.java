@@ -3,20 +3,14 @@ package app;
 import model.TaskModel;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class FileParser {
-    private File file;
-    private FileReader fr;
+    private FileInputStream fileInputStream;
 
-    public FileParser(String filename) {
-        this.file = new File(filename);
-        try {
-            this.fr = new FileReader(this.file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public FileParser(File file) throws FileNotFoundException {
+        fileInputStream = new FileInputStream(file);
     }
 
     public TaskModel getTaskModelFromFile() {

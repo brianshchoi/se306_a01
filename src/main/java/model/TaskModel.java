@@ -54,4 +54,8 @@ public class TaskModel {
     public Set<Task> getEntryTasks() {
         return entryTasks;
     }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
 }
