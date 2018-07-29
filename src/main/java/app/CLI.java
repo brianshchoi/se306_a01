@@ -48,7 +48,7 @@ public class CLI {
         } else {
             outputFilename = inputFilename.replace(".dot", "") + "-output.dot";
         }
-        
+
         FileParser fileParser = new FileParser(inputFilename);
         TaskModel taskModel = fileParser.getTaskModelFromFile();
     }
