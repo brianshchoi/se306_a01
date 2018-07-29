@@ -11,8 +11,6 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    // https://mvnrepository.com/artifact/commons-cli/commons-cli
-    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
-
-
+    // https://mvnrepository.com/artifact/com.paypal.digraph/digraph-parser
+    compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
 }
