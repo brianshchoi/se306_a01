@@ -44,7 +44,7 @@ public class Task {
      * @param parent
      * @param cost
      */
-    public void insertLinkToParent(Task parent, int cost) {
+    void insertLinkToParent(Task parent, int cost) {
         this.parents.put(parent, cost);
     }
 
@@ -53,7 +53,7 @@ public class Task {
      * @param child
      * @param cost
      */
-    public void insertLinkToChild(Task child, int cost) {
+    void insertLinkToChild(Task child, int cost) {
         this.children.put(child, cost);
     }
 
