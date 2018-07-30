@@ -23,6 +23,10 @@ import java.util.List;
  * -o OUTPUT output file is named OUTPUT (default is INPUT-output.dot)
  */
 public class CLI {
+
+    private static int MIN_ARGS = 2;
+    private static int MAX_ARGS = 7;
+
     // Set defaults
     private static boolean visualisation = false;
     private static String outputFilename = null;
@@ -32,6 +36,14 @@ public class CLI {
 
     public static void main(String[] args) {
         List<String> argsList = Arrays.asList(args);
+
+        if (args.length < MIN_ARGS){
+            throw new  IncorrectArgumentsException("Please enter at least 2 arguments");
+        }
+        else if (args.length > MAX_ARGS){
+            throw new IncorrectArgumentsException("There are too many arguments");
+        }
+
 
         // Get mandatory arguments
         inputFilename = argsList.get(0);
