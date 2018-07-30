@@ -1,0 +1,68 @@
+P = list of processors
+B = infinity (bound)
+n = number of tasks
+
+int cTask = -1 (current task)
+int cProc = -1 (current processor)
+int pTask = -1 (previous task)
+int pProc = -1 (previous processor)
+
+Schedule s = new Schedule() //should not have any tasks scheduled but should contain all tasks and processors
+
+freeTasks = getFreeTasks(s)
+
+bestSchedule = null 
+
+int depth = 0 //when depth==n it means a full schedule has been made
+
+
+method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule, B) {
+	if (freeTasks != empty) {
+		for (int i = 0; i < freeTasks.size(), i++) {
+			for (int j = 0; j < s.getProcessors.size(); j++) {
+				depth++
+				if (backtracking) { //if cTask == freeTask.get(i) or cProc==1 and pProc==s.getProcessors.size() it means you're backtracking
+					s.removeTask(freeTasks.get(i)
+				}
+				time = getScheduleTime(freeTask.get(i), s.processor(j), s)
+				s.schedule(freeTask.get(i), s.processor(j), time) //when scheduling task t, it has to be max{max{finishing time of all tasks on different processors + communication cost}, finish time of last task on processor}
+				
+				newfreeTask = getFreeTasks(s)
+				
+				pTask = cTask
+				pProc = cProc
+				cTask = freeTask.get(i)
+				cProc = s.processor(j)
+				if (time(s) <= B && depth == n) {
+					bestSchedule = s
+					B = bestSchedule.getFinishTime()
+				} 
+				if (time(s) <= B && depth < n) {
+					bestSchedule = algorithm(cTask, cProc, pTask, pProc, newfreeTask, depth, s, bestSchedule, B){
+				}
+				depth--
+			}
+		}
+	}
+	return bestSchedule
+}
+
+
+method getScheduleTime(task, processor, schedule) {
+	list parents = task.getParents()
+	maxParent = infinity
+	
+	for (int i = 0; i < parent.size(); i++) {
+		task parent = parents.get(i)
+		if (s.getProcessor(parent) != processor) {
+			time = s.getFinishtime(parent) + parent.getCommunicationCost(task)
+			if (time < maxParent) {
+				maxParent = time
+			}
+		}
+	}
+	
+	processorFinishTime = s.getlast(processor)
+	
+	return max{maxParent,processorFinishTime)
+			
