@@ -2,6 +2,7 @@ package app;
 
 import model.TaskModel;
 
+import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -47,7 +48,11 @@ public class CLI {
 
         // Get mandatory arguments
         inputFilename = argsList.get(0);
-        numOfProcessors = Integer.parseInt(argsList.get(1));
+        try {
+            numOfProcessors = Integer.parseInt(argsList.get(1));
+        } catch (NumberFormatException e){
+            System.out.println("Not a valid integer for the number of processors");
+        }
 
         // Check for visualisation (off by default)
         if (argsList.contains("-v")) {
