@@ -2,7 +2,6 @@ package app;
 
 import model.TaskModel;
 
-import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -38,10 +37,11 @@ public class CLI {
     public static void main(String[] args) {
         List<String> argsList = Arrays.asList(args);
 
-        if (args.length < MIN_ARGS){
+        // Checks that there is a valid number of arguments
+        if (argsList.size() < MIN_ARGS){
             throw new  IncorrectArgumentsException("Please enter at least 2 arguments");
         }
-        else if (args.length > MAX_ARGS){
+        else if (argsList.size() > MAX_ARGS){
             throw new IncorrectArgumentsException("There are too many arguments");
         }
 
@@ -65,7 +65,7 @@ public class CLI {
             try {
                 algorithmCores = Integer.parseInt(N);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                System.out.println("Not a valid integer for the number of algorithm cores");
             }
         }
 
