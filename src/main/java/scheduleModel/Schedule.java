@@ -12,37 +12,37 @@ public interface Schedule {
      * @param processor
      * @param time
      */
-    public void schedule(Task task, Processor processor, int time);
+    void schedule(Task task, Processor processor, int time);
 
     /**
      * Returns time at which task finishes
      * @param task
      * @return
      */
-    public int getFinishTimeOf(Task task);
+    int getFinishTimeOf(Task task);
 
     /**
      * Removes task from schedule
      * @param task
      */
-    public void remove(Task task);
+    void remove(Task task);
 
     /**
      * Gets finish time of schedule
      * @return
      */
-    public int getFinishTime();
+    int getFinishTime();
 
     /**
      * Returns processor task is scheduled on
      * @param task
      * @return
      */
-    public Processor getProcessorOf(Task task);
+    Processor getProcessorOf(Task task);
 
     /**
      * Returns list of all processors
      * @return
      */
-    public List<Processor> getProcessors();
+    List<Processor> getProcessors();
 }
