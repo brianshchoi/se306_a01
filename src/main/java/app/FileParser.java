@@ -3,8 +3,8 @@ package app;
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
 import com.paypal.digraph.parser.GraphParser;
-import model.Task;
-import model.TaskModel;
+import taskModel.Task;
+import taskModel.TaskModel;
 
 import java.io.File;
 import java.io.FileInputStream;

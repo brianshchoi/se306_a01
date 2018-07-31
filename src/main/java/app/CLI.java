@@ -1,6 +1,6 @@
 package app;
 
-import model.TaskModel;
+import taskModel.TaskModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * java -jar scheduler.jar INPUT.dot P [OPTION]
  * INPUT.dot is a task graph with integer weights in dot format
- * P is number of processors to schedule the INPUT graph on
+ * P is number of processors to scheduleModel the INPUT graph on
  *
  * Optional:
  * -p N use N cores for execution in parallel (default is sequential)

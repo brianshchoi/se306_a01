@@ -1,8 +1,8 @@
 package app;
 
-import model.Task;
-import model.TaskModel;
-import model.TaskNotFoundException;
+import taskModel.Task;
+import taskModel.TaskModel;
+import taskModel.TaskNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
