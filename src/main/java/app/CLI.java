@@ -1,5 +1,6 @@
 package app;
 
+import scheduleModel.ISchedule;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -87,5 +88,8 @@ public class CLI {
 
         // Parse the file
         TaskModel taskModel = fileParser.getTaskModelFromFile();
+
+        // Get optimal schedule
+        ISchedule schedule = new Algorithm(taskModel).run();
     }
 }
