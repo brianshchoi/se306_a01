@@ -23,7 +23,7 @@ import java.util.List;
  * -o OUTPUT output file is named OUTPUT (default is INPUT-output.dot)
  */
 public class CLI {
-
+    // Set constants
     private static int MIN_ARGS = 2;
     private static int MAX_ARGS = 7;
 
