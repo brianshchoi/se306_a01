@@ -1,0 +1,23 @@
+
+
+schedulingAlgorithm(currentTask, currentProc, previousTask, previousProc, freeTasks, depth, schedule, bestSchedule, bound) {
+    if there are freeTasks:
+        for each freeTask t:
+            for each Processor p:
+                let previousTask equal currentTask
+                let previousProc equal currentProc
+                let currentTask equal t
+                let currentProc equal p
+                if backtracking then:
+                    remove previousTask from schedule
+                update schedule by scheduling t on p
+                increment depth by 1
+                let newFreeTasks be the new freeTasks according to schedule
+                if the finishing time of schedule is less than bound and depth is equal to the total number of tasks:
+                    let bestSchedule equal schedule
+                    let bound equal the finishing time of bestSchedule
+                if the finishing time of schedule is less than bound and depth is less than the total number of tasks
+                    bestSchedule = schedulingAlgorithm(currentTask, currentProc, previousTask, previousProc, newFreeTasks, depth, schedule, bestSchedule, bound)
+                decrement depth by one
+    return bestSchedule
+}
