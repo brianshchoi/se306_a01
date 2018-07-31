@@ -15,7 +15,6 @@ bestSchedule = null
 
 int depth = 0 //when depth==n it means a full schedule has been made
 
-
 method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule, B) {
 	if (freeTasks != empty) {
 		for (int i = 0; i < freeTasks.size(), i++) {
@@ -24,15 +23,18 @@ method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule,
 				if (backtracking) { //if cTask == freeTask.get(i) or cProc==1 and pProc==s.getProcessors.size() it means you're backtracking
 					s.removeTask(freeTasks.get(i)
 				}
+
+                pTask = cTask
+                pProc = cProc
+                cTask = freeTask.get(i)
+                cProc = s.processor(j)
+
 				time = getScheduleTime(freeTask.get(i), s.processor(j), s)
 				s.schedule(freeTask.get(i), s.processor(j), time) //when scheduling task t, it has to be max{max{finishing time of all tasks on different processors + communication cost}, finish time of last task on processor}
 				
 				newfreeTask = getFreeTasks(s)
 				
-				pTask = cTask
-				pProc = cProc
-				cTask = freeTask.get(i)
-				cProc = s.processor(j)
+
 				if (time(s) <= B && depth == n) {
 					bestSchedule = s
 					B = bestSchedule.getFinishTime()
