@@ -1,9 +1,6 @@
 package taskModel;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class that stores all the tasks and provides
@@ -48,8 +45,8 @@ public class TaskModel {
         return entryTasks;
     }
 
-    public Set<Task> getTasks() {
-        Set<Task> output = new HashSet<>();
+    public List<Task> getTasks() {
+        List<Task> output = new ArrayList<>();
 
         for (Task task: tasks.values()) {
             output.add(task);

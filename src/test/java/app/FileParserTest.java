@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
@@ -42,7 +43,7 @@ public class FileParserTest {
      */
     @Test
     public void testContainsAllEdges() {
-        Set<Task> tasks = taskModel.getTasks();
+        List<Task> tasks = taskModel.getTasks();
         int inEdges = 0;
         int outEdges = 0;
 
