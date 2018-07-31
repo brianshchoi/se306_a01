@@ -2,7 +2,7 @@ package scheduleModel;
 
 import taskModel.Task;
 
-public interface Processor {
+public interface IProcessor {
 
     /**
      * Checks if task is scheduled to this processor
