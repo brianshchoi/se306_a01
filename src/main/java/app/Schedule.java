@@ -58,7 +58,7 @@ public class Schedule implements ISchedule{
         }
 
         if (maxFinishTime == -1){
-            throw new IncorrectArgumentsException("Could not ");
+            throw new IncorrectArgumentsException("Could not find a valid finishing time");
         }
 
         return maxFinishTime;
