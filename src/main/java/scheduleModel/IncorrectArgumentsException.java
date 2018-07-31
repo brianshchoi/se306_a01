@@ -1,4 +1,4 @@
-package app;
+package scheduleModel;
 
 /**
  * This exception is thrown when the user does not enter a valid number of arguments.

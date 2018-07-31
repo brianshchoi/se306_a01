@@ -1,6 +1,7 @@
 package app;
 
 import scheduleModel.ISchedule;
+import scheduleModel.IncorrectArgumentsException;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class CLI {
 
         // Checks that there is a valid number of arguments
         if (argsList.size() < MIN_ARGS){
-            throw new  IncorrectArgumentsException("Please enter at least 2 arguments");
+            throw new IncorrectArgumentsException("Please enter at least 2 arguments");
         }
         else if (argsList.size() > MAX_ARGS){
             throw new IncorrectArgumentsException("There are too many arguments");

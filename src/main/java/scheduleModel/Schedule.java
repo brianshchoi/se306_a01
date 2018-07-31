@@ -1,7 +1,5 @@
-package app;
+package scheduleModel;
 
-import scheduleModel.IProcessor;
-import scheduleModel.ISchedule;
 import taskModel.Task;
 
 import java.util.List;
