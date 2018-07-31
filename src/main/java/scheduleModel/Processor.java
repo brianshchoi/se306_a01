@@ -12,11 +12,7 @@ public class Processor implements IProcessor {
 
     @Override
     public boolean contains(Task task) {
-        if(tasksAtTime.containsValue(task)){
-            return true;
-        } else {
-            return false;
-        }
+        return tasksAtTime.containsValue(task);
     }
 
     @Override
@@ -55,5 +51,4 @@ public class Processor implements IProcessor {
     public void schedule(Task task, int time) {
         tasksAtTime.put(time, task);
     }
-
 }

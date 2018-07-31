@@ -2,14 +2,17 @@ package scheduleModel;
 
 import taskModel.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule implements ISchedule{
 
-    private List<IProcessor> _processors;
+    private List<IProcessor> _processors = new ArrayList<>();
 
-    public Schedule(List<IProcessor> processors) {
-        this._processors = processors;
+    public Schedule(int numOfProcessors) {
+        for (int i = 0; i < numOfProcessors; i++) {
+            _processors.add(new Processor());
+        }
     }
 
     @Override
