@@ -91,6 +91,6 @@ public class CLI {
         TaskModel taskModel = fileParser.getTaskModelFromFile();
 
         // Get optimal schedule
-        ISchedule schedule = new Algorithm(taskModel).run();
+        ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
     }
 }
