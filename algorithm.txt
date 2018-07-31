@@ -3,9 +3,9 @@ B = infinity (bound)
 n = number of tasks
 
 int cTask = -1 (current task)
-int cProc = -1 (current processor)
+int cProc = -1 (current IProcessor)
 int pTask = -1 (previous task)
-int pProc = -1 (previous processor)
+int pProc = -1 (previous IProcessor)
 
 Schedule s = new Schedule() //should not have any tasks scheduled but should contain all tasks and processors
 
@@ -24,15 +24,15 @@ method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule,
 				if (backtracking) { //if cTask == freeTask.get(i) or cProc==1 and pProc==s.getProcessors.size() it means you're backtracking
 					s.removeTask(freeTasks.get(i)) //fix
 				}
-				time = getScheduleTime(freeTask.get(i), s.processor(j), s)
-				s.schedule(freeTask.get(i), s.processor(j), time) //when scheduling task t, it has to be max{max{finishing time of all tasks on different processors + communication cost}, finish time of last task on processor}
+				time = getScheduleTime(freeTask.get(i), s.IProcessor(j), s)
+				s.schedule(freeTask.get(i), s.IProcessor(j), time) //when scheduling task t, it has to be max{max{finishing time of all tasks on different processors + communication cost}, finish time of last task on IProcessor}
 				
 				newfreeTask = getFreeTasks(s)
 				
 				pTask = cTask
 				pProc = cProc
 				cTask = freeTask.get(i)
-				cProc = s.processor(j)
+				cProc = s.IProcessor(j)
 				if (time(s) <= B && depth == n) {
 					bestSchedule = s
 					B = bestSchedule.getFinishTime()
@@ -48,13 +48,13 @@ method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule,
 }
 
 
-method getScheduleTime(task, processor, schedule) {
+method getScheduleTime(task, IProcessor, schedule) {
 	list parents = task.getParents()
 	maxParent = infinity
 	
 	for (int i = 0; i < parent.size(); i++) {
 		task parent = parents.get(i)
-		if (s.getProcessor(parent) != processor) {
+		if (s.getProcessor(parent) != IProcessor) {
 			time = s.getFinishtime(parent) + parent.getCommunicationCost(task)
 			if (time < maxParent) {
 				maxParent = time
@@ -62,7 +62,7 @@ method getScheduleTime(task, processor, schedule) {
 		}
 	}
 	
-	processorFinishTime = s.getlast(processor)
+	processorFinishTime = s.getlast(IProcessor)
 	
 	return max{maxParent,processorFinishTime)
 			

@@ -2,7 +2,7 @@ package scheduleModel;
 
 import taskModel.Task;
 
-public interface Scheduler {
+public interface IScheduler {
 
     /**
      * Removes task from schedule
@@ -11,9 +11,9 @@ public interface Scheduler {
     void remove(Task task);
 
     /**
-     * schedules task on processor
+     * schedules task on IProcessor
      * @param task
-     * @param processor
+     * @param IProcessor
      */
-    void schedule(Task task, Processor processor);
+    void schedule(Task task, IProcessor IProcessor);
 }

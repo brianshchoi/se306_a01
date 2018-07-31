@@ -4,15 +4,15 @@ import taskModel.Task;
 
 import java.util.List;
 
-public interface Schedule {
+public interface ISchedule {
 
     /**
-     * Schedules task to processor, starting from time
+     * Schedules task to IProcessor, starting from time
      * @param task
-     * @param processor
+     * @param IProcessor
      * @param time
      */
-    void schedule(Task task, Processor processor, int time);
+    void schedule(Task task, IProcessor IProcessor, int time);
 
     /**
      * Returns time at which task finishes
@@ -38,11 +38,11 @@ public interface Schedule {
      * @param task
      * @return
      */
-    Processor getProcessorOf(Task task);
+    IProcessor getProcessorOf(Task task);
 
     /**
      * Returns list of all processors
      * @return
      */
-    List<Processor> getProcessors();
+    List<IProcessor> getProcessors();
 }
