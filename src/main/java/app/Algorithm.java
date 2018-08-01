@@ -3,6 +3,7 @@ package app;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import scheduleModel.IScheduler;
+import scheduleModel.Scheduler;
 import taskModel.Task;
 import taskModel.TaskModel;
 
@@ -14,12 +15,17 @@ public class Algorithm {
     private TaskModel taskModel;
     private IScheduler scheduler;
 
-    public Algorithm(TaskModel taskModel, IScheduler scheduler) {
+    public Algorithm(TaskModel taskModel) {
         this.taskModel = taskModel;
-        this.scheduler = scheduler;
+        scheduler = new Scheduler();
     }
 
-    public ISchedule run(Task cTask, IProcessor cProc, Task pTask, IProcessor pProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule, int bound) {
+    public ISchedule run() {
+        // TODO: 1/08/2018 insert initial values into run(....) 
+        return run();
+    }
+
+    private ISchedule run(Task cTask, IProcessor cProc, Task pTask, IProcessor pProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule, int bound) {
         if (!freeTasks.isEmpty()) {
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
@@ -29,10 +35,10 @@ public class Algorithm {
                     cProc = schedule.getProcessors().get(j);
 
                     if (cTask.equals(pTask) || (j == 0 && pProc.equals(schedule.getProcessors().get(schedule.getProcessors().size() - 1)))){
-                        scheduler.remove(pTask);
+                        scheduler.remove(pTask, schedule);
                     }
 
-                    scheduler.schedule(cTask, cProc);
+                    scheduler.schedule(cTask, cProc, schedule);
                     depth++;
 
                     List<Task> newFreeTasks = new ArrayList<>();

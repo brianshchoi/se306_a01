@@ -5,21 +5,16 @@ import taskModel.Task;
 import java.util.*;
 
 public class Scheduler implements IScheduler {
-    private ISchedule schedule;
     private int maxTime = 0;
-
-    public Scheduler(ISchedule schedule) {
-        this.schedule = schedule;
-    }
 
     // Removes a particular task from a schedule
     @Override
-    public void remove(Task task) {
+    public void remove(Task task, ISchedule schedule) {
         schedule.remove(task);
     }
 
     @Override
-    public void schedule(Task task, IProcessor iProcessor) {
+    public void schedule(Task task, IProcessor iProcessor, ISchedule schedule) {
         List<Task> parentsList = new ArrayList<>(task.getParents());
         List<IProcessor> processorList = schedule.getProcessors();
 
