@@ -3,7 +3,9 @@ package scheduleModel;
 import taskModel.Task;
 import taskModel.TaskNotFoundException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Processor implements IProcessor {
@@ -50,5 +52,11 @@ public class Processor implements IProcessor {
     @Override
     public void schedule(Task task, int time) {
         tasksAtTime.put(time, task);
+    }
+
+    @Override
+    public List<Task> getTasks(){
+        List<Task> listOfTasks = new ArrayList<>(tasksAtTime.values());
+        return listOfTasks;
     }
 }

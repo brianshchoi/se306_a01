@@ -45,4 +45,10 @@ public interface ISchedule {
      * @return
      */
     List<IProcessor> getProcessors();
+
+    /**
+     * Returns list of all tasks which have been scheduled
+     * @return
+     */
+    List<Task> getTasks();
 }

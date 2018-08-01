@@ -80,4 +80,16 @@ public class Schedule implements ISchedule{
     public List<IProcessor> getProcessors() {
         return this._processors;
     }
+
+    @Override
+    public List<Task> getTasks() {
+        List<Task> tasks = new ArrayList<>();
+
+        //get all tasks that have been scheduled in each processor
+        for (int i =0; i < _processors.size(); i++){
+            IProcessor processor = _processors.get(i);
+            tasks.addAll(processor.getTasks());
+        }
+        return tasks;
+    }
 }

@@ -2,6 +2,8 @@ package scheduleModel;
 
 import taskModel.Task;
 
+import java.util.List;
+
 public interface IProcessor {
 
     /**
@@ -36,4 +38,10 @@ public interface IProcessor {
      * @param time
      */
     void schedule(Task task, int time);
+
+    /**
+     * Returns all tasks that have been scheduled on the processor
+     * @return
+     */
+    List<Task> getTasks();
 }
