@@ -1,6 +1,7 @@
 package app;
 
 import scheduleModel.ISchedule;
+import scheduleModel.IncorrectArgumentsException;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -24,7 +25,7 @@ import java.util.List;
  * -o OUTPUT output file is named OUTPUT (default is INPUT-output.dot)
  */
 public class CLI {
-
+    // Set constants
     private static int MIN_ARGS = 2;
     private static int MAX_ARGS = 7;
 
@@ -40,7 +41,7 @@ public class CLI {
 
         // Checks that there is a valid number of arguments
         if (argsList.size() < MIN_ARGS){
-            throw new  IncorrectArgumentsException("Please enter at least 2 arguments");
+            throw new IncorrectArgumentsException("Please enter at least 2 arguments");
         }
         else if (argsList.size() > MAX_ARGS){
             throw new IncorrectArgumentsException("There are too many arguments");
@@ -90,6 +91,6 @@ public class CLI {
         TaskModel taskModel = fileParser.getTaskModelFromFile();
 
         // Get optimal schedule
-        ISchedule schedule = new Algorithm(taskModel).run();
+        ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
     }
 }

@@ -9,10 +9,10 @@ public interface ISchedule {
     /**
      * Schedules task to IProcessor, starting from time
      * @param task
-     * @param IProcessor
+     * @param processor
      * @param time
      */
-    void schedule(Task task, IProcessor IProcessor, int time);
+    void schedule(Task task, IProcessor processor, int time);
 
     /**
      * Returns time at which task finishes
