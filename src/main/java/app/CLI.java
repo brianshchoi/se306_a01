@@ -2,6 +2,7 @@ package app;
 
 import scheduleModel.ISchedule;
 import scheduleModel.IncorrectArgumentsException;
+import scheduleModel.Schedule;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -91,6 +92,6 @@ public class CLI {
         TaskModel taskModel = fileParser.getTaskModelFromFile();
 
         // Get optimal schedule
-        ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
+        ISchedule schedule = new Algorithm(taskModel).run();
     }
 }
