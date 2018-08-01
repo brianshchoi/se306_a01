@@ -1,9 +1,6 @@
 package app;
 
-import scheduleModel.IProcessor;
-import scheduleModel.ISchedule;
-import scheduleModel.IScheduler;
-import scheduleModel.Scheduler;
+import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
 
@@ -14,35 +11,45 @@ public class Algorithm {
 
     private TaskModel taskModel;
     private IScheduler scheduler;
+    private int numOfProcessors;
 
-    public Algorithm(TaskModel taskModel) {
+    public Algorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
+        this.numOfProcessors = numOfProcessors;
         scheduler = new Scheduler();
     }
 
     public ISchedule run() {
-        // TODO: 1/08/2018 insert initial values into run(....) 
-        return run();
+        int cTask = -1;
+        int cProc = -1;
+        int bound = Integer.MAX_VALUE;
+        int depth = 0;
+        Schedule schedule = new Schedule(numOfProcessors);
+        Schedule bestSchedule = null;
+        List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
+
+        return run(cTask, cProc, freeTasks, depth, schedule, bestSchedule, bound);
     }
 
-    private ISchedule run(Task cTask, IProcessor cProc, Task pTask, IProcessor pProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule, int bound) {
+    private ISchedule run(int cTask, int cProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule, int bound) {
         if (!freeTasks.isEmpty()) {
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
-                    pTask = cTask;
-                    pProc = cProc;
-                    cTask = freeTasks.get(i);
-                    cProc = schedule.getProcessors().get(j);
+                    int pTask = cTask;
+                    int pProc = cProc;
 
-                    if (cTask.equals(pTask) || (j == 0 && pProc.equals(schedule.getProcessors().get(schedule.getProcessors().size() - 1)))){
-                        scheduler.remove(pTask, schedule);
+                    cTask = i;
+                    cProc = j;
+
+                    //if backtracking, remove the most recently scheduled task
+                    if ((cTask == pTask) || ((cProc == 0) && (pProc == schedule.getProcessors().size() - 1))){
+                        scheduler.remove(freeTasks.get(pTask), schedule);
                     }
 
-                    scheduler.schedule(cTask, cProc, schedule);
+                    scheduler.schedule(freeTasks.get(cTask), schedule.getProcessors().get(cProc), schedule);
                     depth++;
 
-                    List<Task> newFreeTasks = new ArrayList<>();
-                    //somehow update newFreeTasks
+                    List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
@@ -50,7 +57,7 @@ public class Algorithm {
                             bestSchedule = schedule;
                             bound = bestSchedule.getFinishTime();
                         } else if (depth < numTasks) {
-                            bestSchedule = run(cTask, cProc, pTask, pProc, newFreeTasks, depth, schedule, bestSchedule, bound);
+                            bestSchedule = run(cTask, cProc, newFreeTasks, depth, schedule, bestSchedule, bound);
                         }
                     }
                     depth--;
@@ -58,5 +65,24 @@ public class Algorithm {
             }
         }
         return bestSchedule;
+    }
+
+    private List<Task> getFreeTasks(ISchedule schedule, List<Task> allTasks){
+        List<Task> newFreeTasks = new ArrayList<>();
+
+        List<Task> scheduledTasks = schedule.getTasks();
+
+        List<Task> unscheduledTasks = allTasks;
+        unscheduledTasks.removeAll(scheduledTasks);
+
+        //check if each unscheduled task's dependencies have been satisfied
+        for (int k = 0; k < unscheduledTasks.size(); k++){
+            Task task = unscheduledTasks.get(k);
+            if (scheduledTasks.containsAll(task.getParents())){
+                newFreeTasks.add(task);
+            }
+        }
+
+        return newFreeTasks;
     }
 }
