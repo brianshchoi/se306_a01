@@ -13,6 +13,11 @@ public class SchedulerTest {
     private Schedule schedule;
 
     private Task tZero;
+    private Task tOne;
+    private Task tTwo;
+    private Task tThree;
+    private Task tFour;
+
 
 
     @Before
@@ -21,10 +26,10 @@ public class SchedulerTest {
 
         // Create nodes
         tZero = new Task("0", 4);
-        Task tOne = new Task("1", 2);
-        Task tTwo = new Task("2", 2);
-        Task tThree = new Task("3", 2);
-        Task tFour = new Task("4", 5);
+        tOne = new Task("1", 2);
+        tTwo = new Task("2", 2);
+        tThree = new Task("3", 2);
+        tFour = new Task("4", 5);
         Task tFive = new Task("5", 5);
         Task tSix = new Task("6", 10);
 
@@ -59,6 +64,38 @@ public class SchedulerTest {
         IProcessor processor = schedule.getProcessors().get(0);
         scheduler.schedule(tZero, processor, schedule);
         assertEquals(0, scheduler.getMaxTime());
+    }
+
+    @Test
+    public void testScheduleMiddleBeforeOverlap() {
+
+        IProcessor processor0 = schedule.getProcessors().get(0);
+        IProcessor processor1 = schedule.getProcessors().get(1);
+
+        processor0.schedule(tZero,0);
+        processor0.schedule(tOne,4);
+        processor1.schedule(tTwo, 5);
+
+        scheduler.schedule(tFour, processor1, schedule);
+        assertEquals(7, scheduler.getMaxTime());
+
+    }
+
+    @Test
+    public void testScheduleMiddleAfterOverlap() {
+
+        IProcessor processor0 = schedule.getProcessors().get(0);
+        IProcessor processor1 = schedule.getProcessors().get(1);
+
+        processor0.schedule(tZero,0);
+        processor0.schedule(tOne,4);
+        processor0.schedule(tThree, 6);
+        processor1.schedule(tTwo, 5);
+
+
+        scheduler.schedule(tFour, processor1, schedule);
+        assertEquals(7, scheduler.getMaxTime());
+
     }
 
 }
