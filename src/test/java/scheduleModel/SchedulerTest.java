@@ -10,6 +10,9 @@ import static org.junit.Assert.*;
 public class SchedulerTest {
 
     private IScheduler scheduler;
+    private Schedule schedule;
+
+    private Task tZero;
 
 
     @Before
@@ -17,7 +20,7 @@ public class SchedulerTest {
         TaskModel taskModel = new TaskModel();
 
         // Create nodes
-        Task tZero = new Task("0", 4);
+        tZero = new Task("0", 4);
         Task tOne = new Task("1", 2);
         Task tTwo = new Task("2", 2);
         Task tThree = new Task("3", 2);
@@ -43,11 +46,19 @@ public class SchedulerTest {
         taskModel.addDependency(tThree, tFive, 3);
         taskModel.addDependency(tFive, tSix, 5);
         taskModel.addDependency(tFour, tSix, 4);
+
+        schedule = new Schedule(2);
+
+        scheduler = new Scheduler();
+
     }
 
     @Test
-    public void testSchedule() {
+    public void testScheduleEntryNode() {
 
+        IProcessor processor = schedule.getProcessors().get(0);
+        scheduler.schedule(tZero, processor, schedule);
+        assertEquals(0, scheduler.getMaxTime());
     }
 
 }
