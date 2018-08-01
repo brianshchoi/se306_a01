@@ -15,16 +15,21 @@ public class Scheduler implements IScheduler {
 
     @Override
     public void schedule(Task task, IProcessor iProcessor, ISchedule schedule) {
-        List<Task> parentsList = new ArrayList<>(task.getParents());
-        List<IProcessor> processorList = schedule.getProcessors();
+        if (task.getParents().isEmpty()) {
+            maxTime = 0;
+        } else {
+            List<Task> parentsList = new ArrayList<>(task.getParents());
+            List<IProcessor> processorList = schedule.getProcessors();
 
-        // Loops through to find the processor that each parent belongs to
-        for (Task parentTask : parentsList){
-            for (IProcessor parentProcessor : processorList){
-                if (parentProcessor.contains(parentTask)){
-                    getTime(parentTask,task, parentProcessor, iProcessor);
+            // Loops through to find the processor that each parent belongs to
+            for (Task parentTask : parentsList) {
+                for (IProcessor parentProcessor : processorList) {
+                    if (parentProcessor.contains(parentTask)) {
+                        getTime(parentTask, task, parentProcessor, iProcessor);
+                    }
                 }
             }
+
         }
     }
 

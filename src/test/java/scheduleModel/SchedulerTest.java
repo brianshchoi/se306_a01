@@ -1,6 +1,7 @@
 package scheduleModel;
 
 import org.junit.Before;
+import org.junit.Test;
 import taskModel.Task;
 import taskModel.TaskModel;
 
@@ -42,6 +43,11 @@ public class SchedulerTest {
         taskModel.addDependency(tThree, tFive, 3);
         taskModel.addDependency(tFive, tSix, 5);
         taskModel.addDependency(tFour, tSix, 4);
+    }
+
+    @Test
+    public void testSchedule() {
+
     }
 
 }
