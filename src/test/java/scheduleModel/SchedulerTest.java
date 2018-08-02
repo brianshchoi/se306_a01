@@ -62,25 +62,23 @@ public class SchedulerTest {
 
         scheduler = new Scheduler();
 
+        // Add processors to the schedule
         processor0 = schedule.getProcessors().get(0);
         processor1 = schedule.getProcessors().get(1);
 
     }
-    
+
+    // Checks that entry tasks are scheduled correctly at the start of a processor.
     @Test
     public void testEntryTaskFinishTime() {
 
         scheduler.schedule(tZero, processor0, schedule);
+        assertTrue(processor0.contains(tZero));
         assertEquals(4,processor0.getFinishTime());
         assertEquals(4, processor0.getFinishTimeOf(tZero));
     }
 
-    @Test
-    public void testProcessorContainsEntryTask(){
-        scheduler.schedule(tZero, processor0, schedule);
-        assertTrue(processor0.contains(tZero));
-    }
-
+    // Checks that the entry task is removed correctly, and there are no other tasks in the processor.
     @Test
     public void testProcessorRemoveEntryTask(){
         scheduler.schedule(tZero, processor0, schedule);
@@ -88,6 +86,8 @@ public class SchedulerTest {
         assertTrue(processor0.getTasks().isEmpty());
     }
 
+    // Checks that when a centre task is scheduled on more than one processor (with no tasks overlapping said task on another processor)
+    // that it is scheduled at the correct time.
     @Test
     public void testCentreTaskNoOverlap() {
 
@@ -98,6 +98,8 @@ public class SchedulerTest {
         assertEquals(12, processor1.getFinishTime());
     }
 
+    // Checks that when a centre task is scheduled on more than one processor (with other tasks overlapping said task on another processor)
+    // that it is scheduled at the correct time.
     @Test
     public void testCentreTaskOverlap() {
         scheduler.schedule(tZero,processor0,schedule);
@@ -108,6 +110,8 @@ public class SchedulerTest {
         assertEquals(12, processor1.getFinishTime());
     }
 
+
+    //Possible redundant test (testCentreTaskOverlap)
     @Test
     public void testCentreTaskOverlapReverse(){
         scheduler.schedule(tZero,processor0,schedule);
@@ -118,6 +122,7 @@ public class SchedulerTest {
         assertEquals(12, processor1.getFinishTime());
     }
 
+    // Checks that when the last scheduled task on a processor needs to be removed, it is removed from the processor.
     @Test
     public void testRemoveLastScheduledTask(){
         scheduler.schedule(tZero,processor0,schedule);
@@ -127,6 +132,7 @@ public class SchedulerTest {
         assertFalse(processor0.contains(tThree));
     }
 
+    // Checks that when a centre task needs to be removed, an exception is thrown and does not allow that task to be removed.
     @Test
     public void testRemoveCentreTask(){
         scheduler.schedule(tZero,processor0,schedule);
