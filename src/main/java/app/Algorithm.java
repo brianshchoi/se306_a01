@@ -46,6 +46,7 @@ public class Algorithm {
                         scheduler.remove(freeTasks.get(pTask), schedule);
                     }
 
+                    //nothing is getting scheduled
                     scheduler.schedule(freeTasks.get(cTask), schedule.getProcessors().get(cProc), schedule);
                     depth++;
 
