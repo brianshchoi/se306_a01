@@ -19,6 +19,8 @@ public class SchedulerTest {
     private Task tTwo;
     private Task tThree;
     private Task tFour;
+    private Task tFive;
+    private Task tSix;
 
     private IProcessor processor0;
     private IProcessor processor1;
@@ -35,8 +37,8 @@ public class SchedulerTest {
         tTwo = new Task("2", 2);
         tThree = new Task("3", 2);
         tFour = new Task("4", 5);
-        Task tFive = new Task("5", 5);
-        Task tSix = new Task("6", 10);
+        tFive = new Task("5", 5);
+        tSix = new Task("6", 10);
 
         // Add nodes to the task model
         taskModel.addTask(tZero);
@@ -66,6 +68,12 @@ public class SchedulerTest {
         processor0 = schedule.getProcessors().get(0);
         processor1 = schedule.getProcessors().get(1);
 
+    }
+
+    // Checks that first task will get allocated at time 0.
+    @Test
+    public void testZeroTaskAllocated() {
+        assertEquals(0, processor0.getFinishTime());
     }
 
     // Checks that entry tasks are scheduled correctly at the start of a processor.
@@ -148,5 +156,33 @@ public class SchedulerTest {
 
         //Should still contain the task since it wasn't the last one scheduled.
         assertEquals(true ,processor0.contains(tOne));
+    }
+
+    // Checks whether it returns correct time for processor0 with complete model
+    @Test
+    public void testLastNodeProcessor0() {
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.schedule(tFour, processor1, schedule);
+        scheduler.schedule(tFive, processor0, schedule);
+        scheduler.schedule(tSix, processor0, schedule);
+
+        assertEquals(26, processor0.getFinishTime());
+    }
+
+    // Checks whether it returns correct value for in processor1 with complete model
+    @Test
+    public void testLastNodeProcessor1() {
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.schedule(tFour, processor1, schedule);
+        scheduler.schedule(tFive, processor0, schedule);
+        scheduler.schedule(tSix, processor0, schedule);
+
+        assertEquals(12, processor1.getFinishTime());
     }
 }
