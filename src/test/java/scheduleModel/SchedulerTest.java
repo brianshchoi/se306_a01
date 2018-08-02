@@ -44,8 +44,9 @@ public class SchedulerTest {
 
         // Add dependencies to the task model
         taskModel.addDependency(tZero, tOne, 1);
-        taskModel.addDependency(tZero, tThree, 3);
         taskModel.addDependency(tZero, tTwo, 1);
+        taskModel.addDependency(tZero, tThree, 3);
+
         taskModel.addDependency(tOne, tFour, 1);
         taskModel.addDependency(tTwo, tFour, 2);
         taskModel.addDependency(tThree, tFive, 3);
@@ -83,35 +84,54 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testScheduleMiddleBeforeOverlap() {
+    public void testCentreNodeBeforeOverlap() {
 
         IProcessor processor0 = schedule.getProcessors().get(0);
         IProcessor processor1 = schedule.getProcessors().get(1);
 
-        processor0.schedule(tZero,0);
-        processor0.schedule(tOne,4);
-        processor1.schedule(tTwo, 5);
-
+        scheduler.schedule(tZero,processor0,schedule);
+        assertEquals(4, processor0.getFinishTime());
+        scheduler.schedule(tOne, processor0, schedule);
+        assertEquals(6, processor0.getFinishTime());
+        scheduler.schedule(tTwo, processor1, schedule);
+        assertEquals(7, processor1.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
- //       assertEquals(7, scheduler.getMaxTime());
-
+        assertEquals(12, processor1.getFinishTime());
     }
 
     @Test
-    public void testScheduleMiddleAfterOverlap() {
+    public void testMiddleNodeAfterOverlap() {
 
         IProcessor processor0 = schedule.getProcessors().get(0);
         IProcessor processor1 = schedule.getProcessors().get(1);
 
-        processor0.schedule(tZero,0);
-        processor0.schedule(tOne,4);
-        processor0.schedule(tThree, 6);
-        processor1.schedule(tTwo, 5);
-
-
+        scheduler.schedule(tZero,processor0,schedule);
+        assertEquals(4, processor0.getFinishTime());
+        scheduler.schedule(tOne, processor0, schedule);
+        assertEquals(6, processor0.getFinishTime());
+        scheduler.schedule(tTwo, processor1, schedule);
+        assertEquals(7, processor1.getFinishTime());
+        scheduler.schedule(tThree, processor0, schedule);
+        assertEquals(8, processor0.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
-  //      assertEquals(7, scheduler.getMaxTime());
+        assertEquals(12, processor1.getFinishTime());
+    }
 
+    @Test
+    public void testMiddleNodeAfterOverlapReverse(){
+        IProcessor processor0 = schedule.getProcessors().get(0);
+        IProcessor processor1 = schedule.getProcessors().get(1);
+
+        scheduler.schedule(tZero,processor0,schedule);
+        assertEquals(4, processor0.getFinishTime());
+        scheduler.schedule(tOne, processor0, schedule);
+        assertEquals(6, processor0.getFinishTime());
+        scheduler.schedule(tThree, processor0, schedule);
+        assertEquals(8, processor0.getFinishTime());
+        scheduler.schedule(tTwo, processor1, schedule);
+        assertEquals(7, processor1.getFinishTime());
+        scheduler.schedule(tFour, processor1, schedule);
+        assertEquals(12, processor1.getFinishTime());
     }
 
 }

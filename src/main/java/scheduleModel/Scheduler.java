@@ -26,7 +26,8 @@ public class Scheduler implements IScheduler {
             for (Task parentTask : parentsList) {
                 IProcessor parentProcessor = schedule.getProcessorOf(parentTask);
                 if (!parentProcessor.equals(iProcessor)) {
-                    int parentTime = schedule.getFinishTime() + parentTask.getChildLinkCost(task);
+                    //int parentTime = schedule.getFinishTime() + parentTask.getChildLinkCost(task);
+                    int parentTime = schedule.getFinishTimeOf(parentTask) + parentTask.getChildLinkCost(task);
                     if (parentTime > maxTime){
                         maxTime = parentTime;
                     }
