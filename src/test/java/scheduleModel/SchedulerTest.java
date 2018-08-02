@@ -66,9 +66,9 @@ public class SchedulerTest {
         processor1 = schedule.getProcessors().get(1);
 
     }
-
+    
     @Test
-    public void testEntryNodeFinishTime() {
+    public void testEntryTaskFinishTime() {
 
         scheduler.schedule(tZero, processor0, schedule);
         assertEquals(4,processor0.getFinishTime());
@@ -76,20 +76,20 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testProcessorContainsEntryNode(){
+    public void testProcessorContainsEntryTask(){
         scheduler.schedule(tZero, processor0, schedule);
         assertTrue(processor0.contains(tZero));
     }
 
     @Test
-    public void testProcessorRemoveEntryNode(){
+    public void testProcessorRemoveEntryTask(){
         scheduler.schedule(tZero, processor0, schedule);
         scheduler.remove(tZero,schedule);
         assertTrue(processor0.getTasks().isEmpty());
     }
 
     @Test
-    public void testCentreNodeNoOverlap() {
+    public void testCentreTaskNoOverlap() {
 
         scheduler.schedule(tZero,processor0,schedule);
         scheduler.schedule(tOne, processor0, schedule);
@@ -99,7 +99,7 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testCentreNodeOverlap() {
+    public void testCentreTaskOverlap() {
         scheduler.schedule(tZero,processor0,schedule);
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tTwo, processor1, schedule);
@@ -109,7 +109,7 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testCentreNodeOverlapReverse(){
+    public void testCentreTaskOverlapReverse(){
         scheduler.schedule(tZero,processor0,schedule);
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tThree, processor0, schedule);
@@ -119,7 +119,7 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testRemoveLastScheduledNode(){
+    public void testRemoveLastScheduledTask(){
         scheduler.schedule(tZero,processor0,schedule);
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tThree, processor0, schedule);
@@ -128,7 +128,7 @@ public class SchedulerTest {
     }
 
     @Test
-    public void testRemoveCentreNode(){
+    public void testRemoveCentreTask(){
         scheduler.schedule(tZero,processor0,schedule);
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tTwo, processor1, schedule);
