@@ -21,11 +21,13 @@ public class Processor implements IProcessor {
     //you can't edit a list while iterating through it
     @Override
     public void remove(Task task) {
-        for (int k : tasksAtTime.keySet()){
-            if (tasksAtTime.get(k).equals(task)){
-                tasksAtTime.remove(k);
+        Integer key = -1;
+        for (Map.Entry<Integer, Task> entry : tasksAtTime.entrySet()){
+            if (task.equals(entry.getValue())){
+                key = entry.getKey();
             }
         }
+        tasksAtTime.remove(key);
     }
 
     @Override
