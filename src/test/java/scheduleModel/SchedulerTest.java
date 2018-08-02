@@ -112,7 +112,6 @@ public class SchedulerTest {
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tThree, processor0, schedule);
         scheduler.schedule(tTwo, processor1, schedule);
-        assertEquals(7, processor1.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
         assertEquals(12, processor1.getFinishTime());
     }
