@@ -18,6 +18,9 @@ public class SchedulerTest {
     private Task tThree;
     private Task tFour;
 
+    private IProcessor processor0;
+    private IProcessor processor1;
+
 
 
     @Before
@@ -57,81 +60,70 @@ public class SchedulerTest {
 
         scheduler = new Scheduler();
 
+        processor0 = schedule.getProcessors().get(0);
+        processor1 = schedule.getProcessors().get(1);
+
     }
 
     @Test
     public void testEntryNodeFinishTime() {
 
-        IProcessor processor = schedule.getProcessors().get(0);
-        scheduler.schedule(tZero, processor, schedule);
-        assertEquals(4,processor.getFinishTime());
-        assertEquals(4, processor.getFinishTimeOf(tZero));
+        scheduler.schedule(tZero, processor0, schedule);
+        assertEquals(4,processor0.getFinishTime());
+        assertEquals(4, processor0.getFinishTimeOf(tZero));
     }
 
     @Test
     public void testProcessorContainsEntryNode(){
-        IProcessor processor = schedule.getProcessors().get(0);
-        scheduler.schedule(tZero, processor, schedule);
-        assertTrue(processor.contains(tZero));
+        scheduler.schedule(tZero, processor0, schedule);
+        assertTrue(processor0.contains(tZero));
     }
 
     @Test
     public void testProcessorRemoveEntryNode(){
-        IProcessor processor = schedule.getProcessors().get(0);
-        scheduler.schedule(tZero, processor, schedule);
+        scheduler.schedule(tZero, processor0, schedule);
         scheduler.remove(tZero,schedule);
-        assertTrue(processor.getTasks().isEmpty());
+        assertTrue(processor0.getTasks().isEmpty());
     }
 
     @Test
-    public void testCentreNodeBeforeOverlap() {
-
-        IProcessor processor0 = schedule.getProcessors().get(0);
-        IProcessor processor1 = schedule.getProcessors().get(1);
+    public void testCentreNodeNoOverlap() {
 
         scheduler.schedule(tZero,processor0,schedule);
-        assertEquals(4, processor0.getFinishTime());
         scheduler.schedule(tOne, processor0, schedule);
-        assertEquals(6, processor0.getFinishTime());
         scheduler.schedule(tTwo, processor1, schedule);
-        assertEquals(7, processor1.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
         assertEquals(12, processor1.getFinishTime());
     }
 
     @Test
-    public void testMiddleNodeAfterOverlap() {
-
-        IProcessor processor0 = schedule.getProcessors().get(0);
-        IProcessor processor1 = schedule.getProcessors().get(1);
-
+    public void testCentreNodeOverlap() {
         scheduler.schedule(tZero,processor0,schedule);
-        assertEquals(4, processor0.getFinishTime());
         scheduler.schedule(tOne, processor0, schedule);
-        assertEquals(6, processor0.getFinishTime());
         scheduler.schedule(tTwo, processor1, schedule);
-        assertEquals(7, processor1.getFinishTime());
         scheduler.schedule(tThree, processor0, schedule);
-        assertEquals(8, processor0.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
         assertEquals(12, processor1.getFinishTime());
     }
 
     @Test
-    public void testMiddleNodeAfterOverlapReverse(){
-        IProcessor processor0 = schedule.getProcessors().get(0);
-        IProcessor processor1 = schedule.getProcessors().get(1);
-
+    public void testCentreNodeOverlapReverse(){
         scheduler.schedule(tZero,processor0,schedule);
-        assertEquals(4, processor0.getFinishTime());
         scheduler.schedule(tOne, processor0, schedule);
-        assertEquals(6, processor0.getFinishTime());
         scheduler.schedule(tThree, processor0, schedule);
-        assertEquals(8, processor0.getFinishTime());
         scheduler.schedule(tTwo, processor1, schedule);
         assertEquals(7, processor1.getFinishTime());
         scheduler.schedule(tFour, processor1, schedule);
         assertEquals(12, processor1.getFinishTime());
+    }
+
+    @Test
+    public void testRemoveLastScheduledNode(){
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.remove(tThree, schedule);
+        assertFalse(processor0.contains(tThree));
     }
 
 }
