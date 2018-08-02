@@ -13,6 +13,8 @@ public class Algorithm {
     private IScheduler scheduler;
     private int numOfProcessors;
 
+    private int bound = Integer.MAX_VALUE;
+
     public Algorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
         this.numOfProcessors = numOfProcessors;
@@ -20,34 +22,35 @@ public class Algorithm {
     }
 
     public ISchedule run() {
-        int cTask = -1;
-        int cProc = -1;
-        int bound = Integer.MAX_VALUE;
+        Task cTask = null;
+        IProcessor cProc = null;
         int depth = 0;
         Schedule schedule = new Schedule(numOfProcessors);
         Schedule bestSchedule = null;
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
-        return run(cTask, cProc, freeTasks, depth, schedule, bestSchedule, bound);
+        return run(cTask, cProc, freeTasks, depth, schedule, bestSchedule);
     }
 
-    private ISchedule run(int cTask, int cProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule, int bound) {
+    private ISchedule run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule, ISchedule bestSchedule) {
+        boolean backtracking = false;
         if (!freeTasks.isEmpty()) {
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
-                    int pTask = cTask;
-                    int pProc = cProc;
+                    Task pTask = cTask;
+                    IProcessor pProc = cProc;
 
-                    cTask = i;
-                    cProc = j;
+                    cTask = freeTasks.get(i);
+                    cProc = schedule.getProcessors().get(j);
 
                     //if backtracking, remove the most recently scheduled task
-                    if ((cTask == pTask) || ((cProc == 0) && (pProc == schedule.getProcessors().size() - 1))){
-                        scheduler.remove(freeTasks.get(pTask), schedule);
+
+                    if (backtracking){
+                        scheduler.remove(cTask, schedule);
+                        backtracking = false;
                     }
 
-                    //nothing is getting scheduled
-                    scheduler.schedule(freeTasks.get(cTask), schedule.getProcessors().get(cProc), schedule);
+                    scheduler.schedule(cTask, cProc, schedule);
                     depth++;
 
                     List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
@@ -58,10 +61,12 @@ public class Algorithm {
                             bestSchedule = schedule;
                             bound = bestSchedule.getFinishTime();
                         } else if (depth < numTasks) {
-                            bestSchedule = run(cTask, cProc, newFreeTasks, depth, schedule, bestSchedule, bound);
+                            bestSchedule = run(cTask, cProc, newFreeTasks, depth, schedule, bestSchedule);
                         }
                     }
+                    System.out.println(bound);
                     depth--;
+                    backtracking = true;
                 }
             }
         }

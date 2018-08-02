@@ -17,6 +17,8 @@ public class Processor implements IProcessor {
         return tasksAtTime.containsValue(task);
     }
 
+    //will throw concurrentModificationException
+    //you can't edit a list while iterating through it
     @Override
     public void remove(Task task) {
         for (int k : tasksAtTime.keySet()){
@@ -28,6 +30,10 @@ public class Processor implements IProcessor {
 
     @Override
     public int getFinishTime() {
+        //accounts for when processor is empty
+        if(tasksAtTime.isEmpty()){
+            return 0;
+        }
         // assuming Map may not be in order
         int max = 0;
         for (int k : tasksAtTime.keySet()){

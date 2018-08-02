@@ -5,7 +5,6 @@ import taskModel.Task;
 import java.util.*;
 
 public class Scheduler implements IScheduler {
-    private int maxTime = 0;
 
     // Removes a particular task from a schedule
     @Override
@@ -15,50 +14,25 @@ public class Scheduler implements IScheduler {
 
     @Override
     public void schedule(Task task, IProcessor iProcessor, ISchedule schedule) {
+        int maxTime = 0;
         if (task.getParents().isEmpty()) {
-            maxTime = 0;
+            schedule.schedule(task, iProcessor, maxTime);
         } else {
-            List<Task> parentsList = new ArrayList<>(task.getParents());
-            List<IProcessor> processorList = schedule.getProcessors();
+            maxTime = iProcessor.getFinishTime();
 
-            // Loops through to find the processor that each parent belongs to
+            List<Task> parentsList = new ArrayList<>(task.getParents());
+
+            // Loops through each parent and checks it's finish time
             for (Task parentTask : parentsList) {
-                for (IProcessor parentProcessor : processorList) {
-                    if (parentProcessor.contains(parentTask)) {
-                        getTime(parentTask, task, parentProcessor, iProcessor);
+                IProcessor parentProcessor = schedule.getProcessorOf(parentTask);
+                if (!parentProcessor.equals(iProcessor)) {
+                    int parentTime = schedule.getFinishTime() + parentTask.getChildLinkCost(task);
+                    if (parentTime > maxTime){
+                        maxTime = parentTime;
                     }
                 }
             }
-
+            schedule.schedule(task, iProcessor, maxTime);
         }
-    }
-
-    /**
-     * Find the latest time you can schedule a particular task
-     *
-     * Checks if the parent task is in the same processor as the child.
-     * Makes sure that the parent is the final task scheduled on that particular processor before obtaining the finish time.
-     * If the parent task is not on the same processor as the child, then consider the communication costs
-     *
-     * @param parent
-     * @param child
-     * @param parentProcessor
-     * @param childProcessor
-     */
-    private void getTime(Task parent, Task child, IProcessor parentProcessor, IProcessor childProcessor){
-        if (parentProcessor.equals(childProcessor) && (parentProcessor.getFinishTimeOf(parent) == (parentProcessor.getFinishTime()))){
-            if (parentProcessor.getFinishTime() > maxTime){
-                maxTime = parentProcessor.getFinishTime();
-            }
-        }
-        else if (!parentProcessor.equals(childProcessor) && (parentProcessor.getFinishTimeOf(parent) == (parentProcessor.getFinishTime()))){
-            if ((parentProcessor.getFinishTime()+child.getParentLinkCost(parent)) > maxTime){
-                maxTime = parentProcessor.getFinishTime();
-            }
-        }
-    }
-
-    public int getMaxTime() {
-        return maxTime;
     }
 }
