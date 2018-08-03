@@ -42,9 +42,11 @@ public class ScheduleValidator {
          Compare the two sets*/
 
         // Putting entry set into String set
-        Set<Task> entryTasks = model.getEntryTasks();
+
+        // Set<Task> entryTasks = model.getEntryTasks();
+        List<Task> allTasks = model.getTasks();
         Set<String> entryTaskSet = new HashSet<>();
-        for(Task t : entryTasks) {
+        for(Task t : allTasks) {
             entryTaskSet.add(t.getName());
         }
 
