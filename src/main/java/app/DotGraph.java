@@ -27,8 +27,8 @@ public class DotGraph {
 
     // This method generates the optimal schedule digraph in DOT syntax
     public void render(){
-        final StringBuffer output = new StringBuffer();
-        output.append(DotRenderer.openGraph("outputExample"));
+        final StringBuilder output = new StringBuilder();
+        output.append(DotRenderer.openGraph(_title));
 
         // Iterate through all tasks
         for (Task task: _taskModel.getTasks()){
