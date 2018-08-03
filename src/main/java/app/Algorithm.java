@@ -22,7 +22,7 @@ public class Algorithm {
         scheduler = new Scheduler();
     }
 
-    public ISchedule run() {
+    public ISchedule run() throws CloneNotSupportedException {
         Task cTask = null;
         IProcessor cProc = null;
         int depth = 0;
@@ -35,9 +35,9 @@ public class Algorithm {
         return bestSchedule;
     }
 
-    private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) {
-        boolean backtracking = false;
+    private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) throws CloneNotSupportedException {
         if (!freeTasks.isEmpty()) {
+            List<Task> scheduledTasks = schedule.getTasks();
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
                     Task pTask = cTask;
@@ -46,12 +46,11 @@ public class Algorithm {
                     cTask = freeTasks.get(i);
                     cProc = schedule.getProcessors().get(j);
 
-                    //if backtracking, remove the most recently scheduled task
-                    //error, sometimes you need to remove more than one task
-                    if (pProc != null) {
-                        if (backtracking || (j == 0 && pProc.equals(schedule.getProcessors().get(schedule.getProcessors().size() - 1)))) {
-                            scheduler.remove(cTask, schedule);
-                            backtracking = false;
+                    List<Task> tasks = schedule.getTasks();
+
+                    for (Task task : tasks) {
+                        if (!scheduledTasks.contains(task)){
+                            schedule.remove(task);
                         }
                     }
 
@@ -63,15 +62,16 @@ public class Algorithm {
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) {
-                            bestSchedule = schedule;
+                            bestSchedule = (ISchedule) ((Schedule) schedule).clone();
                             bound = bestSchedule.getFinishTime();
+//                            System.out.println(bound);
                         } else if (depth < numTasks) {
                             run(cTask, cProc, newFreeTasks, depth, schedule);
                         }
                     }
-                    System.out.println(bound);
                     depth--;
-                    backtracking = true;
+//                    System.out.println("best schedule " + bestSchedule.getFinishTime());
+//                    System.out.println("schedule " + schedule.getFinishTime());
                 }
             }
         }

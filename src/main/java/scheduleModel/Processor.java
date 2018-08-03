@@ -3,14 +3,22 @@ package scheduleModel;
 import taskModel.Task;
 import taskModel.TaskNotFoundException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Processor implements IProcessor {
+public class Processor implements IProcessor, Cloneable {
 
-    private Map<Integer, Task> tasksAtTime = new HashMap<>();
+    private Map<Integer, Task> tasksAtTime = new TreeMap<>();
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Processor processor = new Processor();
+
+        for (Map.Entry<Integer, Task> entry: tasksAtTime.entrySet()) {
+            processor.tasksAtTime.put(entry.getKey(), entry.getValue());
+        }
+
+        return processor;
+    }
 
     @Override
     public boolean contains(Task task) {
@@ -52,6 +60,16 @@ public class Processor implements IProcessor {
         for (int k : tasksAtTime.keySet()){
             if (tasksAtTime.get(k).equals(task)){
                 return k + task.getWeight();
+            }
+        }
+        throw new TaskNotFoundException();
+    }
+
+    @Override
+    public int getStartTimeOf(Task task) {
+        for (int k : tasksAtTime.keySet()){
+            if (tasksAtTime.get(k).equals(task)){
+                return k;
             }
         }
         throw new TaskNotFoundException();

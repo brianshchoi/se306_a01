@@ -1,8 +1,7 @@
 package app;
 
-import scheduleModel.ISchedule;
-import scheduleModel.IncorrectArgumentsException;
-import scheduleModel.Schedule;
+
+import scheduleModel.*;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -37,7 +36,7 @@ public class CLI {
     private static int algorithmCores = 1;
     private static String inputFilename = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         List<String> argsList = Arrays.asList(args);
 
         // Checks that there is a valid number of arguments
@@ -93,6 +92,6 @@ public class CLI {
 
         // Get optimal schedule
         ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
-        new ScheduleValidator(schedule).validate(taskModel); // Check validity
+        schedule.debug();
     }
 }

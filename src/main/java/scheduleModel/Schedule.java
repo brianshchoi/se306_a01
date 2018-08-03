@@ -5,14 +5,29 @@ import taskModel.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Schedule implements ISchedule{
+public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
+    private int _numOfProcessors;
 
     public Schedule(int numOfProcessors) {
+        _numOfProcessors = numOfProcessors;
         for (int i = 0; i < numOfProcessors; i++) {
             _processors.add(new Processor());
         }
+    }
+
+    private Schedule() {} // for cloning
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Schedule schedule = new Schedule();
+
+        for (IProcessor processor: _processors) {
+            schedule._processors.add((IProcessor) ((Processor) processor).clone());
+        }
+
+        return schedule;
     }
 
     @Override
@@ -25,6 +40,17 @@ public class Schedule implements ISchedule{
         for (IProcessor p : this._processors) {
             if (p.contains(task)) {
                 return p.getFinishTimeOf(task);
+            }
+        }
+
+        throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
+    }
+
+    @Override
+    public int getStartTimeOf(Task task) {
+        for (IProcessor p : this._processors) {
+            if (p.contains(task)) {
+                return p.getStartTimeOf(task);
             }
         }
 
@@ -91,5 +117,28 @@ public class Schedule implements ISchedule{
             tasks.addAll(processor.getTasks());
         }
         return tasks;
+    }
+
+    @Override
+    public boolean contains(Task task) {
+
+        for (IProcessor processor: _processors) {
+            if (processor.contains(task)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void debug() {
+        int i = 0;
+        for (IProcessor processor: _processors) {
+            System.out.println("On processor " + i + ":");
+            for (Task task: processor.getTasks()) {
+                System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
+                    + "finishes at time " + processor.getFinishTimeOf(task));
+            }
+            i++;
+        }
     }
 }
