@@ -11,11 +11,6 @@ public class ScheduleValidator {
     }
 
     public void validate() {
-
-        if (true) { // Check some condition
-            return; // Dodge the throw
-        }
-
-        throw new InvalidScheduleException("{Reason why invalid}");
+        // TODO: 3/08/2018 plan here  
     }
 }
