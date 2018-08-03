@@ -93,5 +93,6 @@ public class CLI {
 
         // Get optimal schedule
         ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
+        new ScheduleValidator(schedule).validate(); // Check validity
     }
 }
