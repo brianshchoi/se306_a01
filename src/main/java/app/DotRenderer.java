@@ -1,5 +1,6 @@
 package app;
 
+import scheduleModel.IProcessor;
 import taskModel.Task;
 
 public class DotRenderer {
@@ -12,17 +13,17 @@ public class DotRenderer {
     }
 
     public static String openGraph(String title) {
-        final StringBuffer sb = new StringBuffer();
-        sb.append("digraph ");
+        final StringBuilder sb = new StringBuilder();
+        sb.append("digraph \"");
         sb.append(title);
-        sb.append(" {");
+        sb.append("\" {");
         sb.append(NEWLINE);
 
         return sb.toString();
     }
 
-    public static String addNode(Task task, int startTime, int processor){
-        final StringBuffer sb = new StringBuffer();
+    public static String addNode(Task task, int startTime, IProcessor processor){
+        final StringBuilder sb = new StringBuilder();
         sb.append(TAB);
         sb.append(task.getName());
         sb.append(TAB);
@@ -31,7 +32,7 @@ public class DotRenderer {
         sb.append(",Start=");
         sb.append(startTime);
         sb.append(",Processor=");
-        sb.append(processor);
+        sb.append(processor.toString());
         sb.append("];");
         sb.append(NEWLINE);
 
@@ -39,7 +40,7 @@ public class DotRenderer {
     }
 
     public static String addDependency(Task parent, Task child){
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(TAB);
         sb.append(parent.getName());
         sb.append(" -> ");
@@ -55,7 +56,7 @@ public class DotRenderer {
 
 
     public static String closeGraph(){
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("}");
 
         return sb.toString();

@@ -49,29 +49,8 @@ public class FileParser {
     // TODO: remove static modifier
     // TODO: maybe need to add a field for graph name in TaskModel??
     private static void writeScheduleToFile(ISchedule schedule, TaskModel taskModel) {
-        DotGraph graph = new DotGraph("man");
-
-        List<Task> tasks = taskModel.getTasks();
-
-//        for (Task task: tasks){
-//            int startTime = schedule.getFinishTimeOf(task) - task.getWeight();
-//            String processor = schedule.getProcessorOf(task).toString();
-//
-//            graph.getTitle();
-//            // Add current task
-//            digraph.addNode(task.getName()).setLabel(Integer.toString(task.getWeight()));
-//
-//            // Dependency Check
-//            if (task.getChildren().size() > 0){
-//                for(Task child : task.getChildren()){
-//                    digraph.addAssociation(task.getName(), child.getName()).setLabel(
-//                            Integer.toString(task.getChildLinkCost(child)));
-//                }
-//            }
-
-//        }
-        // Render file at the end
-//        graph.render();
+        DotGraph graph = new DotGraph("man", schedule, taskModel);
+        graph.render();
     }
 
     //Temporary testing method
