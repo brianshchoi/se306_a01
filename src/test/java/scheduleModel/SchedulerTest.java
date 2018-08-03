@@ -5,6 +5,8 @@ import org.junit.Test;
 import taskModel.Task;
 import taskModel.TaskModel;
 
+import java.security.spec.ECField;
+
 import static org.junit.Assert.*;
 
 public class SchedulerTest {
@@ -145,10 +147,12 @@ public class SchedulerTest {
         scheduler.schedule(tOne, processor0, schedule);
         scheduler.schedule(tTwo, processor1, schedule);
         scheduler.schedule(tFour, processor1, schedule);
-        try {
-            scheduler.remove(tTwo, schedule);
-            fail();
-        } catch (IncorrectArgumentsException e) {}
+       // try {
+            scheduler.remove(tOne, schedule);
+      //  }
+      //  catch {
+
+      //  }
 
         //Should still contain the task since it wasn't the last one scheduled.
         assertEquals(true ,processor0.contains(tOne));
