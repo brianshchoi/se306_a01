@@ -135,7 +135,8 @@ public class Schedule implements ISchedule, Cloneable {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + i + ":");
             for (Task task: processor.getTasks()) {
-                System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task));
+                System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
+                    + "finishes at time " + processor.getFinishTimeOf(task));
             }
             i++;
         }
