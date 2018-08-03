@@ -32,6 +32,8 @@ public interface IProcessor {
      */
     int getFinishTimeOf(Task task);
 
+    int getStartTimeOf(Task task);
+
     /**
      * schedules task on processor at time
      * @param task
