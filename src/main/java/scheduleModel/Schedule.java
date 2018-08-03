@@ -47,6 +47,17 @@ public class Schedule implements ISchedule, Cloneable {
     }
 
     @Override
+    public int getStartTimeOf(Task task) {
+        for (IProcessor p : this._processors) {
+            if (p.contains(task)) {
+                return p.getStartTimeOf(task);
+            }
+        }
+
+        throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
+    }
+
+    @Override
     public void remove(Task task) {
         boolean taskRemoved = false;
 
@@ -124,7 +135,7 @@ public class Schedule implements ISchedule, Cloneable {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + i + ":");
             for (Task task: processor.getTasks()) {
-                System.out.println("Task " + task.getName() + " finishes at time " + processor.getFinishTimeOf(task));
+                System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task));
             }
             i++;
         }
