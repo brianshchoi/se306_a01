@@ -13,8 +13,8 @@ public class Algorithm {
     private IScheduler scheduler;
     private int numOfProcessors;
 
-    private int bound = Integer.MAX_VALUE;
-    private ISchedule bestSchedule;
+    private int bound = Integer.MAX_VALUE; //stores current best finish time
+    private ISchedule bestSchedule; //stores current best schedule
 
     public Algorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
@@ -23,66 +23,63 @@ public class Algorithm {
     }
 
     public ISchedule run() throws CloneNotSupportedException {
-        Task cTask = null;
-        IProcessor cProc = null;
-        int depth = 0;
+
+        int depth = 0; //stores depth of schedule
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
-        List<Task> scheduledTasks = new ArrayList<>();
 
-        run(cTask, cProc, freeTasks, depth, schedule);
+        run(freeTasks, depth, schedule);
 
         return bestSchedule;
     }
 
-    private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) throws CloneNotSupportedException {
+    private void run(List<Task> freeTasks, int depth, ISchedule schedule) throws CloneNotSupportedException {
         if (!freeTasks.isEmpty()) {
-            List<Task> scheduledTasks = schedule.getTasks();
+            List<Task> scheduledTasks = schedule.getTasks(); //Store which tasks should be scheduled at each level
+
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
-                    Task pTask = cTask;
-                    IProcessor pProc = cProc;
 
-                    cTask = freeTasks.get(i);
-                    cProc = schedule.getProcessors().get(j);
-
+                    //Remove extra tasks from schedule when backtracking
                     List<Task> tasks = schedule.getTasks();
-
                     for (Task task : tasks) {
                         if (!scheduledTasks.contains(task)){
                             schedule.remove(task);
                         }
                     }
 
+                    //schedule task
+                    Task cTask = freeTasks.get(i);
+                    IProcessor cProc = schedule.getProcessors().get(j);
                     scheduler.schedule(cTask, cProc, schedule);
+
                     depth++;
 
+                    //set new list of free tasks
                     List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
-                        if (depth == numTasks) {
+
+                        if (depth == numTasks) { //update the best schedule
                             bestSchedule = (ISchedule) ((Schedule) schedule).clone();
                             bound = bestSchedule.getFinishTime();
-//                            System.out.println(bound);
-                        } else if (depth < numTasks) {
-                            run(cTask, cProc, newFreeTasks, depth, schedule);
+                        } else if (depth < numTasks) { //keep building the schedule
+                            run(newFreeTasks, depth, schedule);
                         }
                     }
+                    //start backtracking
                     depth--;
-//                    System.out.println("best schedule " + bestSchedule.getFinishTime());
-//                    System.out.println("schedule " + schedule.getFinishTime());
                 }
             }
         }
-       // return bestSchedule;
     }
 
     private List<Task> getFreeTasks(ISchedule schedule, List<Task> allTasks){
         List<Task> newFreeTasks = new ArrayList<>();
 
+        //create list of tasks which haven't been scheduled yet
         List<Task> scheduledTasks = schedule.getTasks();
-
         List<Task> unscheduledTasks = allTasks;
         unscheduledTasks.removeAll(scheduledTasks);
 
@@ -93,7 +90,6 @@ public class Algorithm {
                 newFreeTasks.add(task);
             }
         }
-
         return newFreeTasks;
     }
 }
