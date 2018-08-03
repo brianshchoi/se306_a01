@@ -2,7 +2,6 @@ package app;
 
 import scheduleModel.ISchedule;
 import scheduleModel.IncorrectArgumentsException;
-import scheduleModel.Schedule;
 import taskModel.TaskModel;
 
 import java.io.File;

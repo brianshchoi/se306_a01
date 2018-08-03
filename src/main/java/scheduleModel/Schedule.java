@@ -37,6 +37,7 @@ public class Schedule implements ISchedule{
 
         for (IProcessor p : this._processors) {
             if (p.contains(task)) {
+                if (p.getFinishTime() != p.getFinishTimeOf(task)) throw new IncorrectArgumentsException("Cannot remove centre task");
                 p.remove(task);
                 taskRemoved = true;
                 break;
