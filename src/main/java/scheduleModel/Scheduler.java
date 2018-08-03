@@ -15,24 +15,21 @@ public class Scheduler implements IScheduler {
     @Override
     public void schedule(Task task, IProcessor iProcessor, ISchedule schedule) {
         int maxTime = 0;
-        if (task.getParents().isEmpty()) {
-            schedule.schedule(task, iProcessor, maxTime);
-        } else {
-            maxTime = iProcessor.getFinishTime();
+        maxTime = iProcessor.getFinishTime();
 
-            List<Task> parentsList = new ArrayList<>(task.getParents());
+        List<Task> parentsList = new ArrayList<>(task.getParents());
 
-            // Loops through each parent and checks it's finish time
-            for (Task parentTask : parentsList) {
-                IProcessor parentProcessor = schedule.getProcessorOf(parentTask);
-                if (!parentProcessor.equals(iProcessor)) {
-                    int parentTime = schedule.getFinishTimeOf(parentTask) + parentTask.getChildLinkCost(task);
-                    if (parentTime > maxTime){
-                        maxTime = parentTime;
-                    }
+        // Loops through each parent and checks it's finish time
+        for (Task parentTask : parentsList) {
+            IProcessor parentProcessor = schedule.getProcessorOf(parentTask);
+            if (!parentProcessor.equals(iProcessor)) {
+                int parentTime = schedule.getFinishTimeOf(parentTask) + parentTask.getChildLinkCost(task);
+                if (parentTime > maxTime) {
+                    maxTime = parentTime;
                 }
             }
-            schedule.schedule(task, iProcessor, maxTime);
         }
+        schedule.schedule(task, iProcessor, maxTime);
+
     }
 }
