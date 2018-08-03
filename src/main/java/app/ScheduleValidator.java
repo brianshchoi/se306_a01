@@ -20,7 +20,6 @@ public class ScheduleValidator {
     }
 
     public void validate(TaskModel model) {
-        // TODO: 3/08/2018 plan here
         // This validation is done on fully completed schedule
 
         // ********We need one more input: full task model in order to compare**********
@@ -43,11 +42,10 @@ public class ScheduleValidator {
 
         // Putting entry set into String set
 
-        // Set<Task> entryTasks = model.getEntryTasks();
         List<Task> allTasks = model.getTasks();
-        Set<String> entryTaskSet = new HashSet<>();
+        Set<String> allTaskSet = new HashSet<>();
         for(Task t : allTasks) {
-            entryTaskSet.add(t.getName());
+            allTaskSet.add(t.getName());
         }
 
         // Get list of all tasks in string set
@@ -64,7 +62,7 @@ public class ScheduleValidator {
             scheduledTaskSet.add(t.getName());
         }
 
-        if(!entryTaskSet.equals(scheduledTaskSet)){
+        if(!allTaskSet.equals(scheduledTaskSet)){
             throw new InvalidScheduleException("Invalid tasks scheduled (Duplicate tasks or not all tasks scheduled");
         }
 
