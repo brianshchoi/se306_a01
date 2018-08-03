@@ -18,7 +18,8 @@ int depth = 0 //when depth==n it means a full schedule has been made
 
 method: algorithm(cTask, cProc, pTask, pProc, freeTasks, depth, s, bestSchedule, B) {
 	if (freeTasks != empty) {
-		for (int i = 0; i < freeTasks.size(), i++) {
+		for (int i = 0; i < freeTasks.size(), i++) { //
+		    scheduledTasks equals schedule.getTasks
 			for (int j = 0; j < s.getProcessors.size(); j++) {
 				depth++
 				if (backtracking) { //if cTask == freeTask.get(i) or cProc==1 and pProc==s.getProcessors.size() it means you're backtracking

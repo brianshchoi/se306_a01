@@ -36,8 +36,8 @@ public class Algorithm {
     }
 
     private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) {
-        boolean backtracking = false;
         if (!freeTasks.isEmpty()) {
+            List<Task> scheduledTasks = schedule.getTasks();
             for (int i = 0; i < freeTasks.size(); i++){
                 for (int j = 0; j < schedule.getProcessors().size(); j++) {
                     Task pTask = cTask;
@@ -46,14 +46,15 @@ public class Algorithm {
                     cTask = freeTasks.get(i);
                     cProc = schedule.getProcessors().get(j);
 
-                    //if backtracking, remove the most recently scheduled task
-                    //error, sometimes you need to remove more than one task
-                    if (pProc != null) {
-                        if (backtracking || (j == 0 && pProc.equals(schedule.getProcessors().get(schedule.getProcessors().size() - 1)))) {
-                            scheduler.remove(cTask, schedule);
-                            backtracking = false;
+                    List<Task> tasks = schedule.getTasks();
+
+                    for (Task task : tasks) {
+                        if (!scheduledTasks.contains(task)){
+                            schedule.remove(task);
                         }
                     }
+
+
 
                     scheduler.schedule(cTask, cProc, schedule);
                     depth++;
@@ -71,7 +72,6 @@ public class Algorithm {
                     }
                     System.out.println(bound);
                     depth--;
-                    backtracking = true;
                 }
             }
         }
