@@ -95,10 +95,14 @@ public class CLI {
 
         // Get optimal schedule
         ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
+
+        int i = 0;
         for (IProcessor processor: schedule.getProcessors()) {
+            System.out.println("Processor " + i + ":");
             for (Task task: processor.getTasks()) {
-                System.out.println(processor.getFinishTimeOf(task));
+                System.out.println("Task " + task.getName() + " finishes at " + processor.getFinishTimeOf(task));
             }
+            i++;
         }
     }
 }
