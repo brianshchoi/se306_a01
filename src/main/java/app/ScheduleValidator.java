@@ -63,41 +63,42 @@ public class ScheduleValidator {
         }
 
         if(!entryTaskSet.equals(scheduledTaskSet)){
-            // throw exception
+            throw new InvalidScheduleException("Invalid tasks scheduled (Duplicate tasks or not all tasks scheduled");
         }
 
         /*## Task scheduled before time 0: #3*/
         for (int i = 0; i < processorList.size(); i++) {
-            List<Task> processor = processorList.get(i).getTasks();
-            for(Task t : processor) {
-                if(processorList.get(i).getStartTimeOf(t)<0){
-                    // throw exception
+            List<Task> listOfTasks = processorList.get(i).getTasks();
+            for(Task t : listOfTasks) {
+                if(processorList.get(i).getStartTimeOf(t) < 0){
+                    throw new InvalidScheduleException("Task scheduled before time 0");
                 }
             }
         }
 
         /*## overlapping schedule in a single processor: #2
         For each processor
-        Make a new array with size very last finish time and initialise the all index as 0 first
+        Make a new array with size equal to finish time of processor
+        Initialise the all elements in array with 0
         Loop through all tasks in the map
-        and for each task add 1 to the corresponding array index element
-        check if the completed array contains any index with number higher than 1*/
+        and for each task add 1 to the corresponding array element
+        check if the completed array contains any index with number greater than 1*/
         for (int i = 0; i < processorList.size(); i++) {
             // if out of bounds exception plus one the array. I cant count
             int [] fill = new int[processorList.get(i).getFinishTime()];
-            List<Task> processor = processorList.get(i).getTasks();
-            for(Task t : processor) {
+            List<Task> listOfTasks = processorList.get(i).getTasks();
+            for(Task t : listOfTasks) {
                 int startTime = processorList.get(i).getStartTimeOf(t);
 
                 // Maybe have to + or - 1 in the condition. I cant count
-                for(int use = startTime; use < startTime+ t.getWeight(); use++ ){
+                for(int use = startTime; use < startTime + t.getWeight(); use++ ){
                     fill[use]++;
                 }
             }
             // Check if the fill array has anything more than 1. I cant count
             for(int j = 0; j < fill.length; j++){
                 if(fill[j] > 1){
-                    // Throw exception
+                    throw new InvalidScheduleException("Overlapping tasks");
                 }
             }
 
@@ -110,7 +111,7 @@ public class ScheduleValidator {
 
         for (Task t: scheduledTasks) {
             if(!t.getParents().isEmpty()) {
-                int start =0;
+                int start = 0;
                 for (int i = 0; i < processorList.size(); i++) {
                     if (processorList.get(i).contains(t)) {
                         start = processorList.get(i).getStartTimeOf(t);
@@ -124,7 +125,7 @@ public class ScheduleValidator {
                         if (processorList.get(i).contains(p)) {
                             parentFin = processorList.get(i).getFinishTimeOf(p);
                             if(start < parentFin){
-                                // throw exception
+                                throw new InvalidScheduleException("Parent task is not scheduled before child task");
                             }
                         }
                     }
