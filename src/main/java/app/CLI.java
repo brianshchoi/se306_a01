@@ -1,8 +1,10 @@
 package app;
 
+import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import scheduleModel.IncorrectArgumentsException;
 import scheduleModel.Schedule;
+import taskModel.Task;
 import taskModel.TaskModel;
 
 import java.io.File;
@@ -93,5 +95,10 @@ public class CLI {
 
         // Get optimal schedule
         ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
+        for (IProcessor processor: schedule.getProcessors()) {
+            for (Task task: processor.getTasks()) {
+                System.out.println(processor.getFinishTimeOf(task));
+            }
+        }
     }
 }
