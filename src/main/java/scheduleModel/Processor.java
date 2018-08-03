@@ -8,9 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Processor implements IProcessor {
+public class Processor implements IProcessor, Cloneable {
 
     private Map<Integer, Task> tasksAtTime = new HashMap<>();
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     @Override
     public boolean contains(Task task) {

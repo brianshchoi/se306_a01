@@ -37,7 +37,7 @@ public class CLI {
     private static int algorithmCores = 1;
     private static String inputFilename = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         List<String> argsList = Arrays.asList(args);
 
         // Checks that there is a valid number of arguments

@@ -5,14 +5,29 @@ import taskModel.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Schedule implements ISchedule{
+public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
+    private int _numOfProcessors;
 
     public Schedule(int numOfProcessors) {
+        _numOfProcessors = numOfProcessors;
         for (int i = 0; i < numOfProcessors; i++) {
             _processors.add(new Processor());
         }
+    }
+
+    private Schedule() {} // for cloning
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Schedule schedule = new Schedule();
+
+        for (IProcessor processor: _processors) {
+            schedule._processors.add((IProcessor) ((Processor) processor).clone());
+        }
+
+        return schedule;
     }
 
     @Override
