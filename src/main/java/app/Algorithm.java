@@ -22,7 +22,7 @@ public class Algorithm {
         scheduler = new Scheduler();
     }
 
-    public ISchedule run() {
+    public ISchedule run() throws CloneNotSupportedException {
         Task cTask = null;
         IProcessor cProc = null;
         int depth = 0;
@@ -35,7 +35,7 @@ public class Algorithm {
         return bestSchedule;
     }
 
-    private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) {
+    private void run(Task cTask, IProcessor cProc, List<Task> freeTasks, int depth, ISchedule schedule) throws CloneNotSupportedException {
         if (!freeTasks.isEmpty()) {
             List<Task> scheduledTasks = schedule.getTasks();
             for (int i = 0; i < freeTasks.size(); i++){
@@ -54,8 +54,6 @@ public class Algorithm {
                         }
                     }
 
-
-
                     scheduler.schedule(cTask, cProc, schedule);
                     depth++;
 
@@ -64,14 +62,16 @@ public class Algorithm {
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) {
-                            bestSchedule = schedule;
+                            bestSchedule = (ISchedule) ((Schedule) schedule).clone();
                             bound = bestSchedule.getFinishTime();
+//                            System.out.println(bound);
                         } else if (depth < numTasks) {
                             run(cTask, cProc, newFreeTasks, depth, schedule);
                         }
                     }
-                    System.out.println(bound);
                     depth--;
+//                    System.out.println("best schedule " + bestSchedule.getFinishTime());
+//                    System.out.println("schedule " + schedule.getFinishTime());
                 }
             }
         }
