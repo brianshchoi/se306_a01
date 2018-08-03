@@ -107,4 +107,26 @@ public class Schedule implements ISchedule, Cloneable {
         }
         return tasks;
     }
+
+    @Override
+    public boolean contains(Task task) {
+
+        for (IProcessor processor: _processors) {
+            if (processor.contains(task)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void debug() {
+        int i = 0;
+        for (IProcessor processor: _processors) {
+            System.out.println("On processor " + i + ":");
+            for (Task task: processor.getTasks()) {
+                System.out.println("Task " + task.getName() + " finishes at time " + processor.getFinishTimeOf(task));
+            }
+            i++;
+        }
+    }
 }

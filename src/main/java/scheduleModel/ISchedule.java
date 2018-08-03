@@ -51,4 +51,8 @@ public interface ISchedule {
      * @return
      */
     List<Task> getTasks();
+
+    boolean contains(Task task);
+
+    void debug();
 }

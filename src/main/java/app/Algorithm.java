@@ -54,8 +54,6 @@ public class Algorithm {
                         }
                     }
 
-
-
                     scheduler.schedule(cTask, cProc, schedule);
                     depth++;
 
@@ -66,12 +64,14 @@ public class Algorithm {
                         if (depth == numTasks) {
                             bestSchedule = (ISchedule) ((Schedule) schedule).clone();
                             bound = bestSchedule.getFinishTime();
+//                            System.out.println(bound);
                         } else if (depth < numTasks) {
                             run(cTask, cProc, newFreeTasks, depth, schedule);
                         }
                     }
-                    System.out.println(bestSchedule.getFinishTime());
                     depth--;
+//                    System.out.println("best schedule " + bestSchedule.getFinishTime());
+//                    System.out.println("schedule " + schedule.getFinishTime());
                 }
             }
         }

@@ -14,7 +14,13 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        Processor processor = new Processor();
+
+        for (Map.Entry<Integer, Task> entry: tasksAtTime.entrySet()) {
+            processor.tasksAtTime.put(entry.getKey(), entry.getValue());
+        }
+
+        return processor;
     }
 
     @Override
