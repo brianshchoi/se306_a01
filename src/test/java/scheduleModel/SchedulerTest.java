@@ -140,24 +140,6 @@ public class SchedulerTest {
         assertFalse(processor0.contains(tThree));
     }
 
-    // Checks that when a centre task needs to be removed, an exception is thrown and does not allow that task to be removed.
-    @Test
-    public void testRemoveCentreTask(){
-        scheduler.schedule(tZero,processor0,schedule);
-        scheduler.schedule(tOne, processor0, schedule);
-        scheduler.schedule(tTwo, processor1, schedule);
-        scheduler.schedule(tFour, processor1, schedule);
-       // try {
-            scheduler.remove(tOne, schedule);
-      //  }
-      //  catch {
-
-      //  }
-
-        //Should still contain the task since it wasn't the last one scheduled.
-        assertEquals(true ,processor0.contains(tOne));
-    }
-
     // Checks whether it returns correct time for processor0 with complete model
     @Test
     public void testLastNodeProcessor0() {
