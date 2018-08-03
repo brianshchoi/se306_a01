@@ -63,7 +63,7 @@ public class ScheduleValidator {
         }
 
         if(!allTaskSet.equals(scheduledTaskSet)){
-            throw new InvalidScheduleException("Invalid tasks scheduled (Duplicate tasks or not all tasks scheduled");
+            throw new InvalidScheduleException("Invalid tasks scheduled (Duplicate tasks or not all tasks scheduled <3");
         }
 
         /*## Task scheduled before time 0: #3*/
@@ -71,7 +71,7 @@ public class ScheduleValidator {
             List<Task> listOfTasks = processorList.get(i).getTasks();
             for(Task t : listOfTasks) {
                 if(processorList.get(i).getStartTimeOf(t) < 0){
-                    throw new InvalidScheduleException("Task scheduled before time 0");
+                    throw new InvalidScheduleException("Task scheduled before time 0 <3");
                 }
             }
         }
@@ -98,7 +98,7 @@ public class ScheduleValidator {
             // Check if the fill array has anything more than 1. I cant count
             for(int j = 0; j < fill.length; j++){
                 if(fill[j] > 1){
-                    throw new InvalidScheduleException("Overlapping tasks");
+                    throw new InvalidScheduleException("Overlapping tasks <3");
                 }
             }
 
@@ -125,13 +125,44 @@ public class ScheduleValidator {
                         if (processorList.get(i).contains(p)) {
                             parentFin = processorList.get(i).getFinishTimeOf(p);
                             if(start < parentFin){
-                                throw new InvalidScheduleException("Parent task is not scheduled before child task");
+                                throw new InvalidScheduleException("Parent task is not scheduled before child task <3");
                             }
                         }
                     }
                 }
             }
         }
+
+        // ## Make sure communication link cost is taken into consideration: #5
+
+        for(Task p : scheduledTasks){
+            if(!p.getChildren().isEmpty()){
+                Set<Task> children = p.getChildren();
+
+                for(Task c : children) {
+                    IProcessor cProcessor = null;
+                    IProcessor pProcessor = null;
+                    for (IProcessor pr : processorList) {
+                        if (pr.contains(c)) {
+                            cProcessor = pr;
+                        }
+                        if(pr.contains(p)){
+                            pProcessor = pr;
+                        }
+                    }
+                    if(!pProcessor.equals(cProcessor)) {
+                        int parentFin = pProcessor.getFinishTimeOf(p);
+                        int childStart = cProcessor.getStartTimeOf(c);
+
+                        // I cant count
+                        if((childStart - parentFin) < p.getChildLinkCost(c)) {
+                            throw new InvalidScheduleException("Link cost is ignored!! <3");
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }
