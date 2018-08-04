@@ -57,9 +57,7 @@ public class DotGraph {
 
     // This method takes the graph string and outputs a dot graph with the filename
     private void writeDotFile(String graph){
-        String filename = System.getProperty("user.dir") + "/" + _filename;
-
-        try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+        try (PrintStream out = new PrintStream(new FileOutputStream(_filename))) {
             out.print(graph);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
