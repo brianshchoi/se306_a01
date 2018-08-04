@@ -14,3 +14,13 @@ dependencies {
     // https://mvnrepository.com/artifact/com.paypal.digraph/digraph-parser
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
 }
+
+jar {
+    archiveName = "scheduler.jar"
+    manifest {
+        attributes 'Main-Class': 'app.CLI'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
