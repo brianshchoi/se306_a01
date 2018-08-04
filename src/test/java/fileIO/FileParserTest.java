@@ -1,5 +1,6 @@
-package app;
+package fileIO;
 
+import fileIO.FileParser;
 import taskModel.Task;
 import taskModel.TaskModel;
 import taskModel.TaskNotFoundException;
@@ -9,7 +10,6 @@ import org.junit.Test;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
