@@ -84,7 +84,7 @@ public class CLI {
         // Create file parser
         FileParser fileParser = null;
         try {
-            fileParser = new FileParser(new File(System.getProperty("user.dir") + "/" + inputFilename));
+            fileParser = new FileParser(new File(inputFilename));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

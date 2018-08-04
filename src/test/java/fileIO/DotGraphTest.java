@@ -55,7 +55,7 @@ public class DotGraphTest {
     @Test
     public void testWriteDotFile() throws FileNotFoundException {
         dotGraph.render();
-        File testFile = new File(System.getProperty("user.dir") + "/" + "DotGraphTest.dot");
+        File testFile = new File("DotGraphTest.dot");
         FileParser fileParser = new FileParser(testFile);
         TaskModel taskModel = fileParser.getTaskModelFromFile();
         assertEquals(taskModel.getTasks().size(), 4);
