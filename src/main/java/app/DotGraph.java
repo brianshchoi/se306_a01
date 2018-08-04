@@ -32,6 +32,8 @@ public class DotGraph {
     // This method generates the optimal schedule digraph in DOT syntax
     public void render(){
         final StringBuilder output = new StringBuilder();
+
+        // Append title of digraph and opening brace
         output.append(DotRenderer.openGraph(_title));
 
         // Iterate through all tasks
@@ -39,17 +41,19 @@ public class DotGraph {
             int startTime = _schedule.getFinishTimeOf(task) - task.getWeight();
             IProcessor processor = _schedule.getProcessorOf(task);
 
-            // Add current task
+            // Add all task
             output.append(DotRenderer.addNode(task, startTime, processor));
 
             // Add dependencies and their weight
-            if (task.getChildren().size() > 0){
-                for(Task child : task.getChildren()){
-                    output.append(DotRenderer.addDependency(task, child));
+            if (task.getParents().size() > 0){
+                for(Task parent : task.getParents()){
+                    output.append(DotRenderer.addDependency(parent, task));
                 }
             }
+
         }
 
+        // Append closing brace
         output.append(DotRenderer.closeGraph());
 
         writeDotFile(output.toString());
@@ -57,7 +61,7 @@ public class DotGraph {
 
     // This method takes the graph string and outputs a dot graph with the filename
     private void writeDotFile(String graph){
-        String filename = _title + ".dot";
+        String filename = System.getProperty("user.dir") + "/" +_title + ".dot";
 
         try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
             out.print(graph);
