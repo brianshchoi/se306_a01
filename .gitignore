@@ -30,3 +30,8 @@ out/
 #Gradle
 .gradle/
 build/
+
+# Test input files that are not in resources
+*.dot
+!src/main/resources/app/*.dot
+!src/main/resources/fileIO/*.dot
