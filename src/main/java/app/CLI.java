@@ -51,7 +51,7 @@ public class CLI {
 
         // Checks that there is a valid number of arguments
         if (argsList.size() < MIN_ARGS){
-            System.err.println("Too many arguments.  See usage below:\n");
+            System.err.println("Not enough arguments.  See usage below:\n");
             System.out.println(USAGE);
             return;
         }
