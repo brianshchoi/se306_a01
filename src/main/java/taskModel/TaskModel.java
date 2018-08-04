@@ -9,6 +9,11 @@ import java.util.*;
 public class TaskModel {
     private Map<String, Task> tasks = new HashMap<>();
     private Set<Task> entryTasks = new HashSet<>();
+    private String graphId;
+
+    public TaskModel(String graphId) {
+        this.graphId = graphId;
+    }
 
     /**
      * Add a task to the TaskModel
@@ -53,5 +58,9 @@ public class TaskModel {
         }
 
         return output;
+    }
+
+    public String getGraphId() {
+        return graphId;
     }
 }

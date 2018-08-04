@@ -1,6 +1,9 @@
 package fileIO;
 
 import fileIO.FileParser;
+import scheduleModel.IProcessor;
+import scheduleModel.ISchedule;
+import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
 import taskModel.TaskNotFoundException;

@@ -1,6 +1,6 @@
 package app;
 
-import scheduleModel.Schedule;
+import fileIO.FileParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,6 +1,8 @@
 package app;
 
 
+import fileIO.DotGraph;
+import fileIO.FileParser;
 import scheduleModel.*;
 import taskModel.TaskModel;
 
@@ -96,5 +98,9 @@ public class CLI {
 
         // Validate
         new ScheduleValidator(schedule).validate(taskModel);
+
+        //Write out to file
+        DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);
+        dotGraph.render();
     }
 }

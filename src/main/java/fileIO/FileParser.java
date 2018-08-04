@@ -1,4 +1,4 @@
-package app;
+package fileIO;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FileParser {
     private FileInputStream fileInputStream;
-    private TaskModel taskModel = new TaskModel();
+    private TaskModel taskModel;
 
     public FileParser(File file) throws FileNotFoundException {
         fileInputStream = new FileInputStream(file);
@@ -24,6 +24,13 @@ public class FileParser {
 
     public TaskModel getTaskModelFromFile() {
         GraphParser parser = new GraphParser(fileInputStream);
+        String graphId = parser.getGraphId();
+
+        // Remove quotation marks from title if there are any
+        if ((graphId.charAt(0) == '"') && (graphId.charAt(graphId.length() - 1) == '"')) {
+            graphId = graphId.substring(1, graphId.length() - 1);
+        }
+        taskModel = new TaskModel(graphId);
 
         // Parse all the nodes into Task objects
         for (GraphNode node: parser.getNodes().values()) {
@@ -44,47 +51,5 @@ public class FileParser {
         }
 
         return taskModel;
-    }
-
-    // TODO: remove static modifier
-    // TODO: maybe need to add a field for graph name in TaskModel??
-    private static void writeScheduleToFile(ISchedule schedule, TaskModel taskModel) {
-        DotGraph graph = new DotGraph("man", schedule, taskModel);
-        graph.render();
-    }
-
-    //Temporary testing method
-    public static void main (String[] args){
-        // Static model created based on model digraph on project description pdf
-        TaskModel model = new TaskModel();
-
-        Task a = new Task("a", 2);
-        Task b = new Task("b", 3);
-        Task c = new Task("c", 3);
-        Task d = new Task("d", 2);
-
-        model.addTask(a);
-        model.addTask(b);
-        model.addTask(c);
-        model.addTask(d);
-
-        model.addDependency(a,b,1);
-        model.addDependency(a,c,2);
-        model.addDependency(b,d,2);
-        model.addDependency(b,d,1);
-
-        ISchedule s = new Schedule(2);
-
-        // Needed here to get processor object
-        List<IProcessor> processors = s.getProcessors();
-        IProcessor p1 = processors.get(0);
-        IProcessor p2 = processors.get(1);
-
-        s.schedule(a, p1, 0);
-        s.schedule(b, p1, 2);
-        s.schedule(c, p2, 4);
-        s.schedule(d, p2, 7);
-
-        writeScheduleToFile(s, model);
     }
 }

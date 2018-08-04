@@ -1,4 +1,4 @@
-package app;
+package fileIO;
 
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
@@ -13,20 +13,16 @@ public class DotGraph {
 
     private static final String OUTPUT_PREFIX = "output";
     private String _title;
+    private String _filename;
     private ISchedule _schedule;
     private TaskModel _taskModel;
 
-    public DotGraph(ISchedule schedule, TaskModel taskModel){
-        this._title = OUTPUT_PREFIX;
-        this._schedule = schedule;
-        this._taskModel = taskModel;
-    }
-
-    DotGraph(final String title, ISchedule schedule, TaskModel taskModel){
+    public DotGraph(String filename, String title, ISchedule schedule, TaskModel taskModel){
         // Capitalise first letter of graph name and add "output" prefix
         this._title = OUTPUT_PREFIX + title.substring(0, 1).toUpperCase() + title.substring(1);
         this._schedule = schedule;
         this._taskModel = taskModel;
+        this._filename = filename;
     }
 
     // This method generates the optimal schedule digraph in DOT syntax
@@ -61,7 +57,7 @@ public class DotGraph {
 
     // This method takes the graph string and outputs a dot graph with the filename
     private void writeDotFile(String graph){
-        String filename = System.getProperty("user.dir") + "/" +_title + ".dot";
+        String filename = System.getProperty("user.dir") + "/" + _filename;
 
         try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
             out.print(graph);

@@ -29,7 +29,7 @@ public class SchedulerTest {
 
     @Before
     public void setup() {
-        TaskModel taskModel = new TaskModel();
+        TaskModel taskModel = new TaskModel("SchedulerTest");
 
         // Create nodes
         tZero = new Task("0", 4);
