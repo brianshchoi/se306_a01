@@ -5,6 +5,10 @@ import scheduleModel.ISchedule;
 import taskModel.Task;
 import taskModel.TaskModel;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 public class DotGraph {
 
     private static final String OUTPUT_PREFIX = "output";
@@ -51,8 +55,14 @@ public class DotGraph {
         writeDotFile(output.toString());
     }
 
-    // TODO: change to write to a DOT file instead of a sout
+    // This method takes the graph string and outputs a dot graph with the filename
     private void writeDotFile(String graph){
-        System.out.println(graph);
+        String filename = _title + ".dot";
+
+        try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+            out.print(graph);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
