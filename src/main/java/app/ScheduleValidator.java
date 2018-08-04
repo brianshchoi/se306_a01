@@ -1,8 +1,8 @@
 package app;
 
+import app.exception.InvalidScheduleException;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
-import scheduleModel.Processor;
 import taskModel.Task;
 import taskModel.TaskModel;
 

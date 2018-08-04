@@ -8,10 +8,15 @@ import java.util.*;
 public class Processor implements IProcessor, Cloneable {
 
     private Map<Integer, Task> tasksAtTime = new TreeMap<>();
+    private int id;
+
+    public Processor(int id) {
+        this.id = id;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Processor processor = new Processor();
+        Processor processor = new Processor(this.id);
 
         for (Map.Entry<Integer, Task> entry: tasksAtTime.entrySet()) {
             processor.tasksAtTime.put(entry.getKey(), entry.getValue());
@@ -84,5 +89,15 @@ public class Processor implements IProcessor, Cloneable {
     public List<Task> getTasks(){
         List<Task> listOfTasks = new ArrayList<>(tasksAtTime.values());
         return listOfTasks;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return Integer.toString(id);
     }
 }

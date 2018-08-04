@@ -13,7 +13,7 @@ public class Schedule implements ISchedule, Cloneable {
     public Schedule(int numOfProcessors) {
         _numOfProcessors = numOfProcessors;
         for (int i = 0; i < numOfProcessors; i++) {
-            _processors.add(new Processor());
+            _processors.add(new Processor(i));
         }
     }
 
@@ -131,14 +131,12 @@ public class Schedule implements ISchedule, Cloneable {
 
     @Override
     public void debug() {
-        int i = 0;
         for (IProcessor processor: _processors) {
-            System.out.println("On processor " + i + ":");
+            System.out.println("On processor " + processor.getId() + ":");
             for (Task task: processor.getTasks()) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
             }
-            i++;
         }
         System.out.println("The schedule has a makespan of " + getFinishTime());
     }

@@ -46,4 +46,6 @@ public interface IProcessor {
      * @return
      */
     List<Task> getTasks();
+
+    int getId();
 }
