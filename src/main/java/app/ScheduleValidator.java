@@ -20,7 +20,6 @@ public class ScheduleValidator {
     }
 
     public void validate(TaskModel model) {
-        // TODO: 3/08/2018 plan here
         // This validation is done on fully completed schedule
 
         // ********We need one more input: full task model in order to compare**********
@@ -42,10 +41,11 @@ public class ScheduleValidator {
          Compare the two sets*/
 
         // Putting entry set into String set
-        Set<Task> entryTasks = model.getEntryTasks();
-        Set<String> entryTaskSet = new HashSet<>();
-        for(Task t : entryTasks) {
-            entryTaskSet.add(t.getName());
+
+        List<Task> allTasks = model.getTasks();
+        Set<String> allTaskSet = new HashSet<>();
+        for(Task t : allTasks) {
+            allTaskSet.add(t.getName());
         }
 
         // Get list of all tasks in string set
@@ -62,42 +62,43 @@ public class ScheduleValidator {
             scheduledTaskSet.add(t.getName());
         }
 
-        if(!entryTaskSet.equals(scheduledTaskSet)){
-            // throw exception
+        if(!allTaskSet.equals(scheduledTaskSet)){
+            throw new InvalidScheduleException("Invalid tasks scheduled (Duplicate tasks or not all tasks scheduled <3");
         }
 
         /*## Task scheduled before time 0: #3*/
         for (int i = 0; i < processorList.size(); i++) {
-            List<Task> processor = processorList.get(i).getTasks();
-            for(Task t : processor) {
-                if(processorList.get(i).getStartTimeOf(t)<0){
-                    // throw exception
+            List<Task> listOfTasks = processorList.get(i).getTasks();
+            for(Task t : listOfTasks) {
+                if(processorList.get(i).getStartTimeOf(t) < 0){
+                    throw new InvalidScheduleException("Task scheduled before time 0 <3");
                 }
             }
         }
 
         /*## overlapping schedule in a single processor: #2
         For each processor
-        Make a new array with size very last finish time and initialise the all index as 0 first
+        Make a new array with size equal to finish time of processor
+        Initialise the all elements in array with 0
         Loop through all tasks in the map
-        and for each task add 1 to the corresponding array index element
-        check if the completed array contains any index with number higher than 1*/
+        and for each task add 1 to the corresponding array element
+        check if the completed array contains any index with number greater than 1*/
         for (int i = 0; i < processorList.size(); i++) {
             // if out of bounds exception plus one the array. I cant count
             int [] fill = new int[processorList.get(i).getFinishTime()];
-            List<Task> processor = processorList.get(i).getTasks();
-            for(Task t : processor) {
+            List<Task> listOfTasks = processorList.get(i).getTasks();
+            for(Task t : listOfTasks) {
                 int startTime = processorList.get(i).getStartTimeOf(t);
 
                 // Maybe have to + or - 1 in the condition. I cant count
-                for(int use = startTime; use < startTime+ t.getWeight(); use++ ){
+                for(int use = startTime; use < startTime + t.getWeight(); use++ ){
                     fill[use]++;
                 }
             }
             // Check if the fill array has anything more than 1. I cant count
             for(int j = 0; j < fill.length; j++){
                 if(fill[j] > 1){
-                    // Throw exception
+                    throw new InvalidScheduleException("Overlapping tasks <3");
                 }
             }
 
@@ -110,7 +111,7 @@ public class ScheduleValidator {
 
         for (Task t: scheduledTasks) {
             if(!t.getParents().isEmpty()) {
-                int start =0;
+                int start = 0;
                 for (int i = 0; i < processorList.size(); i++) {
                     if (processorList.get(i).contains(t)) {
                         start = processorList.get(i).getStartTimeOf(t);
@@ -124,13 +125,44 @@ public class ScheduleValidator {
                         if (processorList.get(i).contains(p)) {
                             parentFin = processorList.get(i).getFinishTimeOf(p);
                             if(start < parentFin){
-                                // throw exception
+                                throw new InvalidScheduleException("Parent task is not scheduled before child task <3");
                             }
                         }
                     }
                 }
             }
         }
+
+        // ## Make sure communication link cost is taken into consideration: #5
+
+        for(Task p : scheduledTasks){
+            if(!p.getChildren().isEmpty()){
+                Set<Task> children = p.getChildren();
+
+                for(Task c : children) {
+                    IProcessor cProcessor = null;
+                    IProcessor pProcessor = null;
+                    for (IProcessor pr : processorList) {
+                        if (pr.contains(c)) {
+                            cProcessor = pr;
+                        }
+                        if(pr.contains(p)){
+                            pProcessor = pr;
+                        }
+                    }
+                    if(!pProcessor.equals(cProcessor)) {
+                        int parentFin = pProcessor.getFinishTimeOf(p);
+                        int childStart = cProcessor.getStartTimeOf(c);
+
+                        // I cant count
+                        if((childStart - parentFin) < p.getChildLinkCost(c)) {
+                            throw new InvalidScheduleException("Link cost is ignored!! <3");
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }
