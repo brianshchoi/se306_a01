@@ -22,7 +22,7 @@ public class DotRenderer {
     public static String addNode(Task task, int startTime, IProcessor processor){
         return TAB +
                 task.getName() +
-                TAB +
+                TAB + TAB +
                 "[Weight=" +
                 task.getWeight() +
                 ",Start=" +
