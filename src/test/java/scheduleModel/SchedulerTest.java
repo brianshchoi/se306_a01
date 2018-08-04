@@ -5,6 +5,8 @@ import org.junit.Test;
 import taskModel.Task;
 import taskModel.TaskModel;
 
+import java.security.spec.ECField;
+
 import static org.junit.Assert.*;
 
 public class SchedulerTest {
@@ -17,6 +19,11 @@ public class SchedulerTest {
     private Task tTwo;
     private Task tThree;
     private Task tFour;
+    private Task tFive;
+    private Task tSix;
+
+    private IProcessor processor0;
+    private IProcessor processor1;
 
 
 
@@ -30,8 +37,8 @@ public class SchedulerTest {
         tTwo = new Task("2", 2);
         tThree = new Task("3", 2);
         tFour = new Task("4", 5);
-        Task tFive = new Task("5", 5);
-        Task tSix = new Task("6", 10);
+        tFive = new Task("5", 5);
+        tSix = new Task("6", 10);
 
         // Add nodes to the task model
         taskModel.addTask(tZero);
@@ -44,8 +51,9 @@ public class SchedulerTest {
 
         // Add dependencies to the task model
         taskModel.addDependency(tZero, tOne, 1);
-        taskModel.addDependency(tZero, tThree, 3);
         taskModel.addDependency(tZero, tTwo, 1);
+        taskModel.addDependency(tZero, tThree, 3);
+
         taskModel.addDependency(tOne, tFour, 1);
         taskModel.addDependency(tTwo, tFour, 2);
         taskModel.addDependency(tThree, tFive, 3);
@@ -56,46 +64,107 @@ public class SchedulerTest {
 
         scheduler = new Scheduler();
 
+        // Add processors to the schedule
+        processor0 = schedule.getProcessors().get(0);
+        processor1 = schedule.getProcessors().get(1);
+
     }
 
+    // Checks that first task will get allocated at time 0.
     @Test
-    public void testScheduleEntryNode() {
-
-        IProcessor processor = schedule.getProcessors().get(0);
-        scheduler.schedule(tZero, processor, schedule);
-        assertEquals(0, scheduler.getMaxTime());
+    public void testZeroTaskAllocated() {
+        assertEquals(0, processor0.getFinishTime());
     }
 
+    // Checks that entry tasks are scheduled correctly at the start of a processor.
     @Test
-    public void testScheduleMiddleBeforeOverlap() {
+    public void testEntryTaskFinishTime() {
 
-        IProcessor processor0 = schedule.getProcessors().get(0);
-        IProcessor processor1 = schedule.getProcessors().get(1);
+        scheduler.schedule(tZero, processor0, schedule);
+        assertTrue(processor0.contains(tZero));
+        assertEquals(4,processor0.getFinishTime());
+        assertEquals(4, processor0.getFinishTimeOf(tZero));
+    }
 
-        processor0.schedule(tZero,0);
-        processor0.schedule(tOne,4);
-        processor1.schedule(tTwo, 5);
+    // Checks that the entry task is removed correctly, and there are no other tasks in the processor.
+    @Test
+    public void testProcessorRemoveEntryTask(){
+        scheduler.schedule(tZero, processor0, schedule);
+        scheduler.remove(tZero,schedule);
+        assertTrue(processor0.getTasks().isEmpty());
+    }
 
+    // Checks that when a centre task is scheduled on more than one processor (with no tasks overlapping said task on another processor)
+    // that it is scheduled at the correct time.
+    @Test
+    public void testCentreTaskNoOverlap() {
+
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
         scheduler.schedule(tFour, processor1, schedule);
-        assertEquals(7, scheduler.getMaxTime());
-
+        assertEquals(12, processor1.getFinishTime());
     }
 
+    // Checks that when a centre task is scheduled on more than one processor (with other tasks overlapping said task on another processor)
+    // that it is scheduled at the correct time.
     @Test
-    public void testScheduleMiddleAfterOverlap() {
-
-        IProcessor processor0 = schedule.getProcessors().get(0);
-        IProcessor processor1 = schedule.getProcessors().get(1);
-
-        processor0.schedule(tZero,0);
-        processor0.schedule(tOne,4);
-        processor0.schedule(tThree, 6);
-        processor1.schedule(tTwo, 5);
-
-
+    public void testCentreTaskOverlap() {
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
         scheduler.schedule(tFour, processor1, schedule);
-        assertEquals(7, scheduler.getMaxTime());
-
+        assertEquals(12, processor1.getFinishTime());
     }
 
+
+    //Possible redundant test (testCentreTaskOverlap)
+    @Test
+    public void testCentreTaskOverlapReverse(){
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tFour, processor1, schedule);
+        assertEquals(12, processor1.getFinishTime());
+    }
+
+    // Checks that when the last scheduled task on a processor needs to be removed, it is removed from the processor.
+    @Test
+    public void testRemoveLastScheduledTask(){
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.remove(tThree, schedule);
+        assertFalse(processor0.contains(tThree));
+    }
+
+    // Checks whether it returns correct time for processor0 with complete model
+    @Test
+    public void testLastNodeProcessor0() {
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.schedule(tFour, processor1, schedule);
+        scheduler.schedule(tFive, processor0, schedule);
+        scheduler.schedule(tSix, processor0, schedule);
+
+        assertEquals(26, processor0.getFinishTime());
+    }
+
+    // Checks whether it returns correct value for in processor1 with complete model
+    @Test
+    public void testLastNodeProcessor1() {
+        scheduler.schedule(tZero,processor0,schedule);
+        scheduler.schedule(tOne, processor0, schedule);
+        scheduler.schedule(tTwo, processor1, schedule);
+        scheduler.schedule(tThree, processor0, schedule);
+        scheduler.schedule(tFour, processor1, schedule);
+        scheduler.schedule(tFive, processor0, schedule);
+        scheduler.schedule(tSix, processor0, schedule);
+
+        assertEquals(12, processor1.getFinishTime());
+    }
 }

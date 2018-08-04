@@ -21,6 +21,8 @@ public interface ISchedule {
      */
     int getFinishTimeOf(Task task);
 
+    int getStartTimeOf(Task task);
+
     /**
      * Removes task from schedule
      * @param task
@@ -51,4 +53,8 @@ public interface ISchedule {
      * @return
      */
     List<Task> getTasks();
+
+    boolean contains(Task task);
+
+    void debug();
 }
