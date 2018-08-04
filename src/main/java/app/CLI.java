@@ -37,16 +37,28 @@ public class CLI {
     private static int numOfProcessors = 1;
     private static int algorithmCores = 1;
     private static String inputFilename = null;
+    private static final String USAGE =
+            "java -jar scheduler.jar INPUT.dot P [OPTION]\n" +
+            "INPUT.dot  a task graph with integer weights in dot format\n" +
+            "P          number of processors to schedule the INPUT graph on\n\n" +
+            "Optional:\n" +
+            "-p N       use N cores for execution in parallel (default is sequential)\n" +
+            "-v         visualise the search\n" +
+            "-o OUTPUT  output file is named OUTPUT (default is input-OUTPUT.dot)";
 
     public static void main(String[] args) throws CloneNotSupportedException {
         List<String> argsList = Arrays.asList(args);
 
         // Checks that there is a valid number of arguments
         if (argsList.size() < MIN_ARGS){
-            throw new IncorrectArgumentsException("Please enter at least 2 arguments");
+            System.err.println("Too many arguments.  See usage below:\n");
+            System.out.println(USAGE);
+            return;
         }
         else if (argsList.size() > MAX_ARGS){
-            throw new IncorrectArgumentsException("There are too many arguments");
+            System.err.println("Too many arguments.  See usage below:\n");
+            System.out.println(USAGE);
+            return;
         }
 
 
