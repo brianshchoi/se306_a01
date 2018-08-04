@@ -12,7 +12,7 @@ public class Schedule implements ISchedule, Cloneable {
 
     public Schedule(int numOfProcessors) {
         _numOfProcessors = numOfProcessors;
-        for (int i = 0; i < numOfProcessors; i++) {
+        for (int i = 1; i <= numOfProcessors; i++) {
             _processors.add(new Processor(i));
         }
     }
