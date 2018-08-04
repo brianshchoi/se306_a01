@@ -75,7 +75,7 @@ public class CLI {
 
         // Configure output filename
         if (argsList.contains("-o")) {
-            outputFilename = argsList.get(argsList.indexOf("-o") + 1);
+            outputFilename = argsList.get(argsList.indexOf("-o") + 1) + ".dot";
         } else {
             outputFilename = inputFilename.replace(".dot", "") + "-output.dot";
         }
