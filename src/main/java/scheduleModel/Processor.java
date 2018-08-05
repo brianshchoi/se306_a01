@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import taskModel.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -12,7 +13,6 @@ public class Processor implements IProcessor, Cloneable {
 
     private int id;
     private BiMap<Integer, Task> taskBiMap = HashBiMap.create();
-    private PriorityQueue<Integer> startTimes = new PriorityQueue<>();
 
     public Processor(int id) {
         this.id = id;
@@ -36,15 +36,15 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public void remove(Task task) {
-        startTimes.remove(taskBiMap.inverse().get(task));
         taskBiMap.inverse().remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        if (startTimes.peek() == null) return 0;
-        Task lastTask = taskBiMap.get(startTimes.peek());
-        return startTimes.peek() + lastTask.getWeight();
+        List<Integer> startTimes = new ArrayList<>(taskBiMap.keySet());
+        if (startTimes.size() == 0) return 0;
+        Collections.sort(startTimes);
+        return startTimes.get(startTimes.size() - 1) + taskBiMap.get(startTimes.size() - 1).getWeight();
     }
 
     @Override
@@ -60,7 +60,6 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public void schedule(Task task, int time) {
         taskBiMap.put(time, task);
-        startTimes.add(time);
     }
 
     @Override
