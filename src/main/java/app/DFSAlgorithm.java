@@ -7,7 +7,7 @@ import taskModel.TaskModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Algorithm {
+public class DFSAlgorithm implements IAlgorithm {
 
     private TaskModel taskModel;
     private IScheduler scheduler;
@@ -16,13 +16,14 @@ public class Algorithm {
     private int bound = Integer.MAX_VALUE; //stores current best finish time
     private ISchedule bestSchedule; //stores current best schedule
 
-    public Algorithm(TaskModel taskModel, int numOfProcessors) {
+    public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
         this.numOfProcessors = numOfProcessors;
         scheduler = new Scheduler();
     }
 
-    public ISchedule run() throws CloneNotSupportedException {
+    @Override
+    public ISchedule run() {
 
         int depth = 0; //stores depth of schedule
         Schedule schedule = new Schedule(numOfProcessors);
@@ -33,7 +34,7 @@ public class Algorithm {
         return bestSchedule;
     }
 
-    private void run(List<Task> freeTasks, int depth, ISchedule schedule) throws CloneNotSupportedException {
+    private void run(List<Task> freeTasks, int depth, ISchedule schedule) {
         if (!freeTasks.isEmpty()) {
             List<Task> scheduledTasks = schedule.getTasks(); //Store which tasks should be scheduled at each level
 
@@ -62,7 +63,11 @@ public class Algorithm {
                         int numTasks = taskModel.getTasks().size();
 
                         if (depth == numTasks) { //update the best schedule
-                            bestSchedule = (ISchedule) ((Schedule) schedule).clone();
+                            try {
+                                bestSchedule = (ISchedule) ((Schedule) schedule).clone();
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                            }
                             bound = bestSchedule.getFinishTime();
                         } else if (depth < numTasks) { //keep building the schedule
                             run(newFreeTasks, depth, schedule);

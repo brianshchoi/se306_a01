@@ -17,6 +17,6 @@ public class Run {
     private static final int NUM_PROCESSORS = 2;
 
     public  static void main(String[] args) throws FileNotFoundException, URISyntaxException, CloneNotSupportedException {
-        new Algorithm(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
+        new DFSAlgorithm(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
     }
 }
