@@ -1,5 +1,7 @@
 package scheduleModel;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import taskModel.Task;
 import taskModel.TaskNotFoundException;
 

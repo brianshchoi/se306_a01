@@ -13,6 +13,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/com.paypal.digraph/digraph-parser
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
+    // https://github.com/google/guava
+    compile 'com.google.guava:guava:26.0-jre'
 }
 
 jar {
