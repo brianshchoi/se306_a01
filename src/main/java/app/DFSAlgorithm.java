@@ -12,9 +12,13 @@ public class DFSAlgorithm implements IAlgorithm {
     private TaskModel taskModel;
     private IScheduler scheduler;
     private int numOfProcessors;
+    private boolean symmetric = true;
+    private boolean firstTaskOnSymmetricScheduleDone = false;
 
     private int bound = Integer.MAX_VALUE; // Stores current best finish time
     private ISchedule bestSchedule; // Stores current best schedule
+
+    private int numBranches = 0;
 
     public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
@@ -29,7 +33,7 @@ public class DFSAlgorithm implements IAlgorithm {
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
         run(freeTasks, depth, schedule);
-
+        System.out.println("Number of branches: " + numBranches);
         return bestSchedule;
     }
 
@@ -40,6 +44,12 @@ public class DFSAlgorithm implements IAlgorithm {
             for (Task currentTask: freeTasks){
                 for (IProcessor currentProcessor: schedule.getProcessors()) {
 
+                    if (symmetric && firstTaskOnSymmetricScheduleDone) {
+                        symmetric = false;
+                        break;
+                    }
+
+                    numBranches++;
                     // Remove extra tasks from schedule when backtracking
                     for (Task task : schedule.getTasks()) {
                         if (!scheduledTasks.contains(task)){
@@ -50,6 +60,9 @@ public class DFSAlgorithm implements IAlgorithm {
                     // Schedule task
                     scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
+                    if (symmetric) {
+                        firstTaskOnSymmetricScheduleDone = true;
+                    }
 
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
