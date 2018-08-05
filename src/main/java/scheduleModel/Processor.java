@@ -7,7 +7,6 @@ import taskModel.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class Processor implements IProcessor, Cloneable {
 
@@ -44,7 +43,8 @@ public class Processor implements IProcessor, Cloneable {
         List<Integer> startTimes = new ArrayList<>(taskBiMap.keySet());
         if (startTimes.size() == 0) return 0;
         Collections.sort(startTimes);
-        return startTimes.get(startTimes.size() - 1) + taskBiMap.get(startTimes.size() - 1).getWeight();
+        int startTime = startTimes.get(startTimes.size() - 1) ;
+        return  startTime + taskBiMap.get(startTime).getWeight();
     }
 
     @Override
@@ -70,5 +70,10 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return Integer.toString(id);
     }
 }
