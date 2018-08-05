@@ -1,17 +1,19 @@
 package scheduleModel;
 
+import app.exception.UnimplmentedException;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import taskModel.Task;
-import taskModel.TaskNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.PriorityQueue;
 
 public class Processor implements IProcessor, Cloneable {
 
-    private Map<Integer, Task> tasksAtTime = new TreeMap<>();
     private int id;
+    private BiMap<Integer, Task> taskBiMap = HashBiMap.create();
+    private PriorityQueue<Integer> timeQueue = new PriorityQueue<>();
 
     public Processor(int id) {
         this.id = id;
@@ -19,87 +21,47 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Processor processor = new Processor(this.id);
-
-        for (Map.Entry<Integer, Task> entry: tasksAtTime.entrySet()) {
-            processor.tasksAtTime.put(entry.getKey(), entry.getValue());
-        }
-
-        return processor;
+        throw new UnimplmentedException();
     }
 
     @Override
     public boolean contains(Task task) {
-        return tasksAtTime.containsValue(task);
+        return taskBiMap.containsValue(task);
     }
 
-    //will throw concurrentModificationException
-    //you can't edit a list while iterating through it
     @Override
     public void remove(Task task) {
-        Integer key = -1;
-        for (Map.Entry<Integer, Task> entry : tasksAtTime.entrySet()){
-            if (task.equals(entry.getValue())){
-                key = entry.getKey();
-            }
-        }
-        tasksAtTime.remove(key);
+        taskBiMap.inverse().remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        //accounts for when processor is empty
-        if(tasksAtTime.isEmpty()){
-            return 0;
-        }
-        // assuming Map may not be in order
-        int max = 0;
-        for (int k : tasksAtTime.keySet()){
-            if(k > max){
-                max = k;
-            }
-        }
-        int lastTaskTime = tasksAtTime.get(max).getWeight();
-        return max + lastTaskTime;
+        return timeQueue.peek() + taskBiMap.get(timeQueue.peek()).getWeight();
     }
 
     @Override
     public int getFinishTimeOf(Task task) {
-        for (int k : tasksAtTime.keySet()){
-            if (tasksAtTime.get(k).equals(task)){
-                return k + task.getWeight();
-            }
-        }
-        throw new TaskNotFoundException();
+        return this.getStartTimeOf(task) + task.getWeight();
     }
 
     @Override
     public int getStartTimeOf(Task task) {
-        for (int k : tasksAtTime.keySet()){
-            if (tasksAtTime.get(k).equals(task)){
-                return k;
-            }
-        }
-        throw new TaskNotFoundException();
+        return taskBiMap.inverse().get(task);
     }
 
     @Override
     public void schedule(Task task, int time) {
-        tasksAtTime.put(time, task);
+        taskBiMap.put(time, task);
+        timeQueue.add(time);
     }
 
     @Override
-    public List<Task> getTasks(){
-        return new ArrayList<>(tasksAtTime.values());
+    public List<Task> getTasks() {
+        return new ArrayList<>(taskBiMap.values());
     }
 
     @Override
     public int getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return Integer.toString(id);
     }
 }
