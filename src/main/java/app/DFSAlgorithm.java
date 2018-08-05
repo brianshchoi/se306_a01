@@ -13,8 +13,8 @@ public class DFSAlgorithm implements IAlgorithm {
     private IScheduler scheduler;
     private int numOfProcessors;
 
-    private int bound = Integer.MAX_VALUE; //stores current best finish time
-    private ISchedule bestSchedule; //stores current best schedule
+    private int bound = Integer.MAX_VALUE; // Stores current best finish time
+    private ISchedule bestSchedule; // Stores current best schedule
 
     public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
@@ -25,7 +25,7 @@ public class DFSAlgorithm implements IAlgorithm {
     @Override
     public ISchedule run() {
 
-        int depth = 0; //stores depth of schedule
+        int depth = 0; // Stores depth of schedule
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
@@ -36,44 +36,40 @@ public class DFSAlgorithm implements IAlgorithm {
 
     private void run(List<Task> freeTasks, int depth, ISchedule schedule) {
         if (!freeTasks.isEmpty()) {
-            List<Task> scheduledTasks = schedule.getTasks(); //Store which tasks should be scheduled at each level
+            List<Task> scheduledTasks = schedule.getTasks(); // Store which tasks should be scheduled at each level
 
-            for (int i = 0; i < freeTasks.size(); i++){
-                for (int j = 0; j < schedule.getProcessors().size(); j++) {
+            for (Task currentTask: freeTasks){
+                for (IProcessor currentProcessor: schedule.getProcessors()) {
 
-                    //Remove extra tasks from schedule when backtracking
-                    List<Task> tasks = schedule.getTasks();
-                    for (Task task : tasks) {
+                    // Remove extra tasks from schedule when backtracking
+                    for (Task task : schedule.getTasks()) {
                         if (!scheduledTasks.contains(task)){
                             schedule.remove(task);
                         }
                     }
 
-                    //schedule task
-                    Task cTask = freeTasks.get(i);
-                    IProcessor cProc = schedule.getProcessors().get(j);
-                    scheduler.schedule(cTask, cProc, schedule);
-
+                    // Schedule task
+                    scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
 
-                    //set new list of free tasks
+                    // Set new list of free tasks
                     List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
 
-                        if (depth == numTasks) { //update the best schedule
+                        if (depth == numTasks) { // Update the best schedule
                             try {
                                 bestSchedule = (ISchedule) ((Schedule) schedule).clone();
                             } catch (CloneNotSupportedException e) {
                                 e.printStackTrace();
                             }
                             bound = bestSchedule.getFinishTime();
-                        } else if (depth < numTasks) { //keep building the schedule
+                        } else if (depth < numTasks) { // Keep building the schedule
                             run(newFreeTasks, depth, schedule);
                         }
                     }
-                    //start backtracking
+                    // Start backtracking
                     depth--;
                 }
             }
@@ -83,15 +79,14 @@ public class DFSAlgorithm implements IAlgorithm {
     private List<Task> getFreeTasks(ISchedule schedule, List<Task> allTasks){
         List<Task> newFreeTasks = new ArrayList<>();
 
-        //create list of tasks which haven't been scheduled yet
+        // Create list of tasks which haven't been scheduled yet
         List<Task> scheduledTasks = schedule.getTasks();
         List<Task> unscheduledTasks = allTasks;
         unscheduledTasks.removeAll(scheduledTasks);
 
-        //check if each unscheduled task's dependencies have been satisfied
-        for (int k = 0; k < unscheduledTasks.size(); k++){
-            Task task = unscheduledTasks.get(k);
-            if (scheduledTasks.containsAll(task.getParents())){
+        // Check if each unscheduled task's dependencies have been satisfied
+        for (Task task: unscheduledTasks){
+            if (scheduledTasks.containsAll(task.getParents())) {
                 newFreeTasks.add(task);
             }
         }
