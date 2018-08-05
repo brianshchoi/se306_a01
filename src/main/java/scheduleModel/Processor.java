@@ -1,6 +1,5 @@
 package scheduleModel;
 
-import app.exception.UnimplmentedException;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import taskModel.Task;
@@ -13,7 +12,7 @@ public class Processor implements IProcessor, Cloneable {
 
     private int id;
     private BiMap<Integer, Task> taskBiMap = HashBiMap.create();
-    private PriorityQueue<Integer> timeQueue = new PriorityQueue<>();
+    private PriorityQueue<Integer> startTimes = new PriorityQueue<>();
 
     public Processor(int id) {
         this.id = id;
@@ -21,7 +20,13 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        throw new UnimplmentedException();
+        Processor processor = new Processor(this.id);
+
+        for (Integer startTime: taskBiMap.keySet()) {
+            processor.taskBiMap.put(startTime, taskBiMap.get(startTime));
+        }
+
+        return processor;
     }
 
     @Override
@@ -31,12 +36,15 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public void remove(Task task) {
+        startTimes.remove(taskBiMap.inverse().get(task));
         taskBiMap.inverse().remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        return timeQueue.peek() + taskBiMap.get(timeQueue.peek()).getWeight();
+        if (startTimes.peek() == null) return 0;
+        Task lastTask = taskBiMap.get(startTimes.peek());
+        return startTimes.peek() + lastTask.getWeight();
     }
 
     @Override
@@ -52,7 +60,7 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public void schedule(Task task, int time) {
         taskBiMap.put(time, task);
-        timeQueue.add(time);
+        startTimes.add(time);
     }
 
     @Override
