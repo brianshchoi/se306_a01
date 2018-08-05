@@ -87,8 +87,7 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public List<Task> getTasks(){
-        List<Task> listOfTasks = new ArrayList<>(tasksAtTime.values());
-        return listOfTasks;
+        return new ArrayList<>(tasksAtTime.values());
     }
 
     @Override

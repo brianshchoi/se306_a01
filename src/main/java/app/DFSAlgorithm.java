@@ -24,7 +24,6 @@ public class DFSAlgorithm implements IAlgorithm {
 
     @Override
     public ISchedule run() {
-
         int depth = 0; // Stores depth of schedule
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
@@ -52,9 +51,6 @@ public class DFSAlgorithm implements IAlgorithm {
                     scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
 
-                    // Set new list of free tasks
-                    List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-
                     if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
 
@@ -66,6 +62,8 @@ public class DFSAlgorithm implements IAlgorithm {
                             }
                             bound = bestSchedule.getFinishTime();
                         } else if (depth < numTasks) { // Keep building the schedule
+                            // Set new list of free tasks
+                            List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
                             run(newFreeTasks, depth, schedule);
                         }
                     }
@@ -81,11 +79,10 @@ public class DFSAlgorithm implements IAlgorithm {
 
         // Create list of tasks which haven't been scheduled yet
         List<Task> scheduledTasks = schedule.getTasks();
-        List<Task> unscheduledTasks = allTasks;
-        unscheduledTasks.removeAll(scheduledTasks);
+        allTasks.removeAll(scheduledTasks);
 
         // Check if each unscheduled task's dependencies have been satisfied
-        for (Task task: unscheduledTasks){
+        for (Task task: allTasks){
             if (scheduledTasks.containsAll(task.getParents())) {
                 newFreeTasks.add(task);
             }

@@ -112,8 +112,7 @@ public class Schedule implements ISchedule, Cloneable {
         List<Task> tasks = new ArrayList<>();
 
         //get all tasks that have been scheduled in each processor
-        for (int i =0; i < _processors.size(); i++){
-            IProcessor processor = _processors.get(i);
+        for (IProcessor processor: _processors){
             tasks.addAll(processor.getTasks());
         }
         return tasks;
