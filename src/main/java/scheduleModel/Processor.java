@@ -4,14 +4,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import taskModel.Task;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Processor implements IProcessor, Cloneable {
 
     private int id;
-    private BiMap<Integer, Task> taskBiMap = HashBiMap.create();
+    private Map<Task, Integer> taskMap = new HashMap<>();
 
     public Processor(int id) {
         this.id = id;
@@ -21,30 +19,34 @@ public class Processor implements IProcessor, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
 
-        for (Integer startTime: taskBiMap.keySet()) {
-            processor.taskBiMap.put(startTime, taskBiMap.get(startTime));
+        for (Task task: taskMap.keySet()) {
+            processor.taskMap.put(task, taskMap.get(task));
         }
 
         return processor;
     }
 
     @Override
+
     public boolean contains(Task task) {
-        return taskBiMap.containsValue(task);
+        return taskMap.containsKey(task);
     }
 
     @Override
     public void remove(Task task) {
-        taskBiMap.inverse().remove(task);
+        taskMap.remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        List<Integer> startTimes = new ArrayList<>(taskBiMap.keySet());
-        if (startTimes.size() == 0) return 0;
-        Collections.sort(startTimes);
-        int startTime = startTimes.get(startTimes.size() - 1) ;
-        return  startTime + taskBiMap.get(startTime).getWeight();
+        int maxFinishTime = 0;
+
+        for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
+            int finishTime = entry.getValue() + entry.getKey().getWeight();
+            if (finishTime > maxFinishTime) maxFinishTime = finishTime;
+        }
+
+        return maxFinishTime;
     }
 
     @Override
@@ -54,17 +56,17 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public int getStartTimeOf(Task task) {
-        return taskBiMap.inverse().get(task);
+        return taskMap.get(task);
     }
 
     @Override
     public void schedule(Task task, int time) {
-        taskBiMap.put(time, task);
+        taskMap.put(task, time);
     }
 
     @Override
     public List<Task> getTasks() {
-        return new ArrayList<>(taskBiMap.values());
+        return new ArrayList<>(taskMap.keySet());
     }
 
     @Override
