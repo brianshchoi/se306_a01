@@ -17,10 +17,7 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
-
-        for (Task task: taskMap.keySet()) {
-            processor.taskMap.put(task, taskMap.get(task));
-        }
+        processor.taskMap = (Map<Task, Integer>) ((TreeMap<Task, Integer>) taskMap).clone();
 
         processor.tasks.addAll(tasks);
         return processor;
