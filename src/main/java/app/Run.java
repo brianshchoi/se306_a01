@@ -25,6 +25,6 @@ public class Run {
 
         // Stop timing algorithm
         final double end = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (end - start)/1000 + " milliseconds");
+        System.out.println("Total execution time: " + (end - start)/1000 + " seconds");
     }
 }
