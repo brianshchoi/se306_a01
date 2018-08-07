@@ -1,17 +1,14 @@
 package scheduleModel;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import taskModel.Task;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Processor implements IProcessor, Cloneable {
 
     private int id;
-    private BiMap<Integer, Task> taskBiMap = HashBiMap.create();
+    private Map<Task, Integer> taskMap = new HashMap<>();
+    private List<Task> tasks = new ArrayList<>();
 
     public Processor(int id) {
         this.id = id;
@@ -20,31 +17,30 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
+        processor.taskMap = (Map<Task, Integer>) ((HashMap<Task, Integer>) taskMap).clone();
 
-        for (Integer startTime: taskBiMap.keySet()) {
-            processor.taskBiMap.put(startTime, taskBiMap.get(startTime));
-        }
-
+        processor.tasks.addAll(tasks);
         return processor;
     }
 
     @Override
+
     public boolean contains(Task task) {
-        return taskBiMap.containsValue(task);
+        return taskMap.containsKey(task);
     }
 
     @Override
     public void remove(Task task) {
-        taskBiMap.inverse().remove(task);
+        taskMap.remove(task);
+        tasks.remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        List<Integer> startTimes = new ArrayList<>(taskBiMap.keySet());
-        if (startTimes.size() == 0) return 0;
-        Collections.sort(startTimes);
-        int startTime = startTimes.get(startTimes.size() - 1) ;
-        return  startTime + taskBiMap.get(startTime).getWeight();
+        if (tasks.size() == 0) return 0;
+
+        Task latestTaskScheduled = tasks.get(tasks.size() - 1);
+        return taskMap.get(latestTaskScheduled) + latestTaskScheduled.getWeight();
     }
 
     @Override
@@ -54,17 +50,18 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public int getStartTimeOf(Task task) {
-        return taskBiMap.inverse().get(task);
+        return taskMap.get(task);
     }
 
     @Override
     public void schedule(Task task, int time) {
-        taskBiMap.put(time, task);
+        taskMap.put(task, time);
+        tasks.add(task);
     }
 
     @Override
     public List<Task> getTasks() {
-        return new ArrayList<>(taskBiMap.values());
+        return new ArrayList<>(taskMap.keySet());
     }
 
     @Override
