@@ -8,10 +8,8 @@ import java.util.List;
 public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
-    private int _numOfProcessors;
 
     public Schedule(int numOfProcessors) {
-        _numOfProcessors = numOfProcessors;
         for (int i = 1; i <= numOfProcessors; i++) {
             _processors.add(new Processor(i));
         }
