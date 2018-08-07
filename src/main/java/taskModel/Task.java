@@ -11,7 +11,7 @@ import java.util.Set;
  * Parent tasks are tasks that this task depends on, and children tasks are
  * tasks that depend on this task.
  */
-public class Task {
+public class Task implements  Comparable<Task> {
     private Map<Task, Integer> parents = new HashMap<>();
     private Map<Task, Integer> children = new HashMap<>();
 
@@ -98,5 +98,10 @@ public class Task {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    public int compareTo(Task task) {
+        return this.name.compareTo(task.name);
     }
 }

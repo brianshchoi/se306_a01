@@ -2,15 +2,13 @@ package scheduleModel;
 
 import taskModel.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Processor implements IProcessor, Cloneable {
 
     private int id;
-    private Map<Task, Integer> taskMap = new HashMap<>();
+    private Map<Task, Integer> taskMap = new TreeMap<>();
+    private List<Task> tasks = new ArrayList<>();
 
     public Processor(int id) {
         this.id = id;
@@ -24,6 +22,7 @@ public class Processor implements IProcessor, Cloneable {
             processor.taskMap.put(task, taskMap.get(task));
         }
 
+        processor.tasks.addAll(tasks);
         return processor;
     }
 
@@ -36,18 +35,15 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public void remove(Task task) {
         taskMap.remove(task);
+        tasks.remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        int maxFinishTime = 0;
+        if (tasks.size() == 0) return 0;
 
-        for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
-            int finishTime = entry.getValue() + entry.getKey().getWeight();
-            if (finishTime > maxFinishTime) maxFinishTime = finishTime;
-        }
-
-        return maxFinishTime;
+        Task latestTaskScheduled = tasks.get(tasks.size() - 1);
+        return taskMap.get(latestTaskScheduled) + latestTaskScheduled.getWeight();
     }
 
     @Override
@@ -63,6 +59,7 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public void schedule(Task task, int time) {
         taskMap.put(task, time);
+        tasks.add(task);
     }
 
     @Override
