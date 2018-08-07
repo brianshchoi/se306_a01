@@ -7,7 +7,7 @@ import java.util.*;
 public class Processor implements IProcessor, Cloneable {
 
     private int id;
-    private Map<Task, Integer> taskMap = new TreeMap<>();
+    private Map<Task, Integer> taskMap = new HashMap<>();
     private List<Task> tasks = new ArrayList<>();
 
     public Processor(int id) {
@@ -17,7 +17,7 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
-        processor.taskMap = (Map<Task, Integer>) ((TreeMap<Task, Integer>) taskMap).clone();
+        processor.taskMap = (Map<Task, Integer>) ((HashMap<Task, Integer>) taskMap).clone();
 
         processor.tasks.addAll(tasks);
         return processor;
