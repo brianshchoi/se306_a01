@@ -2,16 +2,14 @@ package scheduleModel;
 
 import taskModel.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
-    private int _numOfProcessors;
+    private Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
 
     public Schedule(int numOfProcessors) {
-        _numOfProcessors = numOfProcessors;
         for (int i = 1; i <= numOfProcessors; i++) {
             _processors.add(new Processor(i));
         }
@@ -33,27 +31,28 @@ public class Schedule implements ISchedule, Cloneable {
     @Override
     public void schedule(Task task, IProcessor processor, int time) {
         processor.schedule(task, time);
+        _tasksToProcessor.put(task, processor);
     }
 
     @Override
     public int getFinishTimeOf(Task task) {
-        for (IProcessor p : this._processors) {
-            if (p.contains(task)) {
-                return p.getFinishTimeOf(task);
-            }
-        }
+        //get the processor the task is scheduled in
+        IProcessor processor = _tasksToProcessor.get(task);
 
+        if (processor != null){
+            return processor.getFinishTimeOf(task);
+        }
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
     }
 
     @Override
     public int getStartTimeOf(Task task) {
-        for (IProcessor p : this._processors) {
-            if (p.contains(task)) {
-                return p.getStartTimeOf(task);
-            }
-        }
+        //get processor task is scheduled in
+        IProcessor processor = _tasksToProcessor.get(task);
 
+        if (processor != null){
+            return processor.getStartTimeOf(task);
+        }
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
     }
 
@@ -61,12 +60,12 @@ public class Schedule implements ISchedule, Cloneable {
     public void remove(Task task) {
         boolean taskRemoved = false;
 
-        for (IProcessor p : this._processors) {
-            if (p.contains(task)) {
-                p.remove(task);
-                taskRemoved = true;
-                break;
-            }
+        //get processor task is scheduled in
+        IProcessor processor = _tasksToProcessor.get(task);
+        if (processor != null) {
+            processor.remove(task);
+            _tasksToProcessor.remove(task);
+            taskRemoved = true;
         }
 
         if (!taskRemoved){
@@ -93,10 +92,9 @@ public class Schedule implements ISchedule, Cloneable {
 
     @Override
     public IProcessor getProcessorOf(Task task) {
-        for (IProcessor p : this._processors) {
-            if (p.contains(task)) {
-                return p;
-            }
+        IProcessor processor = _tasksToProcessor.get(task);
+        if (processor != null) {
+            return processor;
         }
 
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
@@ -112,8 +110,7 @@ public class Schedule implements ISchedule, Cloneable {
         List<Task> tasks = new ArrayList<>();
 
         //get all tasks that have been scheduled in each processor
-        for (int i =0; i < _processors.size(); i++){
-            IProcessor processor = _processors.get(i);
+        for (IProcessor processor: _processors){
             tasks.addAll(processor.getTasks());
         }
         return tasks;
@@ -133,7 +130,9 @@ public class Schedule implements ISchedule, Cloneable {
     public void debug() {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
-            for (Task task: processor.getTasks()) {
+            List<Task> tasks = new ArrayList<>(processor.getTasks());
+            Collections.sort(tasks);
+            for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
             }

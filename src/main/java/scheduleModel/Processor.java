@@ -1,14 +1,14 @@
 package scheduleModel;
 
 import taskModel.Task;
-import taskModel.TaskNotFoundException;
 
 import java.util.*;
 
 public class Processor implements IProcessor, Cloneable {
 
-    private Map<Integer, Task> tasksAtTime = new TreeMap<>();
     private int id;
+    private Map<Task, Integer> taskMap = new HashMap<>();
+    private List<Task> tasks = new ArrayList<>();
 
     public Processor(int id) {
         this.id = id;
@@ -17,78 +17,51 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
+        processor.taskMap = (Map<Task, Integer>) ((HashMap<Task, Integer>) taskMap).clone();
 
-        for (Map.Entry<Integer, Task> entry: tasksAtTime.entrySet()) {
-            processor.tasksAtTime.put(entry.getKey(), entry.getValue());
-        }
-
+        processor.tasks.addAll(tasks);
         return processor;
     }
 
     @Override
+
     public boolean contains(Task task) {
-        return tasksAtTime.containsValue(task);
+        return taskMap.containsKey(task);
     }
 
-    //will throw concurrentModificationException
-    //you can't edit a list while iterating through it
     @Override
     public void remove(Task task) {
-        Integer key = -1;
-        for (Map.Entry<Integer, Task> entry : tasksAtTime.entrySet()){
-            if (task.equals(entry.getValue())){
-                key = entry.getKey();
-            }
-        }
-        tasksAtTime.remove(key);
+        taskMap.remove(task);
+        tasks.remove(task);
     }
 
     @Override
     public int getFinishTime() {
-        //accounts for when processor is empty
-        if(tasksAtTime.isEmpty()){
-            return 0;
-        }
-        // assuming Map may not be in order
-        int max = 0;
-        for (int k : tasksAtTime.keySet()){
-            if(k > max){
-                max = k;
-            }
-        }
-        int lastTaskTime = tasksAtTime.get(max).getWeight();
-        return max + lastTaskTime;
+        if (tasks.size() == 0) return 0;
+
+        Task latestTaskScheduled = tasks.get(tasks.size() - 1);
+        return taskMap.get(latestTaskScheduled) + latestTaskScheduled.getWeight();
     }
 
     @Override
     public int getFinishTimeOf(Task task) {
-        for (int k : tasksAtTime.keySet()){
-            if (tasksAtTime.get(k).equals(task)){
-                return k + task.getWeight();
-            }
-        }
-        throw new TaskNotFoundException();
+        return this.getStartTimeOf(task) + task.getWeight();
     }
 
     @Override
     public int getStartTimeOf(Task task) {
-        for (int k : tasksAtTime.keySet()){
-            if (tasksAtTime.get(k).equals(task)){
-                return k;
-            }
-        }
-        throw new TaskNotFoundException();
+        return taskMap.get(task);
     }
 
     @Override
     public void schedule(Task task, int time) {
-        tasksAtTime.put(time, task);
+        taskMap.put(task, time);
+        tasks.add(task);
     }
 
     @Override
-    public List<Task> getTasks(){
-        List<Task> listOfTasks = new ArrayList<>(tasksAtTime.values());
-        return listOfTasks;
+    public List<Task> getTasks() {
+        return new ArrayList<>(taskMap.keySet());
     }
 
     @Override

@@ -104,8 +104,11 @@ public class CLI {
         // Parse the file
         TaskModel taskModel = fileParser.getTaskModelFromFile();
 
+        // Set algorithm
+        IAlgorithm algorithm = new DFSAlgorithm(taskModel, numOfProcessors);
+
         // Get optimal schedule
-        ISchedule schedule = new Algorithm(taskModel, numOfProcessors).run();
+        ISchedule schedule = algorithm.run();
 
         // Validate
         new ScheduleValidator(schedule).validate(taskModel);
