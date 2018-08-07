@@ -2,10 +2,7 @@ package scheduleModel;
 
 import taskModel.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Schedule implements ISchedule, Cloneable {
 
@@ -133,7 +130,9 @@ public class Schedule implements ISchedule, Cloneable {
     public void debug() {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
-            for (Task task: processor.getTasks()) {
+            List<Task> tasks = new ArrayList<>(processor.getTasks());
+            Collections.sort(tasks);
+            for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
             }
