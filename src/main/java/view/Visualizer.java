@@ -40,7 +40,7 @@ public class Visualizer extends Application {
 
         Scene scene = new Scene(pane);
 
-        primaryStage.setTitle("TilesFX Dashboard using Medusa");
+        primaryStage.setTitle("Optimal Scheduler GUI");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
