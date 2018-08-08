@@ -8,6 +8,9 @@ import taskModel.TaskModel;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DotGraph {
 
@@ -42,7 +45,9 @@ public class DotGraph {
 
             // Add dependencies and their weight
             if (task.getParents().size() > 0){
-                for(Task parent : task.getParents()){
+                List<Task> parentsInOrderByName = new ArrayList<>(task.getParents());
+                Collections.sort(parentsInOrderByName);
+                for(Task parent : parentsInOrderByName){
                     output.append(DotRenderer.addDependency(parent, task));
                 }
             }

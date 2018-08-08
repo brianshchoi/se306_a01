@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class TaskModel {
     private Map<String, Task> tasks = new HashMap<>();
-    private Set<Task> entryTasks = new HashSet<>();
     private String graphId;
 
     public TaskModel(String graphId) {
@@ -21,7 +20,6 @@ public class TaskModel {
      */
     public void addTask(Task task) {
         tasks.put(task.getName(), task);
-        entryTasks.add(task);
     }
 
     public Task get(String taskName) {
@@ -39,15 +37,6 @@ public class TaskModel {
     public void addDependency(Task parent, Task child, int cost) {
         parent.insertLinkToChild(child, cost);
         child.insertLinkToParent(parent, cost);
-        entryTasks.remove(child);  // This child node has parents so definitely cannot be an entry task
-    }
-
-    /**
-     * Get the tasks which have no dependencies.
-     * @return
-     */
-    public Set<Task> getEntryTasks() {
-        return entryTasks;
     }
 
     public List<Task> getTasks() {
