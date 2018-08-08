@@ -23,10 +23,10 @@ public class Schedule implements ISchedule, Cloneable {
 
         for (IProcessor processor: _processors) {
             schedule._processors.add((IProcessor) ((Processor) processor).clone());
+        }
 
-            for (Task task: _tasksToProcessor.keySet()) {
-                schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
-            }
+        for (Task task: _tasksToProcessor.keySet()) {
+            schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
         }
 
         return schedule;
@@ -147,8 +147,12 @@ public class Schedule implements ISchedule, Cloneable {
     // Maximum of start time + bottom level of any node
     @Override
     public int f1() {
-
-        return 0;
+        int maxBottomLevel = 0;
+        for (Task task: getTasks()) {
+            int f1NonMax = task.getBottomLevel() + getStartTimeOf(task);
+            if (maxBottomLevel < f1NonMax) maxBottomLevel = f1NonMax;
+        }
+        return maxBottomLevel;
     }
 
     @Override
