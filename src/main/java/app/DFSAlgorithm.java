@@ -1,5 +1,6 @@
 package app;
 
+import app.exception.UnimplmentedException;
 import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
@@ -68,7 +69,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         firstTaskOnSymmetricScheduleDone = true;
                     }
 
-                    if (schedule.getFinishTime() < bound) {
+                    if (schedule.getFinishTime() < cost(schedule)) {
                         int numTasks = taskModel.getTasks().size();
 
                         if (depth == numTasks) { // Update the best schedule
@@ -89,6 +90,10 @@ public class DFSAlgorithm implements IAlgorithm {
                 }
             }
         }
+    }
+
+    private int cost(ISchedule schedule) {
+        throw new UnimplmentedException();
     }
 
     private List<Task> getFreeTasks(ISchedule schedule, List<Task> allTasks){

@@ -143,4 +143,19 @@ public class Schedule implements ISchedule, Cloneable {
         }
         System.out.println("The schedule has a makespan of " + getFinishTime());
     }
+
+    @Override
+    public int f1() {
+        return 0;
+    }
+
+    @Override
+    public int f2() {
+        return 0;
+    }
+
+    @Override
+    public int f3() {
+        return 0;
+    }
 }

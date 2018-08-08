@@ -57,4 +57,9 @@ public interface ISchedule {
     boolean contains(Task task);
 
     void debug();
+
+    // Cost functions
+    int f1();
+    int f2();
+    int f3();
 }
