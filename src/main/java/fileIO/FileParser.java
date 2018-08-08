@@ -50,6 +50,12 @@ public class FileParser {
             taskModel.addDependency(parent, child, cost);
         }
 
+        for (Task task: taskModel.getTasks()) {
+            if (task.getParents().size() == 0) {
+                taskModel.computeBottomLevels(task);
+            }
+        }
+
         return taskModel;
     }
 }

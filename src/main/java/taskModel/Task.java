@@ -12,7 +12,6 @@ import java.util.*;
 public class Task implements  Comparable<Task> {
     private Map<Task, Integer> parentCosts = new HashMap<>();
     private Map<Task, Integer> childrenCosts = new HashMap<>();
-    private PriorityQueue<Task> parents = new PriorityQueue<>();
 
     private int weight;
     private String name;
@@ -45,7 +44,6 @@ public class Task implements  Comparable<Task> {
      * @param cost
      */
     void insertLinkToParent(Task parent, int cost) {
-        parents.add(parent);
         this.parentCosts.put(parent, cost);
     }
 
@@ -60,6 +58,7 @@ public class Task implements  Comparable<Task> {
 
     /**
      * Returns a set of childrenCosts tasks
+     *
      * @return Set<Task>
      */
     public Set<Task> getChildren() {
@@ -103,14 +102,14 @@ public class Task implements  Comparable<Task> {
 
     @Override
     public int compareTo(Task task) {
-        return Integer.compare(this.weight, task.weight);
-    }
-
-    public int getBottomLevel() {
-        return bottomLevel;
+        return Integer.compare(task.bottomLevel, this.bottomLevel);
     }
 
     public void setBottomLevel(int bottomLevel) {
         this.bottomLevel = bottomLevel;
+    }
+
+    public int getBottomLevel() {
+        return bottomLevel;
     }
 }

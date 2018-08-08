@@ -53,7 +53,16 @@ public class TaskModel {
         return graphId;
     }
 
-    public void calculateBottomLevels() {
-        
+    public void computeBottomLevels(Task task) {
+        if (task.getChildren().size() == 0) {
+            task.setBottomLevel(task.getWeight());
+        } else {
+            PriorityQueue<Task> priorityQueue = new PriorityQueue<>();
+            for (Task child: task.getChildren()) {
+                computeBottomLevels(child);
+                priorityQueue.add(child);
+            }
+            task.setBottomLevel(priorityQueue.peek().getBottomLevel() + task.getWeight());
+        }
     }
 }
