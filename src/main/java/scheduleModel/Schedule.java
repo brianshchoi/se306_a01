@@ -176,7 +176,19 @@ public class Schedule implements ISchedule, Cloneable {
     // bottom level time, and find the max of these.
     @Override
     public int f3(List<Task> freeTasks) {
+        TreeSet<Integer> bottomLevelPlusEarliestStartTimes = new TreeSet<>();
+        IScheduler scheduler = new Scheduler();
 
-        return 0;
+        for (Task task: freeTasks) {
+            int earliestTime = Integer.MAX_VALUE;
+            for (IProcessor processor: _processors) {
+                int time = scheduler.getEarliestStartTime(task, processor, this);
+                earliestTime = time < earliestTime ? time : earliestTime;
+            }
+
+            bottomLevelPlusEarliestStartTimes.add(earliestTime + task.getBottomLevel());
+        }
+
+        return bottomLevelPlusEarliestStartTimes.last();
     }
 }
