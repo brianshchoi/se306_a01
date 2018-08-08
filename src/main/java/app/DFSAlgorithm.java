@@ -7,6 +7,7 @@ import taskModel.TaskModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class DFSAlgorithm implements IAlgorithm {
 
@@ -69,7 +70,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         firstTaskOnSymmetricScheduleDone = true;
                     }
 
-                    if (schedule.getFinishTime() < bound) {
+                    if ((schedule.getFinishTime() < bound)) {
                         int numTasks = taskModel.getTasks().size();
 
                         if (depth == numTasks) { // Update the best schedule
@@ -82,7 +83,9 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            run(newFreeTasks, depth, schedule);
+                            if (schedule.getFinishTime() < cost(schedule, newFreeTasks)){
+                                run(newFreeTasks, depth, schedule);
+                            }
                         }
                     }
                     // Start backtracking
@@ -92,8 +95,13 @@ public class DFSAlgorithm implements IAlgorithm {
         }
     }
 
-    private int cost(ISchedule schedule, Task currentTask) {
-        throw new UnimplmentedException();
+    private double cost(ISchedule schedule, List<Task> freeTasks) {
+        TreeSet<Double> costFunctionOutputs = new TreeSet<>();
+        costFunctionOutputs.add(((double) schedule.f1()));
+        costFunctionOutputs.add(schedule.f2(taskModel));
+        costFunctionOutputs.add((double)schedule.f3(freeTasks));
+
+        return costFunctionOutputs.last();
     }
 
     private List<Task> getFreeTasks(ISchedule schedule, List<Task> allTasks){
