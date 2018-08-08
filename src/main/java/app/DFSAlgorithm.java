@@ -69,7 +69,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         firstTaskOnSymmetricScheduleDone = true;
                     }
 
-                    if (schedule.getFinishTime() < cost(schedule)) {
+                    if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
 
                         if (depth == numTasks) { // Update the best schedule

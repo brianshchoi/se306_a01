@@ -1,22 +1,22 @@
 package taskModel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A Task class represents a node in the task graph.  It is concerned with
  * packaging up task-relevant information such as the time (weight) of the task,
- * the task name (e.g. "A", "B") and the parent tasks and children tasks.
- * Parent tasks are tasks that this task depends on, and children tasks are
+ * the task name (e.g. "A", "B") and the parent tasks and childrenCosts tasks.
+ * Parent tasks are tasks that this task depends on, and childrenCosts tasks are
  * tasks that depend on this task.
  */
 public class Task implements  Comparable<Task> {
-    private Map<Task, Integer> parents = new HashMap<>();
-    private Map<Task, Integer> children = new HashMap<>();
+    private Map<Task, Integer> parentCosts = new HashMap<>();
+    private Map<Task, Integer> childrenCosts = new HashMap<>();
+    private PriorityQueue<Task> parents = new PriorityQueue<>();
 
     private int weight;
     private String name;
+    private int bottomLevel;
 
     public Task(String name, int weight) {
         this.name = name;
@@ -45,7 +45,8 @@ public class Task implements  Comparable<Task> {
      * @param cost
      */
     void insertLinkToParent(Task parent, int cost) {
-        this.parents.put(parent, cost);
+        parents.add(parent);
+        this.parentCosts.put(parent, cost);
     }
 
     /**
@@ -54,15 +55,15 @@ public class Task implements  Comparable<Task> {
      * @param cost
      */
     void insertLinkToChild(Task child, int cost) {
-        this.children.put(child, cost);
+        this.childrenCosts.put(child, cost);
     }
 
     /**
-     * Returns a set of children tasks
+     * Returns a set of childrenCosts tasks
      * @return Set<Task>
      */
     public Set<Task> getChildren() {
-        return this.children.keySet();
+        return this.childrenCosts.keySet();
     }
 
     /**
@@ -70,7 +71,7 @@ public class Task implements  Comparable<Task> {
      * @return Set<Task>
      */
     public Set<Task> getParents() {
-        return this.parents.keySet();
+        return this.parentCosts.keySet();
     }
 
     /**
@@ -79,7 +80,7 @@ public class Task implements  Comparable<Task> {
      * @return
      */
     public int getParentLinkCost(Task parent) {
-        return parents.get(parent);
+        return parentCosts.get(parent);
     }
 
     /**
@@ -88,7 +89,7 @@ public class Task implements  Comparable<Task> {
      * @return
      */
     public int getChildLinkCost(Task child) {
-        return children.get(child);
+        return childrenCosts.get(child);
     }
 
     /**
@@ -102,6 +103,14 @@ public class Task implements  Comparable<Task> {
 
     @Override
     public int compareTo(Task task) {
-        return this.name.compareTo(task.name);
+        return Integer.compare(this.weight, task.weight);
+    }
+
+    public int getBottomLevel() {
+        return bottomLevel;
+    }
+
+    public void setBottomLevel(int bottomLevel) {
+        this.bottomLevel = bottomLevel;
     }
 }

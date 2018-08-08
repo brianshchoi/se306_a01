@@ -135,7 +135,7 @@ public class Schedule implements ISchedule, Cloneable {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
             List<Task> tasks = new ArrayList<>(processor.getTasks());
-            Collections.sort(tasks);
+            Collections.sort(tasks, Comparator.comparing(Task::getName));
             for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
@@ -144,8 +144,10 @@ public class Schedule implements ISchedule, Cloneable {
         System.out.println("The schedule has a makespan of " + getFinishTime());
     }
 
+    // Maximum of start time + bottom level of any node
     @Override
     public int f1() {
+
         return 0;
     }
 

@@ -52,4 +52,8 @@ public class TaskModel {
     public String getGraphId() {
         return graphId;
     }
+
+    public void calculateBottomLevels() {
+        
+    }
 }
