@@ -15,41 +15,47 @@ import javafx.stage.Stage;
 import java.util.Locale;
 
 public class Visualizer extends Application {
-    private static final double TILE_SIZE = 150;
+    private static final double TILE_SIZE = 300;
 
     // Tiles
-    private Tile clock_tile;
-    private Tile colorRegulator;
-    private Tile sparkLineTile;
+    private Tile scheduler_tile;
+    private Tile nodeTree_tile;
+    private Tile branchPercentage_tile;
 
 
     @Override public void init(){
 
-        clock_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
+        scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CLOCK)
-                .title("Clock Tile")
+                .title("Parallel Scheduler")
                 .text("Whatever text")
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
                 .build();
 
-        sparkLineTile = TileBuilder.create()
-                .prefSize(TILE_SIZE, TILE_SIZE)
+        nodeTree_tile = TileBuilder.create()
+                .prefSize(500, 600)
                 .skinType(Tile.SkinType.SPARK_LINE)
-                .title("SparkLine Tile")
+                .title("Node Tree")
                 .unit("mb")
                 .gradientStops(new Stop(0, Tile.GREEN),
                         new Stop(0.5, Tile.YELLOW),
                         new Stop(1.0, Tile.RED))
                 .strokeWithGradient(true)
                 .build();
+
+        branchPercentage_tile = TileBuilder.create()
+                .prefSize(200, 400)
+                .title("Branch Percentage")
+                .unit("%")
+                .build();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(5,5,
-                clock_tile,sparkLineTile);
+        FlowGridPane pane = new FlowGridPane(3,2,
+                scheduler_tile, nodeTree_tile, branchPercentage_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
