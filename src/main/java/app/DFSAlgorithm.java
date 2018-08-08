@@ -92,7 +92,7 @@ public class DFSAlgorithm implements IAlgorithm {
         }
     }
 
-    private int cost(ISchedule schedule) {
+    private int cost(ISchedule schedule, Task currentTask) {
         throw new UnimplmentedException();
     }
 

@@ -166,11 +166,14 @@ public class Schedule implements ISchedule, Cloneable {
         return maxBottomLevel;
     }
 
+    // Sum of weights of tasks + the idle time divided by the number of processors
     @Override
     public double f2(TaskModel taskModel) {
         return (taskModel.getComputationalLoad() + getIdleTime()) / (double) _processors.size();
     }
 
+    // For each node in free tasks, add the earliest time it can start on any processor to its
+    // bottom level time, and find the max of these.
     @Override
     public int f3(List<Task> freeTasks) {
 
