@@ -23,6 +23,10 @@ public class Schedule implements ISchedule, Cloneable {
 
         for (IProcessor processor: _processors) {
             schedule._processors.add((IProcessor) ((Processor) processor).clone());
+
+            for (Task task: _tasksToProcessor.keySet()) {
+                schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
+            }
         }
 
         return schedule;

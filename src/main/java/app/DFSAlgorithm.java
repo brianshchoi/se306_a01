@@ -44,6 +44,8 @@ public class DFSAlgorithm implements IAlgorithm {
             for (Task currentTask: freeTasks){
                 for (IProcessor currentProcessor: schedule.getProcessors()) {
 
+                    // Check if we are trying to schedule the first task
+                    // on a different processor.  This is unnecessary.
                     if (symmetric && firstTaskOnSymmetricScheduleDone) {
                         symmetric = false;
                         break;
@@ -60,6 +62,8 @@ public class DFSAlgorithm implements IAlgorithm {
                     // Schedule task
                     scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
+
+                    // Remember that we have scheduled the first task on a blank schedule
                     if (symmetric) {
                         firstTaskOnSymmetricScheduleDone = true;
                     }
