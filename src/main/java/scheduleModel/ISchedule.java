@@ -1,6 +1,7 @@
 package scheduleModel;
 
 import taskModel.Task;
+import taskModel.TaskModel;
 
 import java.util.List;
 
@@ -62,6 +63,6 @@ public interface ISchedule {
 
     // Cost functions
     int f1();
-    int f2();
-    int f3();
+    double f2(TaskModel taskModel);
+    int f3(List<Task> freeTasks);
 }

@@ -1,6 +1,7 @@
 package scheduleModel;
 
 import taskModel.Task;
+import taskModel.TaskModel;
 
 import java.util.*;
 
@@ -166,12 +167,13 @@ public class Schedule implements ISchedule, Cloneable {
     }
 
     @Override
-    public int f2() {
-        return 0;
+    public double f2(TaskModel taskModel) {
+        return (taskModel.getComputationalLoad() + getIdleTime()) / (double) _processors.size();
     }
 
     @Override
-    public int f3() {
+    public int f3(List<Task> freeTasks) {
+
         return 0;
     }
 }
