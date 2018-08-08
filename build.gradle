@@ -7,6 +7,10 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    // TilesFX dependency
+    maven {
+        url  "https://dl.bintray.com/hansolo/tilesfx"
+    }
 }
 
 dependencies {
