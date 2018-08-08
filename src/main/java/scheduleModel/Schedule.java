@@ -8,6 +8,7 @@ public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
     private Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
+    private int allocatedTime = 0;
 
     public Schedule(int numOfProcessors) {
         for (int i = 1; i <= numOfProcessors; i++) {
@@ -29,6 +30,8 @@ public class Schedule implements ISchedule, Cloneable {
             schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
         }
 
+        schedule.allocatedTime = this.allocatedTime;
+
         return schedule;
     }
 
@@ -36,6 +39,7 @@ public class Schedule implements ISchedule, Cloneable {
     public void schedule(Task task, IProcessor processor, int time) {
         processor.schedule(task, time);
         _tasksToProcessor.put(task, processor);
+        this.allocatedTime += task.getWeight();
     }
 
     @Override
@@ -69,6 +73,7 @@ public class Schedule implements ISchedule, Cloneable {
         if (processor != null) {
             processor.remove(task);
             _tasksToProcessor.remove(task);
+            allocatedTime -= task.getWeight();
             taskRemoved = true;
         }
 
@@ -128,6 +133,11 @@ public class Schedule implements ISchedule, Cloneable {
         }
 
         return false;
+    }
+
+    @Override
+    public int getIdleTime() {
+        return getFinishTime() - allocatedTime;
     }
 
     @Override

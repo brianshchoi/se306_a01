@@ -56,6 +56,8 @@ public interface ISchedule {
 
     boolean contains(Task task);
 
+    int getIdleTime();
+
     void debug();
 
     // Cost functions
