@@ -36,4 +36,12 @@ public class ScheduleTest {
         assertFalse(b.contains(c));
     }
 
+    @Test
+    public void testIdleTime() {
+        a.schedule(new Task("b", 5), a.getProcessors().get(0), 7);
+        a.schedule(new Task("c", 2), a.getProcessors().get(1), 0);
+        a.schedule(new Task("d", 1), a.getProcessors().get(1), 4);
+        assertEquals(6, a.getIdleTime());
+    }
+
 }
