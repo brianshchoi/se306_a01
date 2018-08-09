@@ -3,6 +3,7 @@ package view;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -100,10 +101,8 @@ public class GanntChartScheduler {
         StackPane node = new StackPane();
         Text text = new Text(task.getName());
         text.setFill(Color.WHITE);
-        text.setFont(Font.font(32));
+        text.setFont(Font.font(20));
         Group group = new Group(text);
-        StackPane.setAlignment(group, Pos.CENTER);
-//        StackPane.setMargin(group, new Insets(0, 0, 5, 0));
         node.getChildren().add(group);
         data.setNode(node);
     }
