@@ -9,6 +9,7 @@ public class Processor implements IProcessor, Cloneable {
     private int id;
     private Map<Task, Integer> taskMap = new HashMap<>();
     private List<Task> tasks = new ArrayList<>();
+    private int allocatedTime = 0;
 
     public Processor(int id) {
         this.id = id;
@@ -18,7 +19,7 @@ public class Processor implements IProcessor, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
         processor.taskMap = (Map<Task, Integer>) ((HashMap<Task, Integer>) taskMap).clone();
-
+        processor.allocatedTime = allocatedTime;
         processor.tasks.addAll(tasks);
         return processor;
     }
@@ -33,6 +34,7 @@ public class Processor implements IProcessor, Cloneable {
     public void remove(Task task) {
         taskMap.remove(task);
         tasks.remove(task);
+        allocatedTime -= task.getWeight();
     }
 
     @Override
@@ -57,6 +59,7 @@ public class Processor implements IProcessor, Cloneable {
     public void schedule(Task task, int time) {
         taskMap.put(task, time);
         tasks.add(task);
+        allocatedTime += task.getWeight();
     }
 
     @Override
@@ -67,6 +70,11 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public int getIdleTime() {
+        return getFinishTime() - allocatedTime;
     }
 
     @Override

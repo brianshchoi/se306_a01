@@ -31,8 +31,6 @@ public class Schedule implements ISchedule, Cloneable {
             schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
         }
 
-        schedule.allocatedTime = this.allocatedTime;
-
         return schedule;
     }
 
@@ -40,7 +38,6 @@ public class Schedule implements ISchedule, Cloneable {
     public void schedule(Task task, IProcessor processor, int time) {
         processor.schedule(task, time);
         _tasksToProcessor.put(task, processor);
-        this.allocatedTime += task.getWeight();
     }
 
     @Override
@@ -74,7 +71,6 @@ public class Schedule implements ISchedule, Cloneable {
         if (processor != null) {
             processor.remove(task);
             _tasksToProcessor.remove(task);
-            allocatedTime -= task.getWeight();
             taskRemoved = true;
         }
 
@@ -138,7 +134,12 @@ public class Schedule implements ISchedule, Cloneable {
 
     @Override
     public int getIdleTime() {
-        return getFinishTime() - allocatedTime;
+        int idleTime = 0;
+        for (IProcessor processor: _processors) {
+            idleTime += processor.getIdleTime();
+        }
+
+        return idleTime;
     }
 
     @Override

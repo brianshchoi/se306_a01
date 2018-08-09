@@ -48,4 +48,6 @@ public interface IProcessor {
     List<Task> getTasks();
 
     int getId();
+
+    int getIdleTime();
 }
