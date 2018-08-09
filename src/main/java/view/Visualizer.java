@@ -12,7 +12,13 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import scheduleModel.IProcessor;
+import scheduleModel.ISchedule;
+import scheduleModel.Schedule;
+import taskModel.Task;
+import taskModel.TaskModel;
 
+import java.util.List;
 import java.util.Locale;
 
 public class Visualizer extends Application {
@@ -22,12 +28,12 @@ public class Visualizer extends Application {
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile branchPercentage_tile;
-    private GanttChartSample _ganttChart;
+    private GanntChartScheduler _ganttChart;
 
 
     @Override public void init(){
 
-        _ganttChart = new GanttChartSample();
+        _ganttChart = new GanntChartScheduler(mockSchedule());
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CUSTOM)
@@ -75,5 +81,51 @@ public class Visualizer extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private ISchedule mockSchedule() {
+        TaskModel model = new TaskModel("Test");
+
+        Task tZero = new Task("0", 4);
+        Task tOne = new Task("1", 2);
+        Task  tTwo = new Task("2", 2);
+        Task tThree = new Task("3", 2);
+        Task tFour = new Task("4", 5);
+        Task tFive = new Task("5", 5);
+        Task tSix = new Task("6", 10);
+
+        model.addTask(tZero);
+        model.addTask(tOne);
+        model.addTask(tTwo);
+        model.addTask(tThree);
+        model.addTask(tFour);
+        model.addTask(tFive);
+        model.addTask(tSix);
+
+        model.addDependency(tZero, tOne, 1);
+        model.addDependency(tZero, tTwo, 1);
+        model.addDependency(tZero, tThree, 3);
+        model.addDependency(tOne, tFour, 1);
+        model.addDependency(tTwo, tFour, 2);
+        model.addDependency(tThree, tFive, 3);
+        model.addDependency(tFive, tSix, 5);
+        model.addDependency(tFour, tSix, 4);
+
+        ISchedule s = new Schedule(2);
+
+        // Needed here to get processor object
+        List<IProcessor> processors = s.getProcessors();
+        IProcessor p1 = processors.get(0);
+        IProcessor p2 = processors.get(1);
+
+        s.schedule(tZero, p1, 0);
+        s.schedule(tOne, p1, 4);
+        s.schedule(tTwo, p2, 5);
+        s.schedule(tThree, p1, 6);
+        s.schedule(tFour, p2, 7);
+        s.schedule(tFive, p1, 8);
+        s.schedule(tSix, p1, 16);
+
+        return s;
     }
 }
