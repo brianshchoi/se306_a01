@@ -61,6 +61,27 @@ public class ScheduleTest {
         schedule2.schedule(a, schedule2.getProcessors().get(1), 0);
         schedule2.schedule(b, schedule2.getProcessors().get(0), 2);
 
-        assertTrue(schedule1.equals(schedule2));
+        Set<ISchedule> schedules = new HashSet<>();
+        schedules.add(schedule1);
+        schedules.add(schedule2);
+        assertEquals(1, schedules.size());
+
+        Set<Task> tasks = new HashSet<>();
+        tasks.add(a);
+        tasks.add(new Task("a", 2));
+        assertEquals(1, tasks.size());
+
+        Set<IProcessor> processors = new HashSet<>();
+        processors.add(schedule1.getProcessorOf(a));
+        processors.add(schedule2.getProcessorOf(a));
+        assertEquals(1, processors.size());
+
+        Schedule schedule3 = new Schedule(2);
+        schedule3.schedule(a, schedule2.getProcessors().get(1), 2);
+        schedule3.schedule(b, schedule2.getProcessors().get(0), 0);
+        schedules.add(schedule3);
+        assertEquals(2, schedules.size());
+
+        //assertTrue(schedule1.equals(schedule2));
     }
 }

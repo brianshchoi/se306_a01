@@ -112,4 +112,23 @@ public class Task implements  Comparable<Task> {
     public int getBottomLevel() {
         return bottomLevel;
     }
+
+    @Override
+    public boolean equals(Object object){
+        if (!(object instanceof Task)){
+            return false;
+        } else {
+            Task task = (Task)object;
+            if (task.getName().equals(this.name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        int result = 17;
+        return  31*result + name.hashCode();
+    }
 }

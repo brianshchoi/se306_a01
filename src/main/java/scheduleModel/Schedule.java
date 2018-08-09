@@ -211,11 +211,22 @@ public class Schedule implements ISchedule, Cloneable {
         return false;
     }
 
+    //very dodgy hash code
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + _processors.hashCode();
-        result = 31 * result + _tasksToProcessor.hashCode();
+        List<Integer> processorHashCodes = new ArrayList<>();
+
+        for (IProcessor processor: _processors) {
+            processorHashCodes.add(processor.hashCode());
+        }
+
+        Collections.sort(processorHashCodes);
+
+        for (int hashCode:processorHashCodes){
+            result = result *31 + hashCode;
+        }
         return result;
     }
+
 }

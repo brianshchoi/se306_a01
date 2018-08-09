@@ -5,9 +5,7 @@ import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class DFSAlgorithm implements IAlgorithm {
 
@@ -43,32 +41,43 @@ public class DFSAlgorithm implements IAlgorithm {
         if (!freeTasks.isEmpty()) {
             List<Task> scheduledTasks = schedule.getTasks(); // Store which tasks should be scheduled at each level
 
-            for (Task currentTask: freeTasks){
-                for (IProcessor currentProcessor: schedule.getProcessors()) {
+            for (Task currentTask : freeTasks) {
 
+                Set<ISchedule> schedules = new HashSet<>();
+                for (IProcessor currentProcessor : schedule.getProcessors()) {
+                    scheduler.schedule(currentTask, currentProcessor, schedule);
+                    try {
+                        schedules.add((ISchedule) ((Schedule) schedule).clone());
+                    } catch (CloneNotSupportedException e) {
+                    }
+                    scheduler.remove(currentTask,schedule);
+                }
+
+                for (ISchedule currentSchedule : schedules){
+                    //schedule = currentSchedule;
                     // Check if we are trying to schedule the first task
                     // on a different processor.  This is unnecessary.
-                    if (symmetric && firstTaskOnSymmetricScheduleDone) {
-                        symmetric = false;
-                        break;
-                    }
+//                    if (symmetric && firstTaskOnSymmetricScheduleDone) {
+//                        symmetric = false;
+//                        break;
+//                    }
 
                     numBranches++;
                     // Remove extra tasks from schedule when backtracking
                     for (Task task : schedule.getTasks()) {
-                        if (!scheduledTasks.contains(task)){
+                        if (!scheduledTasks.contains(task)) {
                             schedule.remove(task);
                         }
                     }
+                    schedule=currentSchedule;
 
-                    // Schedule task
-                    scheduler.schedule(currentTask, currentProcessor, schedule);
+                    //scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
 
-                    // Remember that we have scheduled the first task on a blank schedule
-                    if (symmetric) {
-                        firstTaskOnSymmetricScheduleDone = true;
-                    }
+//                    // Remember that we have scheduled the first task on a blank schedule
+//                    if (symmetric) {
+//                        firstTaskOnSymmetricScheduleDone = true;
+//                    }
 
                     if ((schedule.getFinishTime() < bound)) {
                         int numTasks = taskModel.getTasks().size();
@@ -83,9 +92,9 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            if (schedule.getFinishTime() < cost(schedule, newFreeTasks)){
+                            //if (schedule.getFinishTime() < cost(schedule, newFreeTasks)) { //Lucy wants to look at this
                                 run(newFreeTasks, depth, schedule);
-                            }
+                            //}
                         }
                     }
                     // Start backtracking
@@ -94,6 +103,7 @@ public class DFSAlgorithm implements IAlgorithm {
             }
         }
     }
+
 
     private double cost(ISchedule schedule, List<Task> freeTasks) {
         TreeSet<Double> costFunctionOutputs = new TreeSet<>();

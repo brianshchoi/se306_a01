@@ -92,4 +92,26 @@ public class Processor implements IProcessor, Cloneable {
 
         return true;
     }
+
+    @Override
+    public boolean equals(Object object){
+        if (!(object instanceof Processor)){
+            return false;
+        } else {
+            Processor processor = (Processor) object;
+            if (processor.taskMap.equals(this.taskMap)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        int result = 13;
+        for (Map.Entry<Task, Integer> entry : taskMap.entrySet()){
+            result = 31*result + entry.getKey().hashCode()*entry.getValue();
+        }
+        return result;
+    }
 }
