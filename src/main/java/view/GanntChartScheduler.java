@@ -1,17 +1,30 @@
 package view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.awt.SystemColor.text;
 
 public class GanntChartScheduler {
 
@@ -73,11 +86,26 @@ public class GanntChartScheduler {
             List<Task> listOfTasks = _processors.get(i).getTasks();
             for(Task t : listOfTasks) {
                 int startTime = _processors.get(i).getStartTimeOf(t);
-                series.getData().add(new XYChart.Data<>(startTime, procName[i], new GanttChart.ExtraData( t.getWeight(), "status-green")));
+                XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], new GanttChart.ExtraData( t.getWeight(), "status-green"));
+                displayLabelForData(taskData, t);
+                series.getData().add(taskData);
+
             }
             seriesList.add(series);
         }
         return seriesList;
+    }
+
+    private void displayLabelForData(XYChart.Data<Number,String> data, Task task){
+        StackPane node = new StackPane();
+        Text text = new Text(task.getName());
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font(32));
+        Group group = new Group(text);
+        StackPane.setAlignment(group, Pos.CENTER);
+//        StackPane.setMargin(group, new Insets(0, 0, 5, 0));
+        node.getChildren().add(group);
+        data.setNode(node);
     }
 
     public GanttChart get_chart() {
