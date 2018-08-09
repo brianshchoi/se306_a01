@@ -30,7 +30,7 @@ public class Visualizer extends Application {
         _ganttChart = new GanttChartSample();
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
-                .skinType(Tile.SkinType.CLOCK)
+                .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
                 .text("Whatever text")
                 .graphic(_ganttChart.get_chart())

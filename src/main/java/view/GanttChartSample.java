@@ -40,9 +40,10 @@ public class GanttChartSample {
         String machine;
 
         machine = machines[0];
+        XYChart.Data data1 = new XYChart.Data();
         XYChart.Series series1 = new XYChart.Series<>();
         series1.getData().add(new XYChart.Data<>(0, machine, new GanttChart.ExtraData( 1, "status-red")));
-        series1.getData().add(new XYChart.Data<>(1, machine, new GanttChart.ExtraData( 1, "status-green")));
+        series1.getData().add(new XYChart.Data<>(8, machine, new GanttChart.ExtraData( 1, "status-green")));
         series1.getData().add(new XYChart.Data<>(2, machine, new GanttChart.ExtraData( 1, "status-red")));
         series1.getData().add(new XYChart.Data<>(3, machine, new GanttChart.ExtraData( 1, "status-green")));
         series1.getData().add(new XYChart.Data<>(4,machine,new GanttChart.ExtraData(1, "status-green")));

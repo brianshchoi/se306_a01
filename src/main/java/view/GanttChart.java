@@ -25,6 +25,11 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
             this.length = lengthMs;
             this.styleClass = styleClass;
         }
+
+        public ExtraData(long lengthMs){
+            super();
+            this.length = lengthMs;
+        }
         public long getLength() {
             return length;
         }
