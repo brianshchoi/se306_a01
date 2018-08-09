@@ -1,6 +1,7 @@
 package scheduleModel;
 
 import taskModel.Task;
+import taskModel.TaskModel;
 
 import java.util.*;
 
@@ -8,6 +9,7 @@ public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
     private Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
+    private int allocatedTime = 0;
 
     public Schedule(int numOfProcessors) {
         for (int i = 1; i <= numOfProcessors; i++) {
@@ -29,6 +31,8 @@ public class Schedule implements ISchedule, Cloneable {
             schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
         }
 
+        schedule.allocatedTime = this.allocatedTime;
+
         return schedule;
     }
 
@@ -36,6 +40,7 @@ public class Schedule implements ISchedule, Cloneable {
     public void schedule(Task task, IProcessor processor, int time) {
         processor.schedule(task, time);
         _tasksToProcessor.put(task, processor);
+        this.allocatedTime += task.getWeight();
     }
 
     @Override
@@ -69,6 +74,7 @@ public class Schedule implements ISchedule, Cloneable {
         if (processor != null) {
             processor.remove(task);
             _tasksToProcessor.remove(task);
+            allocatedTime -= task.getWeight();
             taskRemoved = true;
         }
 
@@ -131,16 +137,58 @@ public class Schedule implements ISchedule, Cloneable {
     }
 
     @Override
+    public int getIdleTime() {
+        return getFinishTime() - allocatedTime;
+    }
+
+    @Override
     public void debug() {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
             List<Task> tasks = new ArrayList<>(processor.getTasks());
-            Collections.sort(tasks);
+            Collections.sort(tasks, Comparator.comparing(Task::getName));
             for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
             }
         }
         System.out.println("The schedule has a makespan of " + getFinishTime());
+    }
+
+    // Maximum of start time + bottom level of any node
+    @Override
+    public int f1() {
+        int maxBottomLevel = 0;
+        for (Task task: getTasks()) {
+            int f1NonMax = task.getBottomLevel() + getStartTimeOf(task);
+            if (maxBottomLevel < f1NonMax) maxBottomLevel = f1NonMax;
+        }
+        return maxBottomLevel;
+    }
+
+    // Sum of weights of tasks + the idle time divided by the number of processors
+    @Override
+    public double f2(TaskModel taskModel) {
+        return (taskModel.getComputationalLoad() + getIdleTime()) / (double) _processors.size();
+    }
+
+    // For each node in free tasks, add the earliest time it can start on any processor to its
+    // bottom level time, and find the max of these.
+    @Override
+    public int f3(List<Task> freeTasks) {
+        TreeSet<Integer> bottomLevelPlusEarliestStartTimes = new TreeSet<>();
+        IScheduler scheduler = new Scheduler();
+
+        for (Task task: freeTasks) {
+            int earliestTime = Integer.MAX_VALUE;
+            for (IProcessor processor: _processors) {
+                int time = scheduler.getEarliestStartTime(task, processor, this);
+                earliestTime = time < earliestTime ? time : earliestTime;
+            }
+
+            bottomLevelPlusEarliestStartTimes.add(earliestTime + task.getBottomLevel());
+        }
+
+        return bottomLevelPlusEarliestStartTimes.last();
     }
 }

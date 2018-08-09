@@ -9,6 +9,7 @@ import java.util.*;
 public class TaskModel {
     private Map<String, Task> tasks = new HashMap<>();
     private String graphId;
+    private int computationalLoad = 0;
 
     public TaskModel(String graphId) {
         this.graphId = graphId;
@@ -20,6 +21,7 @@ public class TaskModel {
      */
     public void addTask(Task task) {
         tasks.put(task.getName(), task);
+        computationalLoad += task.getWeight();
     }
 
     public Task get(String taskName) {
@@ -51,5 +53,22 @@ public class TaskModel {
 
     public String getGraphId() {
         return graphId;
+    }
+
+    public void computeBottomLevels(Task task) {
+        if (task.getChildren().size() == 0) {
+            task.setBottomLevel(task.getWeight());
+        } else {
+            PriorityQueue<Task> priorityQueue = new PriorityQueue<>();
+            for (Task child: task.getChildren()) {
+                computeBottomLevels(child);
+                priorityQueue.add(child);
+            }
+            task.setBottomLevel(priorityQueue.peek().getBottomLevel() + task.getWeight());
+        }
+    }
+
+    public int getComputationalLoad() {
+        return computationalLoad;
     }
 }
