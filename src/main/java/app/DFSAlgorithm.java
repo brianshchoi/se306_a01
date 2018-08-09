@@ -92,6 +92,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
+                            System.out.println("free task");
                             //if (schedule.getFinishTime() < cost(schedule, newFreeTasks)) { //Lucy wants to look at this
                                 run(newFreeTasks, depth, schedule);
                             //}
