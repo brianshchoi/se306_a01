@@ -50,4 +50,6 @@ public interface IProcessor {
     int getId();
 
     int getIdleTime();
+
+    boolean isEquivalent(Processor processor);
 }

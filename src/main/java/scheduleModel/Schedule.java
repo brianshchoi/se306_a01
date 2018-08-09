@@ -9,7 +9,6 @@ public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
     private Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
-    private int allocatedTime = 0;
 
     public Schedule(int numOfProcessors) {
         for (int i = 1; i <= numOfProcessors; i++) {
@@ -191,5 +190,32 @@ public class Schedule implements ISchedule, Cloneable {
         }
 
         return bottomLevelPlusEarliestStartTimes.last();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Schedule)) return false;
+        Schedule schedule = (Schedule) o;
+        for (IProcessor processor: _processors) {
+            if (!(schedule.containsProcessor(processor))) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean containsProcessor(IProcessor processor) {
+        for (IProcessor myProcessor: _processors) {
+            if (myProcessor.isEquivalent((Processor) processor)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + _processors.hashCode();
+        result = 31 * result + _tasksToProcessor.hashCode();
+        return result;
     }
 }

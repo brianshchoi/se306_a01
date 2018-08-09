@@ -22,7 +22,7 @@ public class ScheduleTest {
         b = a;
         assertEquals(a, b);
         b = (Schedule) a.clone();
-        assertNotEquals(a, b);
+        assertFalse(a.hashCode() == b.hashCode());
     }
 
     @Test
@@ -44,4 +44,10 @@ public class ScheduleTest {
         assertEquals(6, a.getIdleTime());
     }
 
+    @Test
+    public void testSameSchedule() {
+        ISchedule schedule1, schedule2;
+
+        
+    }
 }

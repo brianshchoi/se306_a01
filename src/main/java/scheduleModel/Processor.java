@@ -81,4 +81,15 @@ public class Processor implements IProcessor, Cloneable {
     public String toString() {
         return Integer.toString(id);
     }
+
+    @Override
+    public boolean isEquivalent(Processor processor) {
+        if (processor.taskMap.size() != taskMap.size()) return false;
+        for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
+            if (!(processor.taskMap.containsKey(entry.getKey()))) return false;
+            if (entry.getValue().intValue() != processor.taskMap.get(entry.getKey()).intValue()) return false;
+        }
+
+        return true;
+    }
 }
