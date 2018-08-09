@@ -6,6 +6,7 @@ import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -21,14 +22,18 @@ public class Visualizer extends Application {
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile branchPercentage_tile;
+    private GanttChartSample _ganttChart;
 
 
     @Override public void init(){
+
+        _ganttChart = new GanttChartSample();
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CLOCK)
                 .title("Parallel Scheduler")
                 .text("Whatever text")
+                .graphic(_ganttChart.get_chart())
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
