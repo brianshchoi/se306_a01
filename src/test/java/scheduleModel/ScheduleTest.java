@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import taskModel.Task;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.*;
 
 public class ScheduleTest {
@@ -46,8 +49,18 @@ public class ScheduleTest {
 
     @Test
     public void testSameSchedule() {
-        ISchedule schedule1, schedule2;
+        Schedule schedule1, schedule2;
+        schedule1 = new Schedule(2);
+        schedule2 = new Schedule(2);
+        Task a, b;
+        a = new Task("a", 1);
+        b = new Task("b", 2);
+        schedule1.schedule(a, schedule1.getProcessors().get(0), 0);
+        schedule1.schedule(b, schedule1.getProcessors().get(1), 2);
 
-        
+        schedule2.schedule(a, schedule2.getProcessors().get(1), 0);
+        schedule2.schedule(b, schedule2.getProcessors().get(0), 2);
+
+        assertTrue(schedule1.equals(schedule2));
     }
 }
