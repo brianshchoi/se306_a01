@@ -1,15 +1,4 @@
-IMPROVEMENT 1 - Priority Queue
-When reading in the file, each task should generate it's bottom level time.
-Task class can then implement comparable and thus the Tasks can be put into a priority queue.
-The priority queue will sort the tasks such that the longest bottom level times are first.
-variable freeTasks in the algorithm gets replaced with the priority queue.
-
-IMPROVEMENT 2 - Cost function
-In the first "if" clause, instead of comparing the makespan of partial schedule
-directly with bound, pass it into a cost function first.
-
-IMPROVEMENT 3 - Remove equivalent schedules.
-No idea how to do this yet.
-
-IMPROVEMENT OTHER - Optimise Schedule class.
-We will figure out how to do this together tomorrow.
+- node identity
+- bubbling
+- removing mirrors locally
+- removing identical schedules (global)
