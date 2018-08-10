@@ -97,20 +97,7 @@ public class GanntChartScheduler {
         }
         return seriesList;
     }
-
-    private void displayLabelForData(XYChart.Data<Number,String> data, Task task, GanttChart.ExtraData ganttChart){
-        StackPane node = new StackPane();
-        Text text = new Text(task.getName());
-        text.setFill(Color.WHITE);
-        text.setFont(Font.font(20));
-        Group group = new Group(text);
-
-        group.setTranslateX(node.getLayoutX()/2);
-        group.setTranslateY(25);
-
-        node.getChildren().add(group);
-        data.setNode(node);
-    }
+    
     public GanttChart get_chart() {
         return _chart;
     }

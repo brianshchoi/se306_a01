@@ -19,14 +19,7 @@ import java.util.List;
 
 public class GanttChart<X,Y> extends XYChart<X,Y> {
 
-    public static int x = 100;
-    protected Rectangle ellipse;
-
-    public Rectangle getEllipse(){
-
-        return ellipse;
-
-    }
+    private Rectangle ellipse;
 
     public static class ExtraData {
 
@@ -34,16 +27,16 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
         public long length;
         public String styleClass;
-        public Task task;
+        public Task _task;
 
         public ExtraData(long lengthMs, String styleClass, Task task) {
             super();
             this.length = lengthMs;
             this.styleClass = styleClass;
-            this.task = task;
+            this._task = task;
         }
         public Task getTask(){
-            return task;
+            return _task;
         }
 
         public long getLength() {
@@ -82,6 +75,10 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     private static double getLength( Object obj) {
         return ((ExtraData) obj).getLength();
+    }
+
+    private static Task getTask( Object obj) {
+        return ((ExtraData) obj).getTask();
     }
 
     @Override protected void layoutPlotChildren() {
@@ -126,7 +123,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                         block.setLayoutX(x);
                         block.setLayoutY(y);
 
-                        Text text = new Text();
+                        Text text = new Text(getTask(item.getExtraValue()).getName());
                         text.setFill(Color.WHITE);
                         text.setFont(Font.font(20));
                         Group group = new Group(text);
