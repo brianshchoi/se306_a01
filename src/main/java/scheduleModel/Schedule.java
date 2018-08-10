@@ -8,7 +8,7 @@ import java.util.*;
 public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
-    private Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
+    public Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
 
     public Schedule(int numOfProcessors) {
         for (int i = 1; i <= numOfProcessors; i++) {
@@ -68,16 +68,13 @@ public class Schedule implements ISchedule, Cloneable {
         //get processor task is scheduled in
         IProcessor processor = _tasksToProcessor.get(task);
         if (processor != null) {
-            processor.remove(task);
-            _tasksToProcessor.remove(task);
-            taskRemoved = true;
-        } else {
-            for (IProcessor processor1: _processors) {
-                if (processor1.contains(task)) {
-                    processor1.remove(task);
-                    taskRemoved = true;
+            for (IProcessor myProcessor: _processors) {
+                if (myProcessor.equals(processor)) {
+                    myProcessor.remove(task);
                 }
             }
+            _tasksToProcessor.remove(task);
+            taskRemoved = true;
         }
 
         if (!taskRemoved){
