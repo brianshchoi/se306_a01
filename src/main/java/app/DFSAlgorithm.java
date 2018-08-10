@@ -85,7 +85,7 @@ public class DFSAlgorithm implements IAlgorithm {
                     depth++;
 
                     // Check if bad schedule
-                    if ((schedule.getFinishTime() < bound)) {
+                    if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) { // Update the best schedule
                             try {
@@ -97,7 +97,9 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            run(newFreeTasks, depth, schedule, previousTasks, previousProcessor);
+                            //if(cost(schedule, newFreeTasks) < bound){
+                                run(newFreeTasks, depth, schedule, previousTasks, previousProcessor);
+                           // }
                         }
                     }
                     // Start backtracking
