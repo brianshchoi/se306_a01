@@ -40,11 +40,12 @@ public class DFSAlgorithm implements IAlgorithm {
 
     private void run(List<Task> freeTasks, int depth, ISchedule schedule) {
         recursionLevel++;
-        System.out.println(recursionLevel);
+        //System.out.println(recursionLevel);
         if (!freeTasks.isEmpty()) {
             List<Task> scheduledTasks = schedule.getTasks(); // Store which tasks should be scheduled at each level
 
             for (Task currentTask : freeTasks) {
+                //System.out.println(currentTask.getName());
 
                 for (Task task : schedule.getTasks()) {
                     if (!scheduledTasks.contains(task)) {
@@ -94,7 +95,6 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            System.out.println("free task");
                             //if (schedule.getFinishTime() < cost(schedule, newFreeTasks)) { //Lucy wants to look at this
                                 run(newFreeTasks, depth, schedule);
                             //}

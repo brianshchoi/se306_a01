@@ -128,7 +128,6 @@ public class Task implements  Comparable<Task> {
 
     @Override
     public int hashCode(){
-        int result = 17;
-        return  31*result + name.hashCode();
+        return  name.hashCode();
     }
 }
