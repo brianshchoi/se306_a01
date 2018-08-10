@@ -31,7 +31,6 @@ public class Scheduler implements IScheduler {
                 int parentTime = schedule.getFinishTimeOf(parentTask) + parentTask.getChildLinkCost(task);
                 if (parentTime > maxTime) {
                     maxTime = parentTime;
-                    System.out.println("time: " + task.getName() + " " + maxTime);
                 }
             }
         }
