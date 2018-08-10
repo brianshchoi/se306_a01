@@ -15,6 +15,7 @@ public class DFSAlgorithm implements IAlgorithm {
     private boolean symmetric = true;
     private boolean firstTaskOnSymmetricScheduleDone = false;
     private int recursionLevel = 0;
+    private Set<Schedule> allSchedules = new HashSet<>();
 
     private int bound = Integer.MAX_VALUE; // Stores current best finish time
     private ISchedule bestSchedule; // Stores current best schedule
@@ -73,6 +74,12 @@ public class DFSAlgorithm implements IAlgorithm {
 //                        }
 //                    }
                     schedule=currentSchedule;
+                    if (allSchedules.contains(schedule)) continue;
+                    try {
+                        allSchedules.add((Schedule) ((Schedule) schedule).clone());
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
 
                     //scheduler.schedule(currentTask, currentProcessor, schedule);
                     depth++;
