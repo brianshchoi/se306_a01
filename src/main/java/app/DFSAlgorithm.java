@@ -31,14 +31,14 @@ public class DFSAlgorithm implements IAlgorithm {
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
 
-        List<Task> pTask = new ArrayList<>();
+        List<Task> previousTasks = new ArrayList<>();
 
-        run(freeTasks, depth, schedule, pTask, null);
+        run(freeTasks, depth, schedule, previousTasks, null);
         System.out.println("Number of branches: " + numBranches);
         return bestSchedule;
     }
 
-    private void run(List<Task> freeTasks, int depth, ISchedule schedule, List<Task> pTasks, IProcessor pProc) {
+    private void run(List<Task> freeTasks, int depth, ISchedule schedule, List<Task> previousTasks, IProcessor previousProcessor) {
         recursionLevel++;
 
         if (!freeTasks.isEmpty()) {
@@ -47,16 +47,20 @@ public class DFSAlgorithm implements IAlgorithm {
             for (Task currentTask : freeTasks) {
 
                 // Remove tasks from list of previously tried tasks when backtracking
-                pTasks.retainAll(scheduledTasks);
+                previousTasks.retainAll(scheduledTasks);
 
+                // If we have tried this task before, then the
+                // we do not need to schedule it on any processor
+                // different to the processor of the previou task
                 Set<IProcessor> processors = new HashSet<>();
-                if (pTasks.contains(currentTask)) {
-                    processors.add(pProc);
+                if (previousTasks.contains(currentTask)) {
+                    processors.add(previousProcessor);
                 } else {
                     processors.addAll(schedule.getProcessors());
                 }
 
-                pTasks.add(currentTask);
+                // Update previous tasks
+                previousTasks.add(currentTask);
 
                 // Try scheduling task on each processor and add copy to set of unique schedules
                 Set<ISchedule> schedules = new HashSet<>();
@@ -71,22 +75,13 @@ public class DFSAlgorithm implements IAlgorithm {
                 }
 
 
-                // Go through each created schedules at this level
+                // Go through each of the unique created schedules at this level
                 for (ISchedule currentSchedule : schedules) {
                     numBranches++;
                     schedule = currentSchedule;
 
-                    //update pProc
-                    pProc = schedule.getProcessorOf(currentTask);
-//                    // Check if duplicate
-//                    if (allSchedules.contains(schedule)) continue;
-//
-//                    // Add to set of explored schedules
-//                    try {
-//                        allSchedules.add((Schedule) ((Schedule) schedule).clone());
-//                    } catch (CloneNotSupportedException e) {
-//                        e.printStackTrace();
-//                    }
+                    // Update previousProcessor
+                    previousProcessor = schedule.getProcessorOf(currentTask);
                     depth++;
 
                     // Check if bad schedule
@@ -102,7 +97,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            run(newFreeTasks, depth, schedule, pTasks, pProc);
+                            run(newFreeTasks, depth, schedule, previousTasks, previousProcessor);
                         }
                     }
                     // Start backtracking
