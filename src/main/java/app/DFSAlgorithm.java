@@ -51,7 +51,7 @@ public class DFSAlgorithm implements IAlgorithm {
 
                 // If we have tried this task before, then the
                 // we do not need to schedule it on any processor
-                // different to the processor of the previou task
+                // different to the processor of the previous task
                 Set<IProcessor> processors = new HashSet<>();
                 if (previousTasks.contains(currentTask)) {
                     processors.add(previousProcessor);
