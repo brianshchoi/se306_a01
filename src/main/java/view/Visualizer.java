@@ -5,12 +5,14 @@ import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
@@ -27,7 +29,7 @@ public class Visualizer extends Application {
     // Tiles
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
-    private Tile branchPercentage_tile;
+    private Tile time_tile;
     private GanntChartScheduler _ganttChart;
 
 
@@ -56,17 +58,21 @@ public class Visualizer extends Application {
                 .strokeWithGradient(true)
                 .build();
 
-        branchPercentage_tile = TileBuilder.create()
+        time_tile = TileBuilder.create()
+                .skinType(Tile.SkinType.TEXT)
                 .prefSize(200, 400)
-                .title("Branch Percentage")
-                .unit("%")
+                .title("Time Taken")
+                .textSize(Tile.TextSize.BIGGER)
+                .description("Nodes: "+ System.lineSeparator()+ "Processors: "
+                        + System.lineSeparator() + "Cores used: ")
+                .descriptionAlignment(Pos.TOP_LEFT)
                 .build();
     }
 
     @Override
     public void start(Stage primaryStage) {
         FlowGridPane pane = new FlowGridPane(3,2,
-                scheduler_tile, nodeTree_tile, branchPercentage_tile);
+                scheduler_tile, nodeTree_tile, time_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
