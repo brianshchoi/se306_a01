@@ -49,7 +49,7 @@ public class DFSAlgorithm implements IAlgorithm {
                 // Remove tasks from list of previously tried tasks when backtracking
                 previousTasks.retainAll(scheduledTasks);
 
-                // If we have tried this task before, then the
+                // If we have tried this task before, then
                 // we do not need to schedule it on any processor
                 // different to the processor of the previous task
                 Set<IProcessor> processors = new HashSet<>();
