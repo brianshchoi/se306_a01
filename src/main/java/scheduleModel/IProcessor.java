@@ -48,4 +48,8 @@ public interface IProcessor {
     List<Task> getTasks();
 
     int getId();
+
+    int getIdleTime();
+
+    boolean isEquivalent(Processor processor);
 }

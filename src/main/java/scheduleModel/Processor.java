@@ -9,6 +9,7 @@ public class Processor implements IProcessor, Cloneable {
     private int id;
     private Map<Task, Integer> taskMap = new HashMap<>();
     private List<Task> tasks = new ArrayList<>();
+    private int allocatedTime = 0;
 
     public Processor(int id) {
         this.id = id;
@@ -18,7 +19,7 @@ public class Processor implements IProcessor, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
         processor.taskMap = (Map<Task, Integer>) ((HashMap<Task, Integer>) taskMap).clone();
-
+        processor.allocatedTime = allocatedTime;
         processor.tasks.addAll(tasks);
         return processor;
     }
@@ -33,6 +34,7 @@ public class Processor implements IProcessor, Cloneable {
     public void remove(Task task) {
         taskMap.remove(task);
         tasks.remove(task);
+        allocatedTime -= task.getWeight();
     }
 
     @Override
@@ -57,6 +59,7 @@ public class Processor implements IProcessor, Cloneable {
     public void schedule(Task task, int time) {
         taskMap.put(task, time);
         tasks.add(task);
+        allocatedTime += task.getWeight();
     }
 
     @Override
@@ -70,7 +73,47 @@ public class Processor implements IProcessor, Cloneable {
     }
 
     @Override
+    public int getIdleTime() {
+        return getFinishTime() - allocatedTime;
+    }
+
+    @Override
     public String toString() {
         return Integer.toString(id);
+    }
+
+    @Override
+    public boolean isEquivalent(Processor processor) {
+        if (processor.taskMap.size() != taskMap.size()) return false;
+        for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
+            if (!(processor.taskMap.containsKey(entry.getKey()))) return false;
+            if (entry.getValue().intValue() != processor.taskMap.get(entry.getKey()).intValue()) return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (!(object instanceof Processor)){
+            return false;
+        } else {
+            Processor processor = (Processor) object;
+            Map<Task, Integer> otherTaskMap = processor.taskMap;
+            if (taskMap.keySet().equals(otherTaskMap.keySet())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Task, Integer> entry : taskMap.entrySet()){
+            sb.append(entry.getKey().getName());
+            sb.append(entry.getValue());
+        }
+        return sb.toString().hashCode();
     }
 }

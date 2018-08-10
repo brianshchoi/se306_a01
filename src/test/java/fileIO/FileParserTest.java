@@ -1,9 +1,5 @@
 package fileIO;
 
-import fileIO.FileParser;
-import scheduleModel.IProcessor;
-import scheduleModel.ISchedule;
-import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
 import taskModel.TaskNotFoundException;
@@ -22,13 +18,13 @@ import static org.junit.Assert.assertTrue;
 public class FileParserTest {
 
     private FileParser fileParser;
-    private static final String testFileName = "Nodes_7_OutTree.dot";
+    private static final String TEST_FILE_NAME = "Nodes_7_OutTree.dot";
     private File file;
     private TaskModel taskModel;
 
     @Before
     public void setUp() throws URISyntaxException, FileNotFoundException {
-        file = new File(this.getClass().getResource(testFileName).toURI());
+        file = new File(this.getClass().getResource(TEST_FILE_NAME).toURI());
         fileParser = new FileParser(file);
         taskModel = fileParser.getTaskModelFromFile();
     }
@@ -113,5 +109,25 @@ public class FileParserTest {
 
         assertFalse(a.getParents().contains(b));
         assertFalse(b.getChildren().contains(a));
+    }
+
+    @Test
+    public void testBottomLevels() {
+        Task t0, t1, t2, t3, t4, t5, t6;
+        t0 = taskModel.get("0");
+        t1 = taskModel.get("1");
+        t2 = taskModel.get("2");
+        t3 = taskModel.get("3");
+        t4 = taskModel.get("4");
+        t5 = taskModel.get("5");
+        t6 = taskModel.get("6");
+
+        assertEquals(18, t0.getBottomLevel());
+        assertEquals(13, t1.getBottomLevel());
+        assertEquals(5, t2.getBottomLevel());
+        assertEquals(6, t3.getBottomLevel());
+        assertEquals(4, t4.getBottomLevel());
+        assertEquals(7, t5.getBottomLevel());
+        assertEquals(7, t6.getBottomLevel());
     }
 }
