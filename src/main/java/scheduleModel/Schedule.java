@@ -71,6 +71,13 @@ public class Schedule implements ISchedule, Cloneable {
             processor.remove(task);
             _tasksToProcessor.remove(task);
             taskRemoved = true;
+        } else {
+            for (IProcessor processor1: _processors) {
+                if (processor1.contains(task)) {
+                    processor1.remove(task);
+                    taskRemoved = true;
+                }
+            }
         }
 
         if (!taskRemoved){

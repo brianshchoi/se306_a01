@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
 public class Run {
+    private static final String NODES_4 = "Nodes_3_Simple.dot";
     private static final String NODES_7 = "Nodes_7_OutTree.dot";
     private static final String NODES_8 = "Nodes_8_Random.dot";
     private static final String NODES_9 = "Nodes_9_SeriesParallel.dot";

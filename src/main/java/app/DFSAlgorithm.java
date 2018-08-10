@@ -14,6 +14,7 @@ public class DFSAlgorithm implements IAlgorithm {
     private int numOfProcessors;
     private boolean symmetric = true;
     private boolean firstTaskOnSymmetricScheduleDone = false;
+    private int recursionLevel = 0;
 
     private int bound = Integer.MAX_VALUE; // Stores current best finish time
     private ISchedule bestSchedule; // Stores current best schedule
@@ -38,14 +39,23 @@ public class DFSAlgorithm implements IAlgorithm {
     }
 
     private void run(List<Task> freeTasks, int depth, ISchedule schedule) {
+        recursionLevel++;
+        System.out.println(recursionLevel);
         if (!freeTasks.isEmpty()) {
             List<Task> scheduledTasks = schedule.getTasks(); // Store which tasks should be scheduled at each level
 
             for (Task currentTask : freeTasks) {
 
+                for (Task task : schedule.getTasks()) {
+                    if (!scheduledTasks.contains(task)) {
+                        schedule.remove(task);
+                    }
+                }
+
                 Set<ISchedule> schedules = new HashSet<>();
                 for (IProcessor currentProcessor : schedule.getProcessors()) {
                     scheduler.schedule(currentTask, currentProcessor, schedule);
+                    //schedule.debug();
                     try {
                         schedules.add((ISchedule) ((Schedule) schedule).clone());
                     } catch (CloneNotSupportedException e) {
@@ -54,21 +64,13 @@ public class DFSAlgorithm implements IAlgorithm {
                 }
 
                 for (ISchedule currentSchedule : schedules){
-                    //schedule = currentSchedule;
-                    // Check if we are trying to schedule the first task
-                    // on a different processor.  This is unnecessary.
-//                    if (symmetric && firstTaskOnSymmetricScheduleDone) {
-//                        symmetric = false;
-//                        break;
-//                    }
-
                     numBranches++;
                     // Remove extra tasks from schedule when backtracking
-                    for (Task task : schedule.getTasks()) {
-                        if (!scheduledTasks.contains(task)) {
-                            schedule.remove(task);
-                        }
-                    }
+//                    for (Task task : schedule.getTasks()) {
+//                        if (!scheduledTasks.contains(task)) {
+//                            schedule.remove(task);
+//                        }
+//                    }
                     schedule=currentSchedule;
 
                     //scheduler.schedule(currentTask, currentProcessor, schedule);
@@ -103,6 +105,7 @@ public class DFSAlgorithm implements IAlgorithm {
                 }
             }
         }
+        boolean backtracking = true;
     }
 
 
