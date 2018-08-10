@@ -99,7 +99,8 @@ public class Processor implements IProcessor, Cloneable {
             return false;
         } else {
             Processor processor = (Processor) object;
-            if (processor.taskMap.equals(this.taskMap)){
+            Map<Task, Integer> otherTaskMap = processor.taskMap;
+            if (taskMap.keySet().equals(otherTaskMap.keySet())){
                 return true;
             }
         }
@@ -108,10 +109,11 @@ public class Processor implements IProcessor, Cloneable {
 
     @Override
     public int hashCode(){
-        int result = 13;
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<Task, Integer> entry : taskMap.entrySet()){
-            result = 31*result + entry.getKey().hashCode()*entry.getValue();
+            sb.append(entry.getKey().getName());
+            sb.append(entry.getValue());
         }
-        return result;
+        return sb.toString().hashCode();
     }
 }

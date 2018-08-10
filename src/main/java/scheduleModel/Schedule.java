@@ -227,10 +227,7 @@ public class Schedule implements ISchedule, Cloneable {
 
         Collections.sort(processorHashCodes);
 
-        for (int hashCode:processorHashCodes){
-            result = result *31 + hashCode;
-        }
-        return result;
+        return processorHashCodes.hashCode();
     }
 
 }
