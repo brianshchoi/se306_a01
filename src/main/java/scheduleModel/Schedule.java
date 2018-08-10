@@ -8,7 +8,7 @@ import java.util.*;
 public class Schedule implements ISchedule, Cloneable {
 
     private List<IProcessor> _processors = new ArrayList<>();
-    public Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
+  //  public Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
 
     public Schedule(int numOfProcessors) {
         for (int i = 1; i <= numOfProcessors; i++) {
@@ -26,26 +26,20 @@ public class Schedule implements ISchedule, Cloneable {
             schedule._processors.add((IProcessor) ((Processor) processor).clone());
         }
 
-        for (Task task: _tasksToProcessor.keySet()) {
-            schedule._tasksToProcessor.put(task, (IProcessor) ((Processor)this._tasksToProcessor.get(task)).clone());
-        }
-
         return schedule;
     }
 
     @Override
     public void schedule(Task task, IProcessor processor, int time) {
         processor.schedule(task, time);
-        _tasksToProcessor.put(task, processor);
     }
 
     @Override
     public int getFinishTimeOf(Task task) {
-        //get the processor the task is scheduled in
-        IProcessor processor = _tasksToProcessor.get(task);
-
-        if (processor != null){
-            return processor.getFinishTimeOf(task);
+        for (IProcessor processor: _processors){
+            if (processor.contains(task)){
+                return processor.getFinishTimeOf(task);
+            }
         }
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
     }
@@ -53,11 +47,12 @@ public class Schedule implements ISchedule, Cloneable {
     @Override
     public int getStartTimeOf(Task task) {
         //get processor task is scheduled in
-        IProcessor processor = _tasksToProcessor.get(task);
-
-        if (processor != null){
-            return processor.getStartTimeOf(task);
+        for (IProcessor processor : _processors){
+            if (processor.contains(task)){
+                return processor.getStartTimeOf(task);
+            }
         }
+
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
     }
 
@@ -66,15 +61,11 @@ public class Schedule implements ISchedule, Cloneable {
         boolean taskRemoved = false;
 
         //get processor task is scheduled in
-        IProcessor processor = _tasksToProcessor.get(task);
-        if (processor != null) {
-            for (IProcessor myProcessor: _processors) {
-                if (myProcessor.equals(processor)) {
-                    myProcessor.remove(task);
-                }
+        for (IProcessor processor : _processors){
+            if (processor.contains(task)){
+                processor.remove(task);
+                taskRemoved = true;
             }
-            _tasksToProcessor.remove(task);
-            taskRemoved = true;
         }
 
         if (!taskRemoved){
@@ -101,9 +92,10 @@ public class Schedule implements ISchedule, Cloneable {
 
     @Override
     public IProcessor getProcessorOf(Task task) {
-        IProcessor processor = _tasksToProcessor.get(task);
-        if (processor != null) {
-            return processor;
+        for (IProcessor processor: _processors){
+            if (processor.contains(task)) {
+                return processor;
+            }
         }
 
         throw new IncorrectArgumentsException("There are no processors which contain the task: " + task.getName());
