@@ -87,8 +87,9 @@ public class GanntChartScheduler {
             List<Task> listOfTasks = _processors.get(i).getTasks();
             for(Task t : listOfTasks) {
                 int startTime = _processors.get(i).getStartTimeOf(t);
-                XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], new GanttChart.ExtraData( t.getWeight(), "status-green"));
-                displayLabelForData(taskData, t);
+                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), "status-green", t);
+                XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], ganttChart);
+    //            displayLabelForData(taskData, t, ganttChart);
                 series.getData().add(taskData);
 
             }
@@ -97,16 +98,19 @@ public class GanntChartScheduler {
         return seriesList;
     }
 
-    private void displayLabelForData(XYChart.Data<Number,String> data, Task task){
+    private void displayLabelForData(XYChart.Data<Number,String> data, Task task, GanttChart.ExtraData ganttChart){
         StackPane node = new StackPane();
         Text text = new Text(task.getName());
         text.setFill(Color.WHITE);
         text.setFont(Font.font(20));
         Group group = new Group(text);
+
+        group.setTranslateX(node.getLayoutX()/2);
+        group.setTranslateY(25);
+
         node.getChildren().add(group);
         data.setNode(node);
     }
-
     public GanttChart get_chart() {
         return _chart;
     }

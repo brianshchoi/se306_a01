@@ -3,10 +3,15 @@ package view;
 import javafx.beans.NamedArg;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import taskModel.Task;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,16 +19,31 @@ import java.util.List;
 
 public class GanttChart<X,Y> extends XYChart<X,Y> {
 
+    public static int x = 100;
+    protected Rectangle ellipse;
+
+    public Rectangle getEllipse(){
+
+        return ellipse;
+
+    }
+
     public static class ExtraData {
+
+   //     final GanttChart gc = GanttChart.this;
 
         public long length;
         public String styleClass;
+        public Task task;
 
-
-        public ExtraData(long lengthMs, String styleClass) {
+        public ExtraData(long lengthMs, String styleClass, Task task) {
             super();
             this.length = lengthMs;
             this.styleClass = styleClass;
+            this.task = task;
+        }
+        public Task getTask(){
+            return task;
         }
 
         public long getLength() {
@@ -79,7 +99,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                     continue;
                 }
                 Node block = item.getNode();
-                Rectangle ellipse;
+          //      Rectangle ellipse;
                 if (block != null) {
                     if (block instanceof StackPane) {
                         StackPane region = (StackPane)item.getNode();
@@ -105,6 +125,15 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
                         block.setLayoutX(x);
                         block.setLayoutY(y);
+
+                        Text text = new Text();
+                        text.setFill(Color.WHITE);
+                        text.setFont(Font.font(20));
+                        Group group = new Group(text);
+                        group.setTranslateY(ellipse.getHeight()/2);
+                        group.setTranslateX(ellipse.getWidth()/2);
+                        region.getChildren().add(group);
+
                     }
                 }
             }
