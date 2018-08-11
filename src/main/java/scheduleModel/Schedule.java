@@ -169,26 +169,6 @@ public class Schedule implements ISchedule, Cloneable {
         return (taskModel.getComputationalLoad() + getIdleTime()) / (double) _processors.size();
     }
 
-    // For each node in free tasks, add the earliest time it can start on any processor to its
-    // bottom level time, and find the max of these.
-    @Override
-    public int f3(List<Task> freeTasks) {
-        TreeSet<Integer> bottomLevelPlusEarliestStartTimes = new TreeSet<>();
-        IScheduler scheduler = new Scheduler();
-
-        for (Task task: freeTasks) {
-            int earliestTime = Integer.MAX_VALUE;
-            for (IProcessor processor: _processors) {
-                int time = scheduler.getEarliestStartTime(task, processor, this);
-                earliestTime = time < earliestTime ? time : earliestTime;
-            }
-
-            bottomLevelPlusEarliestStartTimes.add(earliestTime + task.getBottomLevel());
-        }
-
-        return bottomLevelPlusEarliestStartTimes.last();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Schedule)) return false;
