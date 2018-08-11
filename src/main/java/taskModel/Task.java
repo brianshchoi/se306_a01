@@ -130,4 +130,8 @@ public class Task implements  Comparable<Task> {
     public int hashCode(){
         return  name.hashCode();
     }
+
+    public int getId() {
+        return Integer.parseInt(name);
+    }
 }
