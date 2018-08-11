@@ -3,6 +3,10 @@ package fileIO;
 import scheduleModel.IProcessor;
 import taskModel.Task;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class DotRenderer {
 
     private static final String NEWLINE = String.format("%n");
@@ -48,5 +52,13 @@ public class DotRenderer {
 
     public static String closeGraph(){
         return "}";
+    }
+
+    public static void sortTasks(List<Task> tasks) {
+        try {
+            tasks.sort(Comparator.comparing(Task::getId));
+        } catch (NumberFormatException e) {
+            tasks.sort(Comparator.comparing(Task::getName));
+        }
     }
 }

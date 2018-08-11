@@ -1,5 +1,6 @@
 package scheduleModel;
 
+import fileIO.DotRenderer;
 import taskModel.Task;
 import taskModel.TaskModel;
 
@@ -142,7 +143,7 @@ public class Schedule implements ISchedule, Cloneable {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
             List<Task> tasks = new ArrayList<>(processor.getTasks());
-            Collections.sort(tasks, Comparator.comparing(Task::getName));
+            DotRenderer.sortTasks(tasks);
             for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
