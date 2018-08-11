@@ -97,9 +97,7 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-
-                            // Make recursive call, using deep copy
-                            if (cost(schedule, newFreeTasks) < bound) {
+                            if(cost(schedule, newFreeTasks) < bound){
                                 try {
                                     run(newFreeTasks, depth, (ISchedule) ((Schedule) schedule).clone(), previousTasks, previousProcessor);
                                 } catch (CloneNotSupportedException e) {
