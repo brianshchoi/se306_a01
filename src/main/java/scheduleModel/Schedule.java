@@ -1,5 +1,6 @@
 package scheduleModel;
 
+import fileIO.DotRenderer;
 import taskModel.Task;
 import taskModel.TaskModel;
 
@@ -142,7 +143,7 @@ public class Schedule implements ISchedule, Cloneable {
         for (IProcessor processor: _processors) {
             System.out.println("On processor " + processor.getId() + ":");
             List<Task> tasks = new ArrayList<>(processor.getTasks());
-            Collections.sort(tasks, Comparator.comparing(Task::getName));
+            DotRenderer.sortTasks(tasks);
             for (Task task: tasks) {
                 System.out.println("Task " + task.getName() + " starts at time " + processor.getStartTimeOf(task) + ", "
                     + "finishes at time " + processor.getFinishTimeOf(task));
@@ -166,26 +167,6 @@ public class Schedule implements ISchedule, Cloneable {
     @Override
     public double f2(TaskModel taskModel) {
         return (taskModel.getComputationalLoad() + getIdleTime()) / (double) _processors.size();
-    }
-
-    // For each node in free tasks, add the earliest time it can start on any processor to its
-    // bottom level time, and find the max of these.
-    @Override
-    public int f3(List<Task> freeTasks) {
-        TreeSet<Integer> bottomLevelPlusEarliestStartTimes = new TreeSet<>();
-        IScheduler scheduler = new Scheduler();
-
-        for (Task task: freeTasks) {
-            int earliestTime = Integer.MAX_VALUE;
-            for (IProcessor processor: _processors) {
-                int time = scheduler.getEarliestStartTime(task, processor, this);
-                earliestTime = time < earliestTime ? time : earliestTime;
-            }
-
-            bottomLevelPlusEarliestStartTimes.add(earliestTime + task.getBottomLevel());
-        }
-
-        return bottomLevelPlusEarliestStartTimes.last();
     }
 
     @Override

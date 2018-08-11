@@ -64,7 +64,6 @@ public interface ISchedule {
     // Cost functions
     int f1();
     double f2(TaskModel taskModel);
-    int f3(List<Task> freeTasks);
 
     boolean containsProcessor(IProcessor processor);
 }

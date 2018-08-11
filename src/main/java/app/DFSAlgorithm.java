@@ -85,7 +85,7 @@ public class DFSAlgorithm implements IAlgorithm {
                     depth++;
 
                     // Check if bad schedule
-                    if ((schedule.getFinishTime() < bound)) {
+                    if (schedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) { // Update the best schedule
                             try {
@@ -97,24 +97,27 @@ public class DFSAlgorithm implements IAlgorithm {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            run(newFreeTasks, depth, schedule, previousTasks, previousProcessor);
+                            if (cost(schedule) < bound) {
+                                try {
+                                    run(newFreeTasks, depth, (ISchedule) ((Schedule) schedule).clone(), previousTasks, previousProcessor);
+                                } catch (CloneNotSupportedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                     // Start backtracking
                     depth--;
-
                 }
             }
         }
     }
 
     // Cost function
-    private double cost(ISchedule schedule, List<Task> freeTasks) {
+    private double cost(ISchedule schedule) {
         TreeSet<Double> costFunctionOutputs = new TreeSet<>();
         costFunctionOutputs.add(((double) schedule.f1()));
         costFunctionOutputs.add(schedule.f2(taskModel));
-        costFunctionOutputs.add((double) schedule.f3(freeTasks));
-
         return costFunctionOutputs.last();
     }
 
