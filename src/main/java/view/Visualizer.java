@@ -6,11 +6,9 @@ import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
@@ -45,15 +43,17 @@ public class Visualizer extends Application {
                 .running(true)
                 .build();
 
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(mockModel());
+
         nodeTree_tile = TileBuilder.create()
                 .prefSize(500, 600)
-                .skinType(Tile.SkinType.SPARK_LINE)
-                .title("Node Tree")
-                .unit("mb")
-                .gradientStops(new Stop(0, Tile.GREEN),
-                        new Stop(0.5, Tile.YELLOW),
-                        new Stop(1.0, Tile.RED))
-                .strokeWithGradient(true)
+                .skinType(Tile.SkinType.CUSTOM)
+                .title("Parallel Scheduler")
+                .text("Whatever text")
+                .graphic(new view.Node("1", 2, "blue").getStackPane())
+                .dateVisible(true)
+                .locale(Locale.US)
+                .running(true)
                 .build();
 
         branchPercentage_tile = TileBuilder.create()
@@ -83,12 +83,12 @@ public class Visualizer extends Application {
         launch(args);
     }
 
-    private ISchedule mockSchedule() {
+    private TaskModel mockModel() {
         TaskModel model = new TaskModel("Test");
 
         Task tZero = new Task("0", 4);
         Task tOne = new Task("1", 2);
-        Task  tTwo = new Task("2", 2);
+        Task tTwo = new Task("2", 2);
         Task tThree = new Task("3", 2);
         Task tFour = new Task("4", 5);
         Task tFive = new Task("5", 5);
@@ -110,6 +110,17 @@ public class Visualizer extends Application {
         model.addDependency(tThree, tFive, 3);
         model.addDependency(tFive, tSix, 5);
         model.addDependency(tFour, tSix, 4);
+        return model;
+    }
+
+    private ISchedule mockSchedule() {
+        Task tZero = new Task("0", 4);
+        Task tOne = new Task("1", 2);
+        Task tTwo = new Task("2", 2);
+        Task tThree = new Task("3", 2);
+        Task tFour = new Task("4", 5);
+        Task tFive = new Task("5", 5);
+        Task tSix = new Task("6", 10);
 
         ISchedule s = new Schedule(2);
 
