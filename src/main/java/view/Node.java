@@ -27,10 +27,6 @@ public class Node {
                 _rectangle.setFill(Color.BLACK);
                 _text.setFill(Color.WHITE);
                 break;
-            case "white":
-                _rectangle.setFill(Color.WHITE);
-                _text.setFill(Color.BLACK);
-                break;
             case "blue":
                 _rectangle.setFill(Color.BLUE);
                 _text.setFill(Color.WHITE);
@@ -41,6 +37,11 @@ public class Node {
                 break;
             case "cyan":
                 _rectangle.setFill(Color.CYAN);
+                _text.setFill(Color.BLACK);
+                break;
+            default:
+            case "white":
+                _rectangle.setFill(Color.WHITE);
                 _text.setFill(Color.BLACK);
                 break;
         }

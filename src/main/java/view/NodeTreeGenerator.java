@@ -29,7 +29,7 @@ public class NodeTreeGenerator {
     private void createNode (Task task){
         Pane node = new Node(task.getName(), task.getWeight(), "blue").getStackPane();
         node.setLayoutX(x);
-        x = x + 50;
+        x = x + 100;
 
         _graphicPane.getChildren().add(
                 node
@@ -69,15 +69,5 @@ public class NodeTreeGenerator {
 
         return _graphicPane;
     }
-
-    public void render() {
-        for (Task task : _taskModel.getTasks()){
-            // create a Node
-            Node node = new Node(task.getName(), task.getWeight(), "blue");
-
-
-        }
-    }
-
 }
 
