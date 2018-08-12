@@ -2,17 +2,17 @@ package view;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class Node {
-    private Rectangle _rectangle;
+    private Circle _rectangle;
     private Text _text;
     private StackPane _stack;
-    private String _color;
 
     public Node(String taskName, int weight, String color){
-        _rectangle = new Rectangle(100, 10, 80, 80);
+        _rectangle = new Circle(0, 0, 40);
         _text = new Text(taskName + "\n\n" + weight);
 
         _stack = new StackPane();

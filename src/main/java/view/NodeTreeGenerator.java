@@ -1,5 +1,6 @@
 package view;
 
+import javafx.scene.layout.Pane;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
@@ -16,21 +17,29 @@ public class NodeTreeGenerator {
 
     private TaskModel _taskModel;
     private ISchedule _schedule;
+    private Pane _graphicPane;
+    private int x;
 
     NodeTreeGenerator(TaskModel taskModel) {
         _taskModel = taskModel;
+        _graphicPane = new Pane();
+        x = 0;
     }
 
-    public void render(){
-        for (Task task : _taskModel.getTasks()){
-            // create a Node
-            Node node = new Node(task.getName(), task.getWeight(), "blue");
+    private void createNode (Task task){
+        Pane node = new Node(task.getName(), task.getWeight(), "blue").getStackPane();
+        node.setLayoutX(x);
+        x = x + 50;
 
-
-        }
+        _graphicPane.getChildren().add(
+                node
+        );
     }
 
-
+    //TODO: create edge between child and parent
+    private Node createEdge (){
+        return null;
+    }
 
     public void a() {
 
@@ -51,5 +60,24 @@ public class NodeTreeGenerator {
             }
         }
     }
+
+    public Pane getGraphicPane() {
+        for (Task task: _taskModel.getTasks()){
+            createNode(task);
+        }
+
+
+        return _graphicPane;
+    }
+
+    public void render() {
+        for (Task task : _taskModel.getTasks()){
+            // create a Node
+            Node node = new Node(task.getName(), task.getWeight(), "blue");
+
+
+        }
+    }
+
 }
 

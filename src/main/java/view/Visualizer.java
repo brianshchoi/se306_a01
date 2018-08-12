@@ -46,11 +46,13 @@ public class Visualizer extends Application {
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(mockModel());
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(500, 600)
+                .prefSize(1000, 1000)
                 .skinType(Tile.SkinType.CUSTOM)
-                .title("Parallel Scheduler")
+                .title("Node Tree")
                 .text("Whatever text")
-                .graphic(new view.Node("1", 2, "blue").getStackPane())
+                .graphic(
+                        nodeTreeGenerator.getGraphicPane()
+                )
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
