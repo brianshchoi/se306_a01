@@ -55,9 +55,11 @@ public class DFSAlgorithm implements IAlgorithm {
 
 
                 // Go through each of the unique created schedules at this level
-                for (ISchedule currentSchedule : schedules) {
+                for (ISchedule currentSchedule: schedules) {
                     numBranches++;
                     schedule = currentSchedule;
+                   // schedule.debug();
+                  //  System.out.println(" ");
                     depth++;
 
                     // Check if bad schedule

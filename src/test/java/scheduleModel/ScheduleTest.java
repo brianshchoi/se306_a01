@@ -74,7 +74,7 @@ public class ScheduleTest {
         assertEquals(1, processors.size());
 
         Schedule schedule3 = new Schedule(2);
-        schedule3.schedule(a, schedule3.getProcessors().get(1), 2);
+        schedule3.schedule(a, schedule3.getProcessors().get(1), 0);
         schedule3.schedule(b, schedule3.getProcessors().get(0), 0);
         schedules.add(schedule3);
         assertEquals(2, schedules.size());
