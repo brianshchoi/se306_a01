@@ -28,10 +28,10 @@ public class NodeTreeGenerator {
     private double _tileHeight;
     private int _totalLayers;
 
-    public NodeTreeGenerator(TaskModel taskModel, double tileSizeX, double tileSizeY) {
+    public NodeTreeGenerator(TaskModel taskModel, double tileWidth, double tileHeight) {
         _taskModel = taskModel;
-        this._tileWidth = tileSizeX;
-        this._tileHeight = tileSizeY;
+        this._tileWidth = tileWidth;
+        this._tileHeight = tileHeight;
 
         makeNodePosition();
         _graphicPane = new Pane();
@@ -44,7 +44,6 @@ public class NodeTreeGenerator {
         return node;
     }
 
-    //TODO: create edge between child and parent
     private void createEdge (Pane parent, Pane child){
         Line edge = new Line();
 
@@ -95,8 +94,7 @@ public class NodeTreeGenerator {
         countLayers();
         int layer = 0;
         while(scheduledTasks.size() != _taskModel.getTasks().size()){
-            List<Task> layeredTasks = new ArrayList<>();
-            layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
+            List<Task> layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
 
             int count = 0;
                 for (Task task : layeredTasks) {
@@ -116,8 +114,7 @@ public class NodeTreeGenerator {
         List<Task> scheduledTasks = new ArrayList<>();
         _totalLayers = 0;
         while(scheduledTasks.size() != _taskModel.getTasks().size()){
-            List<Task> layeredTasks = new ArrayList<>();
-            layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
+            List<Task> layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
             _totalLayers++;
             scheduledTasks.addAll(layeredTasks);
         }
@@ -136,8 +133,6 @@ public class NodeTreeGenerator {
         }
         return newLayerTasks;
     }
-
-
 
 }
 

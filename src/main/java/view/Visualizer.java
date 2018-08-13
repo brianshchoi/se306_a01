@@ -36,7 +36,7 @@ public class Visualizer extends Application {
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 1000, 1000);
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(800, 1000)
+                .prefSize(1000, 1000)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(nodeTreeGenerator.getGraphicPane())
@@ -66,7 +66,7 @@ public class Visualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(2,2,
+        FlowGridPane pane = new FlowGridPane(3,1,
                 nodeTree_tile, scheduler_tile,  branchPercentage_tile);
         pane.setHgap(5);
         pane.setVgap(5);
