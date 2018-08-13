@@ -31,11 +31,14 @@ public class Visualizer extends Application {
     private Tile nodeTree_tile;
     private Tile time_tile;
     private GanntChartScheduler _ganttChart;
+    private TimerTile _timeTile;
 
 
     @Override public void init(){
 
         _ganttChart = new GanntChartScheduler(mockSchedule());
+        _timeTile = new TimerTile();
+
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CUSTOM)
@@ -59,10 +62,11 @@ public class Visualizer extends Application {
                 .build();
 
         time_tile = TileBuilder.create()
-                .skinType(Tile.SkinType.TEXT)
+                .skinType(Tile.SkinType.CUSTOM)
                 .prefSize(200, 400)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
+                .graphic(_timeTile.makeTimer())
                 .description("0.000s")
                 .descriptionAlignment(Pos.TOP_RIGHT)
                 .build();
