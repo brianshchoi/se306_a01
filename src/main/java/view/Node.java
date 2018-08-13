@@ -3,20 +3,21 @@ package view;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import taskModel.Task;
 
 public class Node {
-    private Circle _rectangle;
+
+    private Circle _circle;
     private Text _text;
     private StackPane _stack;
 
-    public Node(String taskName, int weight, String color){
-        _rectangle = new Circle(0, 0, 40);
-        _text = new Text(taskName + "\n\n" + weight);
+    public Node(Task task, String color){
+        _circle = new Circle(0, 0, 40);
+        _text = new Text(task.getName() + "\n\n" + task.getWeight());
 
         _stack = new StackPane();
-        _stack.getChildren().addAll(_rectangle, _text);
+        _stack.getChildren().addAll(_circle, _text);
         setColor(color);
     }
 
@@ -24,24 +25,24 @@ public class Node {
     private void setColor(String color){
         switch(color){
             case "black":
-                _rectangle.setFill(Color.BLACK);
+                _circle.setFill(Color.BLACK);
                 _text.setFill(Color.WHITE);
                 break;
             case "blue":
-                _rectangle.setFill(Color.BLUE);
+                _circle.setFill(Color.BLUE);
                 _text.setFill(Color.WHITE);
                 break;
             case "":
-                _rectangle.setFill(Color.GOLD);
+                _circle.setFill(Color.GOLD);
                 _text.setFill(Color.BLACK);
                 break;
             case "cyan":
-                _rectangle.setFill(Color.CYAN);
+                _circle.setFill(Color.CYAN);
                 _text.setFill(Color.BLACK);
                 break;
             default:
             case "white":
-                _rectangle.setFill(Color.WHITE);
+                _circle.setFill(Color.WHITE);
                 _text.setFill(Color.BLACK);
                 break;
         }

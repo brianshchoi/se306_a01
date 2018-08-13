@@ -49,7 +49,6 @@ public class Visualizer extends Application {
                 .prefSize(1000, 1000)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
-                .text("Whatever text")
                 .graphic(
                         nodeTreeGenerator.getGraphicPane()
                 )
