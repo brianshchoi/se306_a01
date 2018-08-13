@@ -1,10 +1,11 @@
-package view;
+package view.nodeTree;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import taskModel.Task;
 import taskModel.TaskModel;
+import view.nodeTree.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class NodeTreeGenerator {
 //    private ISchedule _schedule;
     private Pane _graphicPane;
 
-    NodeTreeGenerator(TaskModel taskModel) {
+    public NodeTreeGenerator(TaskModel taskModel) {
         _taskModel = taskModel;
         _graphicPane = new Pane();
     }
@@ -49,6 +50,8 @@ public class NodeTreeGenerator {
                 child.layoutYProperty().add(child.getBoundsInParent().getHeight() / 2.0));
 
         edge.setStroke(Color.AQUA);
+
+        // Add the edge to parent pane
         _graphicPane.getChildren().add(edge);
     }
 

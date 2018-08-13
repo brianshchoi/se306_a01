@@ -15,6 +15,7 @@ import scheduleModel.ISchedule;
 import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
+import view.nodeTree.NodeTreeGenerator;
 
 import java.util.List;
 import java.util.Locale;
