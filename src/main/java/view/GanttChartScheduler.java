@@ -16,7 +16,7 @@ import java.util.List;
 public class GanttChartScheduler {
 
     private List<IProcessor> _processors;
-    private GanttChart<Number,String> _ganttChart;
+    private GanttChart<Number,String> _chart;
 
     public GanttChartScheduler(ISchedule schedule){
         _processors = schedule.getProcessors();
@@ -31,7 +31,7 @@ public class GanttChartScheduler {
         String[] processorNames = makeProcessorNames();
 
         // Chart set up
-        _ganttChart = new GanttChart<>(xAxis, yAxis);
+        _chart = new GanttChart<>(xAxis, yAxis);
         xAxis.setLabel("");
         xAxis.setTickLabelFill(Color.WHITE);
         xAxis.setMinorTickCount(4);
@@ -41,17 +41,17 @@ public class GanttChartScheduler {
         yAxis.setTickLabelGap(10);
         yAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(processorNames)));
 
-        _ganttChart.setTitle("Task Schedule");
-        _ganttChart.setLegendVisible(false);
-        _ganttChart.setBlockHeight( 50);
+        _chart.setTitle("Task Schedule");
+        _chart.setLegendVisible(false);
+        _chart.setBlockHeight( 50 - _processors.size() * 1.3);
 
         // Make series list then add to chart
         List<XYChart.Series> seriesList = makeSeriesList(processorNames);
         for(XYChart.Series s : seriesList){
-          _ganttChart.getData().add(s);
+          _chart.getData().add(s);
         }
 
-        _ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+        _chart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
     }
 
     private String[] makeProcessorNames() {
@@ -83,6 +83,6 @@ public class GanttChartScheduler {
     }
     
     public GanttChart getChart() {
-        return _ganttChart;
+        return _chart;
     }
 }

@@ -5,10 +5,13 @@ import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Stop;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
@@ -28,12 +31,16 @@ public class Visualizer extends Application {
     private TaskModel _taskModel = mockModel();
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
-    private Tile branchPercentage_tile;
+    private Tile time_tile;
+    private GanttChartScheduler _ganttChart;
+    private TimerTile _timeTile;
 
 
     @Override public void init(){
 
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 1000, 1000);
+        _ganttChart = new GanttChartScheduler(mockSchedule());
+        _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
                 .prefSize(1000, 1000)
@@ -57,17 +64,21 @@ public class Visualizer extends Application {
                 .running(true)
                 .build();
 
-        branchPercentage_tile = TileBuilder.create()
+        time_tile = TileBuilder.create()
+                .skinType(Tile.SkinType.CUSTOM)
                 .prefSize(200, 400)
-                .title("Branch Percentage")
-                .unit("%")
+                .title("Time Taken")
+                .textSize(Tile.TextSize.BIGGER)
+                .graphic(_timeTile.makeTimer())
+                .description("0.000s")
+                .descriptionAlignment(Pos.TOP_RIGHT)
                 .build();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(3,1,
-                nodeTree_tile, scheduler_tile,  branchPercentage_tile);
+        FlowGridPane pane = new FlowGridPane(3,2,
+                scheduler_tile, nodeTree_tile, time_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
