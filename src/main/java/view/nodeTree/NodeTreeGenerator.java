@@ -84,10 +84,8 @@ public class NodeTreeGenerator {
                     createEdge(parentNode, taskNode);
                 }
             }
-
-
-
         }
+
         return _graphicPane;
     }
 
