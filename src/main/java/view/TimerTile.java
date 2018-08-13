@@ -31,7 +31,9 @@ public class TimerTile {
         _time = new Label();
         _time.setTextFill(Color.WHITE);
         _time.setFont(Font.font(28));
-        _time.setText("hi");
+        _time.setText("0.00s");
+
+        doTIme();
 
         VBox box = new VBox(2);
         box.getChildren().add(_time);
@@ -48,7 +50,7 @@ public class TimerTile {
         }
 
         time.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+        KeyFrame frame = new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 

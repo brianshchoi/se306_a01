@@ -69,8 +69,8 @@ public class Visualizer extends Application {
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(_timeTile.makeTimer())
-                .description("0.000s")
-                .descriptionAlignment(Pos.TOP_RIGHT)
+                /*.description("0.000s")
+                .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
     }
 
