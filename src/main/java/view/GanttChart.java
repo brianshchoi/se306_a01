@@ -24,8 +24,6 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     public static class ExtraData {
 
-   //     final GanttChart gc = GanttChart.this;
-
         public long length;
         public String styleClass;
         public Task _task;
@@ -73,23 +71,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         public void setStyleClass(String styleClass) {
             this.styleClass = styleClass;
         }
-
-
     }
-
-//    private String setColor(NodeColor color) {
-//        switch (color) {
-//            case RED:
-//                return "status-red";
-//            case GREEN:
-//                return "status-green";
-//            case BLUE:
-//                return "status-blue";
-//            default:
-//            case WHITE:
-//                return "status-white";
-//        }
-//    }
 
     private double blockHeight = 10;
 
