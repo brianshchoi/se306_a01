@@ -84,6 +84,7 @@ public class DFSAlgorithm implements IAlgorithm {
                     }
                     // Start backtracking
                     depth--;
+                    schedule.remove(currentTask);
                 }
             }
         }
