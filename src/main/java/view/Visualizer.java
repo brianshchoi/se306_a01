@@ -63,9 +63,8 @@ public class Visualizer extends Application {
                 .prefSize(200, 400)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
-                .description("Nodes: "+ System.lineSeparator()+ "Processors: "
-                        + System.lineSeparator() + "Cores used: ")
-                .descriptionAlignment(Pos.TOP_LEFT)
+                .description("0.000s")
+                .descriptionAlignment(Pos.TOP_RIGHT)
                 .build();
     }
 
