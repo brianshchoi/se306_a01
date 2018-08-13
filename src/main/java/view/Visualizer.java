@@ -38,12 +38,12 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 1000, 1000);
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 1000, 500);
         _ganttChart = new GanttChartScheduler(mockSchedule());
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(1000, 1000)
+                .prefSize(1000, 500)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(nodeTreeGenerator.getGraphicPane())
@@ -54,10 +54,9 @@ public class Visualizer extends Application {
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
 
-        scheduler_tile = TileBuilder.create().prefSize(1000, 600)
+        scheduler_tile = TileBuilder.create().prefSize(1000, 400)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
-                .text("Whatever text")
                 .graphic(ganttChart.getChart())
                 .dateVisible(true)
                 .locale(Locale.US)
@@ -66,7 +65,7 @@ public class Visualizer extends Application {
 
         time_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.CUSTOM)
-                .prefSize(200, 400)
+                .prefSize(200, 500)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(_timeTile.makeTimer())
@@ -77,8 +76,8 @@ public class Visualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(3,2,
-                scheduler_tile, nodeTree_tile, time_tile);
+        FlowGridPane pane = new FlowGridPane(2,2,
+                nodeTree_tile, time_tile, scheduler_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
@@ -87,6 +86,7 @@ public class Visualizer extends Application {
         Scene scene = new Scene(pane);
 
         primaryStage.setTitle("Optimal Scheduler GUI");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
