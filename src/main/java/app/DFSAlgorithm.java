@@ -57,25 +57,24 @@ public class DFSAlgorithm implements IAlgorithm {
                 // Go through each of the unique created schedules at this level
                 for (ISchedule currentSchedule : schedules) {
                     numBranches++;
-                    schedule = currentSchedule;
                     depth++;
 
                     // Check if bad schedule
-                    if (schedule.getFinishTime() < bound) {
+                    if (currentSchedule.getFinishTime() < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) { // Update the best schedule
                             try {
-                                bestSchedule = (ISchedule) ((Schedule) schedule).clone();
+                                bestSchedule = (ISchedule) ((Schedule) currentSchedule).clone();
                             } catch (CloneNotSupportedException e) {
                                 e.printStackTrace();
                             }
                             bound = bestSchedule.getFinishTime();
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
-                            List<Task> newFreeTasks = getFreeTasks(schedule, taskModel.getTasks());
-                            if (cost(schedule) < bound) {
+                            List<Task> newFreeTasks = getFreeTasks(currentSchedule, taskModel.getTasks());
+                            if (cost(currentSchedule) < bound) {
                                 try {
-                                    run(newFreeTasks, depth, (ISchedule) ((Schedule) schedule).clone());
+                                    run(newFreeTasks, depth, (ISchedule) ((Schedule) currentSchedule).clone());
                                 } catch (CloneNotSupportedException e) {
                                     e.printStackTrace();
                                 }
@@ -84,7 +83,6 @@ public class DFSAlgorithm implements IAlgorithm {
                     }
                     // Start backtracking
                     depth--;
-                    schedule.remove(currentTask);
                 }
             }
         }
@@ -111,6 +109,7 @@ public class DFSAlgorithm implements IAlgorithm {
                 newFreeTasks.add(task);
             }
         }
+        Collections.sort(newFreeTasks);
         return newFreeTasks;
     }
 }
