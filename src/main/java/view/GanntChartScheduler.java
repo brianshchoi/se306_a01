@@ -1,36 +1,22 @@
 package view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
 
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.awt.SystemColor.text;
-
 public class GanntChartScheduler {
 
     private ISchedule _schedule;
-    private List<IProcessor> _processors = new ArrayList<>();
+    private List<IProcessor> _processors;
     private GanttChart<Number,String> _chart;
 
     public GanntChartScheduler(ISchedule schedule){

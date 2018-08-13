@@ -24,27 +24,28 @@ public class Visualizer extends Application {
     private static final double TILE_SIZE = 300;
 
     // Tiles
+    private ISchedule _schedule = mockSchedule();
+    private TaskModel _taskModel = mockModel();
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile branchPercentage_tile;
-    private GanntChartScheduler _ganttChart;
 
 
     @Override public void init(){
 
-        _ganttChart = new GanntChartScheduler(mockSchedule());
+        GanntChartScheduler ganttChart = new GanntChartScheduler(_schedule);
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
                 .text("Whatever text")
-                .graphic(_ganttChart.get_chart())
+                .graphic(ganttChart.get_chart())
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
                 .build();
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(mockModel());
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel);
 
         nodeTree_tile = TileBuilder.create()
                 .prefSize(1000, 1000)
@@ -85,6 +86,7 @@ public class Visualizer extends Application {
         launch(args);
     }
 
+    // TODO: Remove when real data is implemented
     private TaskModel mockModel() {
         TaskModel model = new TaskModel("Test");
 
@@ -115,6 +117,7 @@ public class Visualizer extends Application {
         return model;
     }
 
+    // TODO: Remove when real data is implemented
     private ISchedule mockSchedule() {
         Task tZero = new Task("0", 4);
         Task tOne = new Task("1", 2);
