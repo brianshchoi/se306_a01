@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import taskModel.Task;
+import view.nodeTree.NodeColor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +36,27 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
             this.styleClass = styleClass;
             this._task = task;
         }
+
+        public ExtraData(long lengthMs, NodeColor color, Task task) {
+            super();
+            switch (color) {
+                case RED:
+                    this.styleClass  = "status-red";
+                    break;
+                case GREEN:
+                    this.styleClass = "status-green";
+                    break;
+                case BLUE:
+                    this.styleClass = "status-blue";
+                    break;
+                default:
+                case WHITE:
+                    this.styleClass = "status-white";
+                    break;
+            }
+            this.length = lengthMs;
+            this._task = task;
+        }
         public Task getTask(){
             return _task;
         }
@@ -54,6 +76,20 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
 
     }
+
+//    private String setColor(NodeColor color) {
+//        switch (color) {
+//            case RED:
+//                return "status-red";
+//            case GREEN:
+//                return "status-green";
+//            case BLUE:
+//                return "status-blue";
+//            default:
+//            case WHITE:
+//                return "status-white";
+//        }
+//    }
 
     private double blockHeight = 10;
 
