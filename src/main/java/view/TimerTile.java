@@ -11,19 +11,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class TimerTile {
 
-    private StackPane _pane = new StackPane();
     private Label _time;
+    private Boolean _finished = false;
 
-    private final Integer starttime=15;
-    private Integer seconds= starttime;
-
+    // add more fields if you want to show more information like how many nodes, processors, etc
     TimerTile() {
-
-      //  makeTimer();
+        makeTimer();
     }
 
     public Node makeTimer() {
@@ -31,9 +29,11 @@ public class TimerTile {
         _time = new Label();
         _time.setTextFill(Color.WHITE);
         _time.setFont(Font.font(28));
-        _time.setText("0.00s");
+        _time.setTextAlignment(TextAlignment.RIGHT);
+        _time.setText("0.000s");
 
-        doTIme();
+        // comment this out when integrating with the actual algorithm
+        doTime(System.currentTimeMillis());
 
         VBox box = new VBox(2);
         box.getChildren().add(_time);
@@ -41,30 +41,34 @@ public class TimerTile {
         return box;
     }
 
-    private void doTIme() {
-
+    public void doTime(double starTime) {
         Timeline time = new Timeline();
-
         if(time!=null){
             time.stop();
         }
 
         time.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame frame = new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+        KeyFrame frame = new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                double currentTime  = System.currentTimeMillis();
+                double timeElapsed = (currentTime - starTime)/1000;
+                _time.setText( timeElapsed +"s");
+                _time.setTextAlignment(TextAlignment.RIGHT);
 
-                seconds--;
-                _time.setText( seconds.toString() +"s");
-                if(seconds <= 0) {
+                // Check if algorithm has finished
+                if(_finished) {
+                    _finished = false;
                     time.stop();
                 }
-
             }
         });
         time.getKeyFrames().add(frame);
         time.playFromStart();
+    }
 
+    public void setFinished(){
+        _finished = true;
     }
 
 
