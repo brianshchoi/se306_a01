@@ -15,6 +15,7 @@ import scheduleModel.ISchedule;
 import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
+import view.ganttChart.GanttChartScheduler;
 import view.nodeTree.NodeTreeGenerator;
 
 import java.util.List;

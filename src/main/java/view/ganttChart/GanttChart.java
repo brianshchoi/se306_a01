@@ -1,4 +1,4 @@
-package view;
+package view.ganttChart;
 
 import javafx.beans.NamedArg;
 import javafx.collections.FXCollections;
