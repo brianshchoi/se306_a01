@@ -68,7 +68,7 @@ public class TimerTile {
     }
 
     // use this somewhere to end the time
-    public void setFinished(){
+    public void setTimeFinished(){
         _finished = true;
     }
 

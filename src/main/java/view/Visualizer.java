@@ -32,7 +32,7 @@ public class Visualizer extends Application {
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile time_tile;
-    private Tile branch_tile;
+    private Tile memory_tile;
     private TimerTile _timeTile;
 
 
@@ -74,19 +74,24 @@ public class Visualizer extends Application {
                 .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
 
-        branch_tile = TileBuilder.create()
+        Runtime runtime = Runtime.getRuntime();
+        memory_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
                 .prefSize(200,500)
                 .title("Memory")
+                .maxValue(runtime.maxMemory()/1000000)
+                .unit("mB")
                 .textSize(Tile.TextSize.BIGGER)
                 .build();
+
+        MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
 
     }
 
     @Override
     public void start(Stage primaryStage) {
         FlowGridPane pane = new FlowGridPane(2,2,
-               scheduler_tile, nodeTree_tile, time_tile, branch_tile);
+               scheduler_tile, nodeTree_tile, time_tile, memory_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
