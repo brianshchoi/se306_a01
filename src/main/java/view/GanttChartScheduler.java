@@ -13,15 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GanntChartScheduler {
+public class GanttChartScheduler {
 
-    private ISchedule _schedule;
     private List<IProcessor> _processors;
     private GanttChart<Number,String> _chart;
 
-    public GanntChartScheduler(ISchedule schedule){
-        this._schedule = schedule;
-        _processors = _schedule.getProcessors();
+    public GanttChartScheduler(ISchedule schedule){
+        _processors = schedule.getProcessors();
         makeChart();
     }
 

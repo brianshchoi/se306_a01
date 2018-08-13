@@ -33,7 +33,7 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        GanntChartScheduler ganttChart = new GanntChartScheduler(_schedule);
+        GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
 
         scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
                 .skinType(Tile.SkinType.CUSTOM)
