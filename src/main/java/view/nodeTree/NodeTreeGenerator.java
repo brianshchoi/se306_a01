@@ -28,7 +28,7 @@ public class NodeTreeGenerator {
     }
 
     private Pane createNode (Task task){
-        Pane node = new Node(task, "blue").getStackPane();
+        Pane node = new Node(task, NodeColor.GREEN).getStackPane();
         node.setLayoutX((int) Math.ceil(Math.random() * 800));
         node.setLayoutY((int) Math.ceil(Math.random() * 800));
         return node;
