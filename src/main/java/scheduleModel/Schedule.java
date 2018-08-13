@@ -173,10 +173,9 @@ public class Schedule implements ISchedule, Cloneable {
     public boolean equals(Object o) {
         if (!(o instanceof Schedule)) return false;
         Schedule schedule = (Schedule) o;
-        for (IProcessor processor: _processors) {
-            if (!(schedule.containsProcessor(processor))) return false;
-        }
-        return true;
+        Set<IProcessor> thisProcessors = new HashSet<>(this._processors);
+        Set<IProcessor> otherProcessors = new HashSet<>(schedule._processors);
+        return thisProcessors.equals(otherProcessors);
     }
 
     @Override
