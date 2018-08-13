@@ -75,9 +75,9 @@ public class Visualizer extends Application {
                 .build();
 
         branch_tile = TileBuilder.create()
-                .skinType(Tile.SkinType.CIRCULAR_PROGRESS)
+                .skinType(Tile.SkinType.GAUGE)
                 .prefSize(200,500)
-                .title("Branches")
+                .title("Memory")
                 .textSize(Tile.TextSize.BIGGER)
                 .build();
 

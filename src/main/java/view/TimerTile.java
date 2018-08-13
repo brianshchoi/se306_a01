@@ -67,6 +67,7 @@ public class TimerTile {
         time.playFromStart();
     }
 
+    // use this somewhere to end the time
     public void setFinished(){
         _finished = true;
     }
