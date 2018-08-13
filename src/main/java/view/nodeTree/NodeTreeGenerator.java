@@ -3,6 +3,7 @@ package view.nodeTree;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import scheduleModel.ISchedule;
 import taskModel.Task;
 import taskModel.TaskModel;
 import view.nodeTree.Node;
@@ -21,16 +22,25 @@ public class NodeTreeGenerator {
     private TaskModel _taskModel;
 //    private ISchedule _schedule;
     private Pane _graphicPane;
+    private HashMap<Task, Integer> _nodePositionX = new HashMap<>();
+    private HashMap<Task, Integer> _nodePositionY = new HashMap<>();
+    private double _tileWidth;
+    private double _tileHeight;
+    private int _totalLayers;
 
-    public NodeTreeGenerator(TaskModel taskModel) {
+    public NodeTreeGenerator(TaskModel taskModel, double tileSizeX, double tileSizeY) {
         _taskModel = taskModel;
+        this._tileWidth = tileSizeX;
+        this._tileHeight = tileSizeY;
+
+        makeNodePosition();
         _graphicPane = new Pane();
     }
 
     private Pane createNode (Task task){
         Pane node = new Node(task, NodeColor.GREEN).getStackPane();
-        node.setLayoutX((int) Math.ceil(Math.random() * 800));
-        node.setLayoutY((int) Math.ceil(Math.random() * 800));
+        node.setLayoutX(_nodePositionX.get(task));
+        node.setLayoutY(_nodePositionY.get(task));
         return node;
     }
 
@@ -80,5 +90,56 @@ public class NodeTreeGenerator {
         }
         return _graphicPane;
     }
+
+
+    public void makeNodePosition(){
+        List<Task> scheduledTasks = new ArrayList<>();
+        countLayers();
+        int layer = 0;
+        while(scheduledTasks.size() != _taskModel.getTasks().size()){
+            List<Task> layeredTasks = new ArrayList<>();
+            layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
+
+            int count = 0;
+                for (Task task : layeredTasks) {
+                    int y = (int) Math.ceil(layer * ((_tileHeight * 0.9)/_totalLayers));
+                    int x = (int) Math.ceil(_tileWidth/layeredTasks.size()/2 + count * _tileWidth/layeredTasks.size());
+                    _nodePositionY.put(task, y);
+                    _nodePositionX.put(task, x);
+
+                    count++;
+                }
+            layer++;
+            scheduledTasks.addAll(layeredTasks);
+        }
+    }
+
+    private void countLayers() {
+        List<Task> scheduledTasks = new ArrayList<>();
+        _totalLayers = 0;
+        while(scheduledTasks.size() != _taskModel.getTasks().size()){
+            List<Task> layeredTasks = new ArrayList<>();
+            layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
+            _totalLayers++;
+            scheduledTasks.addAll(layeredTasks);
+        }
+    }
+
+    private List<Task> layerTasks(List<Task> schedule, List<Task> allTasks){
+        List<Task> newLayerTasks = new ArrayList<>();
+        // Create list of tasks which haven't been scheduled yet
+        allTasks.removeAll(schedule);
+
+        // Check if each unscheduled task's dependencies have been satisfied
+        for (Task task: allTasks){
+            if (schedule.containsAll(task.getParents())) {
+                newLayerTasks.add(task);
+            }
+        }
+        return newLayerTasks;
+    }
+
+
+
 }
 

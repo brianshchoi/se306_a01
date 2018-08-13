@@ -44,10 +44,10 @@ public class Visualizer extends Application {
                 .running(true)
                 .build();
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(mockModel());
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(mockModel(), 1000, 1000);
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(1000, 1000)
+                .minSize(1000, 1000)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(
