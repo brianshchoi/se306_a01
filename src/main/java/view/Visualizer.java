@@ -33,27 +33,25 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel);
 
-        scheduler_tile = TileBuilder.create().prefSize(TILE_SIZE, TILE_SIZE)
+        nodeTree_tile = TileBuilder.create()
+                .prefSize(800, 1000)
                 .skinType(Tile.SkinType.CUSTOM)
-                .title("Parallel Scheduler")
-                .text("Whatever text")
-                .graphic(ganttChart.get_chart())
+                .title("Node Tree")
+                .graphic(nodeTreeGenerator.getGraphicPane())
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
                 .build();
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel);
+        GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
 
-        nodeTree_tile = TileBuilder.create()
-                .prefSize(1000, 1000)
+        scheduler_tile = TileBuilder.create().prefSize(1000, 600)
                 .skinType(Tile.SkinType.CUSTOM)
-                .title("Node Tree")
-                .graphic(
-                        nodeTreeGenerator.getGraphicPane()
-                )
+                .title("Parallel Scheduler")
+                .text("Whatever text")
+                .graphic(ganttChart.getChart())
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
@@ -68,8 +66,8 @@ public class Visualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(3,2,
-                scheduler_tile, nodeTree_tile, branchPercentage_tile);
+        FlowGridPane pane = new FlowGridPane(2,2,
+                nodeTree_tile, scheduler_tile,  branchPercentage_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));

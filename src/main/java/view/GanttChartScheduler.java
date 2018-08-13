@@ -16,14 +16,14 @@ import java.util.List;
 public class GanttChartScheduler {
 
     private List<IProcessor> _processors;
-    private GanttChart<Number,String> _chart;
+    private GanttChart<Number,String> _ganttChart;
 
     public GanttChartScheduler(ISchedule schedule){
         _processors = schedule.getProcessors();
-        makeChart();
+        createChart();
     }
 
-    private void makeChart(){
+    private void createChart(){
         final NumberAxis xAxis = new NumberAxis();
         final CategoryAxis yAxis = new CategoryAxis();
 
@@ -31,27 +31,27 @@ public class GanttChartScheduler {
         String[] processorNames = makeProcessorNames();
 
         // Chart set up
-        _chart = new GanttChart<>(xAxis, yAxis);
+        _ganttChart = new GanttChart<>(xAxis, yAxis);
         xAxis.setLabel("");
-        xAxis.setTickLabelFill(Color.CHOCOLATE);
+        xAxis.setTickLabelFill(Color.WHITE);
         xAxis.setMinorTickCount(4);
 
         yAxis.setLabel("");
-        yAxis.setTickLabelFill(Color.CHOCOLATE);
+        yAxis.setTickLabelFill(Color.WHITE);
         yAxis.setTickLabelGap(10);
         yAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(processorNames)));
 
-        _chart.setTitle("Task Schedule");
-        _chart.setLegendVisible(false);
-        _chart.setBlockHeight( 50);
+        _ganttChart.setTitle("Task Schedule");
+        _ganttChart.setLegendVisible(false);
+        _ganttChart.setBlockHeight( 50);
 
         // Make series list then add to chart
         List<XYChart.Series> seriesList = makeSeriesList(processorNames);
         for(XYChart.Series s : seriesList){
-          _chart.getData().add(s);
+          _ganttChart.getData().add(s);
         }
 
-        _chart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+        _ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
     }
 
     private String[] makeProcessorNames() {
@@ -82,7 +82,7 @@ public class GanttChartScheduler {
         return seriesList;
     }
     
-    public GanttChart get_chart() {
-        return _chart;
+    public GanttChart getChart() {
+        return _ganttChart;
     }
 }
