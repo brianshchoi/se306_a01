@@ -32,14 +32,14 @@ public class Visualizer extends Application {
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile time_tile;
-    private GanttChartScheduler _ganttChart;
+    private Tile branch_tile;
     private TimerTile _timeTile;
+
 
 
     @Override public void init(){
 
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 400, 550);
-        _ganttChart = new GanttChartScheduler(mockSchedule());
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
@@ -73,12 +73,20 @@ public class Visualizer extends Application {
                 /*.description("0.000s")
                 .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
+
+        branch_tile = TileBuilder.create()
+                .skinType(Tile.SkinType.CIRCULAR_PROGRESS)
+                .prefSize(200,500)
+                .title("Branches")
+                .textSize(Tile.TextSize.BIGGER)
+                .build();
+
     }
 
     @Override
     public void start(Stage primaryStage) {
         FlowGridPane pane = new FlowGridPane(2,2,
-               scheduler_tile, nodeTree_tile, time_tile);
+               scheduler_tile, nodeTree_tile, time_tile, branch_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
