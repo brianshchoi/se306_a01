@@ -38,12 +38,12 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 1000, 500);
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 400, 550);
         _ganttChart = new GanttChartScheduler(mockSchedule());
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(1000, 500)
+                .minSize(500, 550)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(nodeTreeGenerator.getGraphicPane())
@@ -54,7 +54,8 @@ public class Visualizer extends Application {
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
 
-        scheduler_tile = TileBuilder.create().prefSize(1000, 400)
+        scheduler_tile = TileBuilder.create()
+                .minSize(800, 550)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
                 .graphic(ganttChart.getChart())
@@ -77,7 +78,7 @@ public class Visualizer extends Application {
     @Override
     public void start(Stage primaryStage) {
         FlowGridPane pane = new FlowGridPane(2,2,
-                nodeTree_tile, time_tile, scheduler_tile);
+               scheduler_tile, nodeTree_tile, time_tile);
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));

@@ -13,7 +13,7 @@ public class Node {
     private StackPane _stack;
 
     public Node(Task task, NodeColor color){
-        _circle = new Circle(0, 0, 40);
+        _circle = new Circle(0, 0, 30);
         _text = new Text(task.getName() + "\n\n" + task.getWeight());
 
         _stack = new StackPane();
