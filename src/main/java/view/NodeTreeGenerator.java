@@ -37,7 +37,7 @@ public class NodeTreeGenerator {
     private void createEdge (Pane parent, Pane child){
         Line edge = new Line();
 
-        // Find the starting and e
+        // Find the starting and positions (i.e. find the middle of the parent and child nodes respectively)
         edge.startXProperty().bind(
                 parent.layoutXProperty().add(parent.getBoundsInParent().getWidth() / 2.0));
         edge.startYProperty().bind(
