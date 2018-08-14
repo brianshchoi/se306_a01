@@ -5,6 +5,7 @@ import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -125,7 +126,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         launch();
     }
 
-    private Node remakeChart(ISchedule schedule){
+    private void remakeChart(ISchedule schedule){
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
 
         scheduler_tile = TileBuilder.create()
@@ -138,13 +139,15 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .running(true)
                 .build();
 
-        return scheduler_tile;
     }
 
     @Override
     public void bestScheduleUpdated(ISchedule schedule) {
-        schedule.debug();
-        pane.getChildren().remove(0);
-        pane.getChildren().add(0, remakeChart(schedule));
+        Platform.runLater(() -> {
+            schedule.debug();
+            pane.getChildren().remove(scheduler_tile);
+            remakeChart(schedule);
+            pane.getChildren().add(scheduler_tile);
+        });
     }
 }
