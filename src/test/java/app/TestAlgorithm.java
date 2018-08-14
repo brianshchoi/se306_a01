@@ -16,7 +16,6 @@ public class TestAlgorithm {
         // Other inputs from Oliver Sinnen
         put("2p_Fork_Join_Nodes_10_CCR_1.01_WeightType_Random.dot", 59);
         put("2p_Fork_Nodes_10_CCR_0.10_WeightType_Random.dot", 300);
-        put("Nodes_4.dot", 22);
 
         // From Canvas
         put("Nodes_7_OutTree.dot", 28);
