@@ -17,10 +17,13 @@ import view.nodeTree.NodeColor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+// Acknowledgement:
+// A lot of stuff here is inspired by Roland on Stack Overflow.
+// We used his ideas and modified it.  See link below:
+// https://stackoverflow.com/questions/27975898/gantt-chart-from-scratch
 public class GanttChart<X,Y> extends XYChart<X,Y> {
 
-    private Rectangle ellipse;
+    private Rectangle rectangle;
 
     public static class ExtraData {
 
@@ -114,26 +117,26 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                     continue;
                 }
                 Node block = item.getNode();
-          //      Rectangle ellipse;
+          //      Rectangle rectangle;
                 if (block != null) {
                     if (block instanceof StackPane) {
                         StackPane region = (StackPane)item.getNode();
                         if (region.getShape() == null) {
-                            ellipse = new Rectangle( getLength( item.getExtraValue()), getBlockHeight());
+                            rectangle = new Rectangle( getLength( item.getExtraValue()), getBlockHeight());
                         } else if (region.getShape() instanceof Rectangle) {
-                            ellipse = (Rectangle)region.getShape();
+                            rectangle = (Rectangle)region.getShape();
                         } else {
                             return;
                         }
-                        ellipse.setWidth( getLength( item.getExtraValue()) * ((getXAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getXAxis()).getScale()) : 1));
-                        ellipse.setHeight(getBlockHeight() * ((getYAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getYAxis()).getScale()) : 1));
+                        rectangle.setWidth( getLength( item.getExtraValue()) * ((getXAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getXAxis()).getScale()) : 1));
+                        rectangle.setHeight(getBlockHeight() * ((getYAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getYAxis()).getScale()) : 1));
                         y -= getBlockHeight() / 2.0;
 
                         // Note: workaround for RT-7689 - saw this in ProgressControlSkin
                         // The region doesn't update itself when the shape is mutated in place, so we
                         // null out and then restore the shape in order to force invalidation.
                         region.setShape(null);
-                        region.setShape(ellipse);
+                        region.setShape(rectangle);
                         region.setScaleShape(false);
                         region.setCenterShape(false);
                         region.setCacheShape(false);
@@ -145,8 +148,8 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                         text.setFill(Color.WHITE);
                         text.setFont(Font.font(20));
                         Group group = new Group(text);
-                        group.setTranslateY(ellipse.getHeight()/2);
-                        group.setTranslateX(ellipse.getWidth()/2);
+                        group.setTranslateY(rectangle.getHeight()/2);
+                        group.setTranslateX(rectangle.getWidth()/2);
                         region.getChildren().add(group);
 
                     }
