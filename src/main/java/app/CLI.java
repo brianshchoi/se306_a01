@@ -3,10 +3,12 @@ package app;
 
 import fileIO.DotGraph;
 import fileIO.FileParser;
+import javafx.beans.Observable;
 import scheduleModel.ISchedule;
 import scheduleModel.Schedule;
 import taskModel.TaskModel;
 import view.Visualizer;
+import view.ganttChart.GanttChartScheduler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +49,7 @@ public class CLI {
             "-p N       use N cores for execution in parallel (default is sequential)\n" +
             "-v         visualise the search\n" +
             "-o OUTPUT  output file is named OUTPUT (default is input-OUTPUT.dot)";
+    private static TaskModel taskModel;
 
     public static void main(String[] args) throws CloneNotSupportedException {
         List<String> argsList = Arrays.asList(args);
@@ -104,13 +107,27 @@ public class CLI {
         }
 
         // Parse the file
-        TaskModel taskModel = fileParser.getTaskModelFromFile();
+        taskModel = fileParser.getTaskModelFromFile();
 
+        if (visualisation) {
+            // Visualisation
+            System.out.println("Starting visualizer...");
+            new Thread(() -> Visualizer.launch(taskModel, new Schedule(numOfProcessors))).start();
+        } else {
+            visualizerReady(null);
+        }
+    }
+
+    public static void visualizerReady(GanttChartScheduler ganttChartScheduler) {
         // Set algorithm
         IAlgorithm algorithm = new DFSAlgorithm(taskModel, numOfProcessors);
 
-        // Visualisation
-        new Thread(() -> Visualizer.launch(taskModel, new Schedule(numOfProcessors))).start();
+
+        if (ganttChartScheduler != null) {
+            // Set up listener
+            ((Observable) algorithm).addListener(ganttChartScheduler);
+        }
+
 
         // Get optimal schedule
         ISchedule schedule = algorithm.run();

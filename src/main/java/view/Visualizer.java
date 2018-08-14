@@ -1,5 +1,6 @@
 package view;
 
+import app.CLI;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
@@ -55,6 +56,7 @@ public class Visualizer extends Application {
                 .build();
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
+        CLI.visualizerReady(ganttChart);
 
         scheduler_tile = TileBuilder.create()
                 .prefSize(800, firstLayerHeight)
