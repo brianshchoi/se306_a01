@@ -36,7 +36,7 @@ public class DFSAlgorithm implements IAlgorithm, Observable {
 
         run(freeTasks, depth, schedule, pTasks, null);
         System.out.println("Number of branches: " + numBranches);
-        listener.invalidated(this);
+        if (CLI.isVisualisation()) listener.invalidated(this);
         return bestSchedule;
     }
 

@@ -139,4 +139,8 @@ public class CLI {
         DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);
         dotGraph.render();
     }
+
+    public static boolean isVisualisation() {
+        return visualisation;
+    }
 }
