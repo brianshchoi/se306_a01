@@ -39,13 +39,31 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
             super();
             switch (color) {
                 case RED:
-                    this.styleClass  = "status-red";
+                    this.styleClass = "status-red";
+                    break;
+                case ORANGE:
+                    this.styleClass = "status-orange";
+                    break;
+                case YELLOW:
+                    this.styleClass = "status-yellow";
                     break;
                 case GREEN:
                     this.styleClass = "status-green";
                     break;
                 case BLUE:
                     this.styleClass = "status-blue";
+                    break;
+                case INDIGO:
+                    this.styleClass = "status-indigo";
+                    break;
+                case VIOLET:
+                    this.styleClass = "status-violet";
+                    break;
+                case CYAN:
+                    this.styleClass = "status-cyan";
+                    break;
+                case MAGENTA:
+                    this.styleClass = "status-magenta";
                     break;
                 default:
                 case WHITE:
@@ -143,7 +161,6 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
                         Text text = new Text(getTask(item.getExtraValue()).getName());
                         text.setFill(Color.WHITE);
-                        text.setFont(Font.font(20));
                         Group group = new Group(text);
                         group.setTranslateY(ellipse.getHeight()/2);
                         group.setTranslateX(ellipse.getWidth()/2);
