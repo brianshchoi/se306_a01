@@ -7,6 +7,7 @@ import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Visualizer extends Application {
+public class Visualizer extends Application implements AlgorithmListener {
     private static final double firstLayerHeight = 300;
     private static final double secondLayerHeight = 300;
 
@@ -39,6 +40,7 @@ public class Visualizer extends Application {
     private Tile time_tile;
     private Tile memory_tile;
     private TimerTile _timeTile;
+    private FlowGridPane pane;
 
 
 
@@ -59,6 +61,7 @@ public class Visualizer extends Application {
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
         listeners.add(ganttChart);
+        listeners.add(this);
 
         scheduler_tile = TileBuilder.create()
                 .prefSize(800, firstLayerHeight)
@@ -92,14 +95,16 @@ public class Visualizer extends Application {
 
         MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
 
+        pane = new FlowGridPane(2,2,
+                scheduler_tile, nodeTree_tile, time_tile, memory_tile);
+
         // Give listeners to CLI
         new Thread(() -> CLI.visualizerReady(listeners)).start();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        FlowGridPane pane = new FlowGridPane(2,2,
-               scheduler_tile, nodeTree_tile, time_tile, memory_tile);
+
         pane.setHgap(5);
         pane.setVgap(5);
         pane.setPadding(new Insets(5));
@@ -120,4 +125,26 @@ public class Visualizer extends Application {
         launch();
     }
 
+    private Node remakeChart(ISchedule schedule){
+        GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
+
+        scheduler_tile = TileBuilder.create()
+                .prefSize(800, firstLayerHeight)
+                .skinType(Tile.SkinType.CUSTOM)
+                .title("Parallel Scheduler")
+                .graphic(ganttChart.getChart())
+                .dateVisible(true)
+                .locale(Locale.US)
+                .running(true)
+                .build();
+
+        return scheduler_tile;
+    }
+
+    @Override
+    public void bestScheduleUpdated(ISchedule schedule) {
+        schedule.debug();
+        pane.getChildren().remove(0);
+        pane.getChildren().add(0, remakeChart(schedule));
+    }
 }
