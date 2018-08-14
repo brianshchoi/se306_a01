@@ -1,12 +1,14 @@
 package app;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
 
 import java.util.*;
 
-public class DFSAlgorithm implements IAlgorithm {
+public class DFSAlgorithm implements IAlgorithm, Observable {
 
     private TaskModel taskModel;
     private IScheduler scheduler;
@@ -17,6 +19,7 @@ public class DFSAlgorithm implements IAlgorithm {
     private ISchedule bestSchedule; // Stores current best schedule
 
     private int numBranches = 0;
+    private InvalidationListener listener;
 
     public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
@@ -33,6 +36,12 @@ public class DFSAlgorithm implements IAlgorithm {
 
         run(freeTasks, depth, schedule, pTasks, null);
         System.out.println("Number of branches: " + numBranches);
+        listener.invalidated(this);
+        return bestSchedule;
+    }
+
+    @Override
+    public ISchedule getBestSchedule() {
         return bestSchedule;
     }
 
@@ -130,5 +139,15 @@ public class DFSAlgorithm implements IAlgorithm {
         }
         Collections.sort(newFreeTasks);
         return newFreeTasks;
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        this.listener = null;
     }
 }
