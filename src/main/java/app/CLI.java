@@ -3,8 +3,9 @@ package app;
 
 import fileIO.DotGraph;
 import fileIO.FileParser;
-import scheduleModel.*;
+import scheduleModel.ISchedule;
 import taskModel.TaskModel;
+import view.Visualizer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -112,6 +113,11 @@ public class CLI {
 
         // Validate
         new ScheduleValidator(schedule).validate(taskModel);
+
+        // Visualisation
+        if (visualisation){
+            Visualizer.launch(taskModel, schedule);
+        }
 
         //Write out to file
         DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);

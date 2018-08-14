@@ -8,4 +8,6 @@ public interface IScheduler {
     void remove(Task task, ISchedule schedule);
 
     void schedule(Task task, IProcessor iProcessor, ISchedule schedule);
+
+    int getEarliestStartTime(Task task, IProcessor processor, ISchedule schedule);
 }

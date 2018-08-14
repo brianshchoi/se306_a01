@@ -1,6 +1,7 @@
 package scheduleModel;
 
 import taskModel.Task;
+import taskModel.TaskModel;
 
 import java.util.List;
 
@@ -56,5 +57,13 @@ public interface ISchedule {
 
     boolean contains(Task task);
 
+    int getIdleTime();
+
     void debug();
+
+    // Cost functions
+    int f1();
+    double f2(TaskModel taskModel);
+
+    boolean containsProcessor(IProcessor processor);
 }

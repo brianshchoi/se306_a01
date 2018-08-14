@@ -1,4 +1,4 @@
-package view;
+package view.ganttChart;
 
 import javafx.collections.FXCollections;
 import javafx.scene.chart.CategoryAxis;

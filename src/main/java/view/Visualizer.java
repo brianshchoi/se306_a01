@@ -18,6 +18,7 @@ import scheduleModel.ISchedule;
 import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
+import view.ganttChart.GanttChartScheduler;
 import view.nodeTree.NodeTreeGenerator;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public class Visualizer extends Application {
     private static final double secondLayerHeight = 300;
 
     // Tiles
-    private ISchedule _schedule = mockSchedule();
-    private TaskModel _taskModel = mockModel();
+    private static ISchedule schedule;
+    private static TaskModel taskModel;
     private Tile scheduler_tile;
     private Tile nodeTree_tile;
     private Tile time_tile;
@@ -40,7 +41,7 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 500, firstLayerHeight);
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(taskModel, 500, firstLayerHeight);
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
@@ -53,7 +54,7 @@ public class Visualizer extends Application {
                 .running(true)
                 .build();
 
-        GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
+        GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
 
         scheduler_tile = TileBuilder.create()
                 .prefSize(800, firstLayerHeight)
@@ -106,66 +107,11 @@ public class Visualizer extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void launch(TaskModel tm, ISchedule sch) {
+        taskModel = tm;
+        schedule = sch;
+
+        launch();
     }
 
-    // TODO: Remove when real data is implemented
-    private TaskModel mockModel() {
-        TaskModel model = new TaskModel("Test");
-
-        Task tZero = new Task("0", 4);
-        Task tOne = new Task("1", 2);
-        Task tTwo = new Task("2", 2);
-        Task tThree = new Task("3", 2);
-        Task tFour = new Task("4", 5);
-        Task tFive = new Task("5", 5);
-        Task tSix = new Task("6", 10);
-
-        model.addTask(tZero);
-        model.addTask(tOne);
-        model.addTask(tTwo);
-        model.addTask(tThree);
-        model.addTask(tFour);
-        model.addTask(tFive);
-        model.addTask(tSix);
-
-        model.addDependency(tZero, tOne, 1);
-        model.addDependency(tZero, tTwo, 1);
-        model.addDependency(tZero, tThree, 3);
-        model.addDependency(tOne, tFour, 1);
-        model.addDependency(tTwo, tFour, 2);
-        model.addDependency(tThree, tFive, 3);
-        model.addDependency(tFive, tSix, 5);
-        model.addDependency(tFour, tSix, 4);
-        return model;
-    }
-
-    // TODO: Remove when real data is implemented
-    private ISchedule mockSchedule() {
-        Task tZero = new Task("0", 4);
-        Task tOne = new Task("1", 2);
-        Task tTwo = new Task("2", 2);
-        Task tThree = new Task("3", 2);
-        Task tFour = new Task("4", 5);
-        Task tFive = new Task("5", 5);
-        Task tSix = new Task("6", 10);
-
-        ISchedule s = new Schedule(2);
-
-        // Needed here to get processor object
-        List<IProcessor> processors = s.getProcessors();
-        IProcessor p1 = processors.get(0);
-        IProcessor p2 = processors.get(1);
-
-        s.schedule(tZero, p1, 0);
-        s.schedule(tOne, p1, 4);
-        s.schedule(tTwo, p2, 5);
-        s.schedule(tThree, p1, 6);
-        s.schedule(tFour, p2, 7);
-        s.schedule(tFive, p1, 8);
-        s.schedule(tSix, p1, 16);
-
-        return s;
-    }
 }

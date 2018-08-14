@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DotGraph {
@@ -36,17 +37,21 @@ public class DotGraph {
         output.append(DotRenderer.openGraph(_title));
 
         // Iterate through all tasks
-        for (Task task: _taskModel.getTasks()){
+        List<Task> tasks = _taskModel.getTasks();
+        DotRenderer.sortTasks(tasks);
+        for (Task task: tasks){
             int startTime = _schedule.getFinishTimeOf(task) - task.getWeight();
             IProcessor processor = _schedule.getProcessorOf(task);
 
             // Add all task
             output.append(DotRenderer.addNode(task, startTime, processor));
+        }
 
+        for (Task task: tasks){
             // Add dependencies and their weight
             if (task.getParents().size() > 0){
                 List<Task> parentsInOrderByName = new ArrayList<>(task.getParents());
-                Collections.sort(parentsInOrderByName);
+                DotRenderer.sortTasks(parentsInOrderByName);
                 for(Task parent : parentsInOrderByName){
                     output.append(DotRenderer.addDependency(parent, task));
                 }
