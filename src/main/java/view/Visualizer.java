@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Visualizer extends Application {
-    private static final double firstLayerHeight = 600;
+    private static final double firstLayerHeight = 300;
     private static final double secondLayerHeight = 300;
 
     // Tiles
