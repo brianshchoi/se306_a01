@@ -4,6 +4,7 @@ package app;
 import fileIO.DotGraph;
 import fileIO.FileParser;
 import scheduleModel.ISchedule;
+import scheduleModel.Schedule;
 import taskModel.TaskModel;
 import view.Visualizer;
 
@@ -108,16 +109,14 @@ public class CLI {
         // Set algorithm
         IAlgorithm algorithm = new DFSAlgorithm(taskModel, numOfProcessors);
 
+        // Visualisation
+        new Thread(() -> Visualizer.launch(taskModel, new Schedule(numOfProcessors))).start();
+
         // Get optimal schedule
         ISchedule schedule = algorithm.run();
 
         // Validate
         new ScheduleValidator(schedule).validate(taskModel);
-
-        // Visualisation
-        if (visualisation){
-            Visualizer.launch(taskModel, schedule);
-        }
 
         //Write out to file
         DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);

@@ -71,7 +71,7 @@ public class Visualizer extends Application {
                 .prefSize(800, secondLayerHeight)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
-                .graphic(_timeTile.makeTimer(0))
+                .graphic(_timeTile.makeTimer())
                 /*.description("0.000s")
                 .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
