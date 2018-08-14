@@ -9,6 +9,8 @@ import scheduleModel.Schedule;
 import taskModel.TaskModel;
 import view.Visualizer;
 import view.ganttChart.GanttChartScheduler;
+import view.listeners.AlgorithmListener;
+import view.listeners.AlgorithmObservable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -118,16 +120,15 @@ public class CLI {
         }
     }
 
-    public static void visualizerReady(GanttChartScheduler ganttChartScheduler) {
+    public static void visualizerReady(List<AlgorithmListener> listeners) {
         // Set algorithm
         IAlgorithm algorithm = new DFSAlgorithm(taskModel, numOfProcessors);
 
-
-        if (ganttChartScheduler != null) {
-            // Set up listener
-            ((Observable) algorithm).addListener(ganttChartScheduler);
+        if (visualisation) {
+            for (AlgorithmListener listener: listeners) {
+                ((AlgorithmObservable) algorithm).addAlgorithmListener(listener);
+            }
         }
-
 
         // Get optimal schedule
         ISchedule schedule = algorithm.run();

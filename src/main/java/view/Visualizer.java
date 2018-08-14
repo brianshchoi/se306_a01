@@ -20,8 +20,10 @@ import scheduleModel.Schedule;
 import taskModel.Task;
 import taskModel.TaskModel;
 import view.ganttChart.GanttChartScheduler;
+import view.listeners.AlgorithmListener;
 import view.nodeTree.NodeTreeGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,7 +43,7 @@ public class Visualizer extends Application {
 
 
     @Override public void init(){
-
+        List<AlgorithmListener> listeners = new ArrayList<>();
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(taskModel, 500, firstLayerHeight);
         _timeTile = new TimerTile();
 
@@ -56,8 +58,7 @@ public class Visualizer extends Application {
                 .build();
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
-        new Thread(() -> CLI.visualizerReady(ganttChart)).start();
-
+        listeners.add(ganttChart);
 
         scheduler_tile = TileBuilder.create()
                 .prefSize(800, firstLayerHeight)
@@ -91,6 +92,8 @@ public class Visualizer extends Application {
 
         MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
 
+        // Give listeners to CLI
+        new Thread(() -> CLI.visualizerReady(listeners)).start();
     }
 
     @Override

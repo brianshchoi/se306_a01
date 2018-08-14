@@ -5,10 +5,12 @@ import javafx.beans.Observable;
 import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
+import view.listeners.AlgorithmListener;
+import view.listeners.AlgorithmObservable;
 
 import java.util.*;
 
-public class DFSAlgorithm implements IAlgorithm, Observable {
+public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     private TaskModel taskModel;
     private IScheduler scheduler;
@@ -19,7 +21,7 @@ public class DFSAlgorithm implements IAlgorithm, Observable {
     private ISchedule bestSchedule; // Stores current best schedule
 
     private int numBranches = 0;
-    private InvalidationListener listener;
+    private List<AlgorithmListener> listeners = new ArrayList<>();
 
     public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
         this.taskModel = taskModel;
@@ -36,7 +38,7 @@ public class DFSAlgorithm implements IAlgorithm, Observable {
 
         run(freeTasks, depth, schedule, pTasks, null);
         System.out.println("Number of branches: " + numBranches);
-        if (CLI.isVisualisation()) listener.invalidated(this);
+
         return bestSchedule;
     }
 
@@ -97,6 +99,7 @@ public class DFSAlgorithm implements IAlgorithm, Observable {
                         if (depth == numTasks) { // Update the best schedule
                             try {
                                 bestSchedule = (ISchedule) ((Schedule) currentSchedule).clone();
+                                if (CLI.isVisualisation()) fire(EventType.BEST_SCHEDULE_UPDATED);
                             } catch (CloneNotSupportedException e) {
                                 e.printStackTrace();
                             }
@@ -142,12 +145,23 @@ public class DFSAlgorithm implements IAlgorithm, Observable {
     }
 
     @Override
-    public void addListener(InvalidationListener listener) {
-        this.listener = listener;
+    public void addAlgorithmListener(AlgorithmListener listener) {
+        listeners.add(listener);
     }
 
     @Override
-    public void removeListener(InvalidationListener listener) {
-        this.listener = null;
+    public void removeAlgorithmListener(AlgorithmListener listener) {
+        listeners.remove(listener);
+    }
+
+    @Override
+    public void fire(EventType eventType) {
+        switch (eventType) {
+            case BEST_SCHEDULE_UPDATED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.bestScheduleUpdated(bestSchedule);
+                }
+                break;
+        }
     }
 }

@@ -11,13 +11,14 @@ import javafx.scene.paint.Color;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
+import view.listeners.AlgorithmListener;
 import view.nodeTree.NodeColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GanttChartScheduler implements InvalidationListener {
+public class GanttChartScheduler implements AlgorithmListener{
 
     private List<IProcessor> _processors;
     private GanttChart<Number,String> _chart;
@@ -92,9 +93,7 @@ public class GanttChartScheduler implements InvalidationListener {
     }
 
     @Override
-    public void invalidated(Observable observable) {
-        ISchedule schedule = ((IAlgorithm) observable).getBestSchedule();
-        schedule.debug();
-        System.out.println("INVALIDATION EVENT FIRED!");
+    public void bestScheduleUpdated(ISchedule schedule) {
+        // Update Gantt chart
     }
 }
