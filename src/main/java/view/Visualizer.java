@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Visualizer extends Application {
-    private static final double TILE_SIZE = 300;
+    private static final double firstLayerHeight = 600;
+    private static final double secondLayerHeight = 300;
 
     // Tiles
     private ISchedule _schedule = mockSchedule();
@@ -39,11 +40,11 @@ public class Visualizer extends Application {
 
     @Override public void init(){
 
-        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 400, 550);
+        NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(_taskModel, 500, firstLayerHeight);
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
-                .minSize(500, 550)
+                .prefSize(500, firstLayerHeight)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(nodeTreeGenerator.getGraphicPane())
@@ -55,7 +56,7 @@ public class Visualizer extends Application {
         GanttChartScheduler ganttChart = new GanttChartScheduler(_schedule);
 
         scheduler_tile = TileBuilder.create()
-                .minSize(800, 550)
+                .prefSize(800, firstLayerHeight)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
                 .graphic(ganttChart.getChart())
@@ -66,7 +67,7 @@ public class Visualizer extends Application {
 
         time_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.CUSTOM)
-                .prefSize(200, 500)
+                .prefSize(800, secondLayerHeight)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(_timeTile.makeTimer())
@@ -77,10 +78,10 @@ public class Visualizer extends Application {
         Runtime runtime = Runtime.getRuntime();
         memory_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
-                .prefSize(200,500)
+                .prefSize(500,secondLayerHeight)
                 .title("Memory")
                 .maxValue(runtime.maxMemory()/1000000)
-                .unit("mB")
+                .unit("MB")
                 .textSize(Tile.TextSize.BIGGER)
                 .build();
 

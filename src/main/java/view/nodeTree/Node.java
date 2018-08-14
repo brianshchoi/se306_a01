@@ -42,7 +42,7 @@ public class Node {
                 break;
             case GREEN:
                 _circle.setFill(Color.GREEN);
-                _text.setFill(Color.BLACK);
+                _text.setFill(Color.WHITE);
                 break;
             case BLUE:
                 _circle.setFill(Color.BLUE);
