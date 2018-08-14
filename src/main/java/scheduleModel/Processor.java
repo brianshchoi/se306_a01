@@ -37,6 +37,21 @@ public class Processor implements IProcessor, Cloneable {
         allocatedTime -= task.getWeight();
     }
 
+    public Map.Entry<Task, Integer> getLatestTask(){
+        Map.Entry<Task, Integer> latestTask = taskMap.entrySet().iterator().next();
+
+        for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
+            int taskFinishTime = entry.getValue() + entry.getKey().getWeight();
+            int latestTaskFinish = latestTask.getValue() + latestTask.getKey().getWeight();
+
+            if (taskFinishTime > latestTaskFinish) {
+                latestTask = entry;
+            }
+        }
+
+        return latestTask;
+    }
+
     @Override
     public int getFinishTime() {
         int finishTime = 0;
