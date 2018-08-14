@@ -56,7 +56,8 @@ public class Visualizer extends Application {
                 .build();
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
-        CLI.visualizerReady(ganttChart);
+        new Thread(() -> CLI.visualizerReady(ganttChart)).start();
+
 
         scheduler_tile = TileBuilder.create()
                 .prefSize(800, firstLayerHeight)
