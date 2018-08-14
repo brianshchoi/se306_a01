@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
+import view.nodeTree.NodeColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,13 +66,14 @@ public class GanttChartScheduler {
     private List<XYChart.Series> makeSeriesList(String[] procName){
         // for each processors
         List<XYChart.Series> seriesList = new ArrayList<>();
+        List<NodeColor> colors = Arrays.asList(NodeColor.values());
         for(int i = 0; i < _processors.size(); i++){
             XYChart.Series series = new XYChart.Series<>();
             // add each task to series
             List<Task> listOfTasks = _processors.get(i).getTasks();
             for(Task t : listOfTasks) {
                 int startTime = _processors.get(i).getStartTimeOf(t);
-                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), "status-green", t);
+                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), colors.get(i), t);
                 XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], ganttChart);
     //            displayLabelForData(taskData, t, ganttChart);
                 series.getData().add(taskData);
