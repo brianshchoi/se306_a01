@@ -1,5 +1,8 @@
 package view.ganttChart;
 
+import app.IAlgorithm;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -14,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GanttChartScheduler {
+public class GanttChartScheduler implements InvalidationListener {
 
     private List<IProcessor> _processors;
     private GanttChart<Number,String> _chart;
@@ -86,5 +89,12 @@ public class GanttChartScheduler {
     
     public GanttChart getChart() {
         return _chart;
+    }
+
+    @Override
+    public void invalidated(Observable observable) {
+        ISchedule schedule = ((IAlgorithm) observable).getBestSchedule();
+        schedule.debug();
+        System.out.println("INVALIDATION EVENT FIRED!");
     }
 }
