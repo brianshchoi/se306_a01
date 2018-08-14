@@ -16,6 +16,9 @@ public class TestAlgorithm {
         // Other inputs from Oliver Sinnen
         put("2p_Fork_Join_Nodes_10_CCR_1.01_WeightType_Random.dot", 59);
         put("2p_Fork_Nodes_10_CCR_0.10_WeightType_Random.dot", 300);
+        put("2p_InTree-Balanced-MaxBf-3_Nodes_10_CCR_0.10_WeightType_Random.dot", 222);
+        put("2p_InTree-Unbalanced-MaxBf-3_Nodes_10_CCR_0.10_WeightType_Random.dot", 344);
+        put("2p_OutTree-Balanced-MaxBf-3_Nodes_10_CCR_0.10_WeightType_Random.dot", 253);
 
         // From Canvas
         put("Nodes_7_OutTree.dot", 28);
