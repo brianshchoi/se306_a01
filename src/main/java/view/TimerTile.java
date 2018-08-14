@@ -48,19 +48,16 @@ public class TimerTile {
         }
 
         time.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame frame = new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                double currentTime  = System.currentTimeMillis();
-                double timeElapsed = (currentTime - starTime)/1000;
-                _time.setText( timeElapsed +"s");
-                _time.setTextAlignment(TextAlignment.RIGHT);
+        KeyFrame frame = new KeyFrame(Duration.millis(10), event -> {
+            double currentTime  = System.currentTimeMillis();
+            double timeElapsed = (currentTime - starTime)/1000;
+            _time.setText( timeElapsed +"s");
+            _time.setTextAlignment(TextAlignment.RIGHT);
 
-                // Check if algorithm has finished
-                if(_finished) {
-                    _finished = false;
-                    time.stop();
-                }
+            // Check if algorithm has finished
+            if(_finished) {
+                _finished = false;
+                time.stop();
             }
         });
         time.getKeyFrames().add(frame);
