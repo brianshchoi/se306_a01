@@ -38,7 +38,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
         run(freeTasks, depth, schedule, pTasks, null);
         System.out.println("Number of branches: " + numBranches);
-
+        fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
 
@@ -156,10 +156,16 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     @Override
     public void fire(EventType eventType) {
+        if (!CLI.isVisualisation()) return;
         switch (eventType) {
             case BEST_SCHEDULE_UPDATED:
                 for (AlgorithmListener listener: listeners) {
                     listener.bestScheduleUpdated(bestSchedule);
+                }
+                break;
+            case ALGORTHIM_FINISHED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.algorithmFinished();
                 }
                 break;
         }

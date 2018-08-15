@@ -13,8 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import scheduleModel.ISchedule;
+import view.listeners.AlgorithmListener;
 
-public class TimerTile {
+public class TimerTile implements AlgorithmListener {
 
     private Label _time;
     private Boolean _finished = false;
@@ -43,21 +45,13 @@ public class TimerTile {
 
     public void doTime(double starTime) {
         Timeline time = new Timeline();
-        if(time!=null){
-            time.stop();
-        }
-
         time.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame frame = new KeyFrame(Duration.millis(10), event -> {
-            double currentTime  = System.currentTimeMillis();
-            double timeElapsed = (currentTime - starTime)/1000;
-            _time.setText( timeElapsed +"s");
-            _time.setTextAlignment(TextAlignment.RIGHT);
-
-            // Check if algorithm has finished
-            if(_finished) {
-                _finished = false;
-                time.stop();
+        KeyFrame frame = new KeyFrame(Duration.millis(1), event -> {
+            if (!_finished) {
+                double currentTime  = System.currentTimeMillis();
+                double timeElapsed = (currentTime - starTime)/1000;
+                _time.setText( timeElapsed +"s");
+                _time.setTextAlignment(TextAlignment.RIGHT);
             }
         });
         time.getKeyFrames().add(frame);
@@ -70,4 +64,14 @@ public class TimerTile {
     }
 
 
+    @Override
+    public void bestScheduleUpdated(ISchedule schedule) {
+        // do nothing
+    }
+
+    @Override
+    public void algorithmFinished() {
+        System.out.println("event fired");
+        _finished = true;
+    }
 }

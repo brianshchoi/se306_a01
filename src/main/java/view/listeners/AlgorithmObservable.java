@@ -2,7 +2,8 @@ package view.listeners;
 
 public interface AlgorithmObservable {
     enum EventType {
-        BEST_SCHEDULE_UPDATED;
+        BEST_SCHEDULE_UPDATED,
+        ALGORTHIM_FINISHED
     }
 
     void addAlgorithmListener(AlgorithmListener listener);

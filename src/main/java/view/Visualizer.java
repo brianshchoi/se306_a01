@@ -34,14 +34,14 @@ public class Visualizer extends Application implements AlgorithmListener {
     private Tile time_tile;
     private Tile memory_tile;
     private Tile branches_tile;
-    private TimerTile _timeTile;
+    private TimerTile timerTile;
     private FlowGridPane wholePane, topRowPane, bottomRowPane;
 
 
     @Override public void init(){
         List<AlgorithmListener> listeners = new ArrayList<>();
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(taskModel, 500, firstLayerHeight);
-        _timeTile = new TimerTile();
+        timerTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
                 .prefSize(600, firstLayerHeight)
@@ -58,11 +58,11 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .prefSize(400, secondLayerHeight)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
-                .graphic(_timeTile.makeTimer())
+                .graphic(timerTile.makeTimer())
                 /*.description("0.000s")
                 .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
-
+        listeners.add(timerTile);
         Runtime runtime = Runtime.getRuntime();
         memory_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
@@ -76,7 +76,6 @@ public class Visualizer extends Application implements AlgorithmListener {
         MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
-        listeners.add(ganttChart);
         listeners.add(this);
 
         scheduler_tile = TileBuilder.create()
@@ -156,5 +155,10 @@ public class Visualizer extends Application implements AlgorithmListener {
             remakeChart(schedule);
             topRowPane.getChildren().add(0, scheduler_tile);
         });
+    }
+
+    @Override
+    public void algorithmFinished() {
+
     }
 }

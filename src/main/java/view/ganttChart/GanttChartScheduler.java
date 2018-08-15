@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GanttChartScheduler implements AlgorithmListener{
+public class GanttChartScheduler {
 
     private List<IProcessor> _processors;
     private GanttChart<Number,String> _chart;
@@ -90,10 +90,5 @@ public class GanttChartScheduler implements AlgorithmListener{
     
     public GanttChart getChart() {
         return _chart;
-    }
-
-    @Override
-    public void bestScheduleUpdated(ISchedule schedule) {
-        // Update Gantt chart
     }
 }
