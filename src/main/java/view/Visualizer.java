@@ -7,19 +7,12 @@ import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
-import scheduleModel.Schedule;
-import taskModel.Task;
 import taskModel.TaskModel;
 import view.ganttChart.GanttChartScheduler;
 import view.listeners.AlgorithmListener;
@@ -30,8 +23,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Visualizer extends Application implements AlgorithmListener {
-    private static final double firstLayerHeight = 300;
-    private static final double secondLayerHeight = 300;
+    private static final double firstLayerHeight = 325;
+    private static final double secondLayerHeight = 325;
 
     // Tiles
     private static ISchedule schedule;
@@ -40,9 +33,9 @@ public class Visualizer extends Application implements AlgorithmListener {
     private Tile nodeTree_tile;
     private Tile time_tile;
     private Tile memory_tile;
+    private Tile branches_tile;
     private TimerTile _timeTile;
-    private FlowGridPane pane;
-
+    private FlowGridPane wholePane, topRowPane, bottomRowPane;
 
 
     @Override public void init(){
@@ -51,7 +44,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         _timeTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
-                .prefSize(500, firstLayerHeight)
+                .prefSize(600, firstLayerHeight)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Node Tree")
                 .graphic(nodeTreeGenerator.getGraphicPane())
@@ -62,7 +55,7 @@ public class Visualizer extends Application implements AlgorithmListener {
 
         time_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.CUSTOM)
-                .prefSize(800, secondLayerHeight)
+                .prefSize(400, secondLayerHeight)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(_timeTile.makeTimer())
@@ -73,7 +66,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         Runtime runtime = Runtime.getRuntime();
         memory_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
-                .prefSize(500,secondLayerHeight)
+                .prefSize(400,secondLayerHeight)
                 .title("Memory")
                 .maxValue(runtime.maxMemory()/1000000)
                 .unit("MB")
@@ -87,17 +80,31 @@ public class Visualizer extends Application implements AlgorithmListener {
         listeners.add(this);
 
         scheduler_tile = TileBuilder.create()
-                .prefSize(800, firstLayerHeight)
+                .prefSize(600, firstLayerHeight)
                 .skinType(Tile.SkinType.CUSTOM)
-                .title("Parallel Scheduler")
+                .title("Currently Known Best Schedule")
                 .graphic(ganttChart.getChart())
                 .dateVisible(true)
                 .locale(Locale.US)
                 .running(true)
                 .build();
 
-        pane = new FlowGridPane(2,2,
-                scheduler_tile, nodeTree_tile, time_tile, memory_tile);
+        branches_tile = TileBuilder.create()
+                .prefSize(400, secondLayerHeight)
+                .skinType(Tile.SkinType.BAR_CHART)
+                .title("Branches Explored")
+                .running(true)
+                .build();
+
+        topRowPane = new FlowGridPane(2, 1, scheduler_tile, nodeTree_tile);
+        topRowPane.setVgap(5);
+        topRowPane.setHgap(5);
+
+        bottomRowPane = new FlowGridPane(3, 1, time_tile, branches_tile, memory_tile);
+        bottomRowPane.setVgap(5);
+        bottomRowPane.setHgap(5);
+        wholePane = new FlowGridPane(1,2,
+                topRowPane, bottomRowPane);
 
         // Give listeners to CLI
         new Thread(() -> CLI.visualizerReady(listeners)).start();
@@ -106,12 +113,12 @@ public class Visualizer extends Application implements AlgorithmListener {
     @Override
     public void start(Stage primaryStage) {
 
-        pane.setHgap(5);
-        pane.setVgap(5);
-        pane.setPadding(new Insets(5));
-        pane.setBackground(new Background(new BackgroundFill(Tile.BACKGROUND.darker(), CornerRadii.EMPTY, Insets.EMPTY)));
+        wholePane.setHgap(5);
+        wholePane.setVgap(5);
+        wholePane.setPadding(new Insets(5));
+        wholePane.setBackground(new Background(new BackgroundFill(Tile.BACKGROUND.darker(), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Scene scene = new Scene(pane);
+        Scene scene = new Scene(wholePane);
 
         primaryStage.setTitle("Optimal Scheduler GUI");
         primaryStage.setResizable(false);
@@ -130,7 +137,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
 
         scheduler_tile = TileBuilder.create()
-                .prefSize(800, firstLayerHeight)
+                .prefSize(600, firstLayerHeight)
                 .skinType(Tile.SkinType.CUSTOM)
                 .title("Parallel Scheduler")
                 .graphic(ganttChart.getChart())
@@ -145,9 +152,9 @@ public class Visualizer extends Application implements AlgorithmListener {
     public void bestScheduleUpdated(ISchedule schedule) {
         Platform.runLater(() -> {
             schedule.debug();
-            pane.getChildren().remove(scheduler_tile);
+            topRowPane.getChildren().remove(scheduler_tile);
             remakeChart(schedule);
-            pane.getChildren().add(0, scheduler_tile);
+            topRowPane.getChildren().add(0, scheduler_tile);
         });
     }
 }
