@@ -42,7 +42,7 @@ public class GanttChartScheduler {
         yAxis.setTickLabelGap(10);
         yAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(processorNames)));
 
-        _chart.setTitle("Task Schedule");
+        _chart.setTitle("Click to zoom");
         _chart.setLegendVisible(false);
         _chart.setBlockHeight( 20 + (10 / _processors.size()));
 
