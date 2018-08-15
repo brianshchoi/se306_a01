@@ -90,10 +90,15 @@ public class Visualizer extends Application implements AlgorithmListener {
 
         branches_tile = TileBuilder.create()
                 .prefSize(400, secondLayerHeight)
-                .skinType(Tile.SkinType.BAR_CHART)
+                .skinType(Tile.SkinType.SMOOTH_AREA_CHART)
                 .title("Branches Explored")
+                .unit("Branches")
+                .animated(true)
                 .running(true)
                 .build();
+
+        BranchTile branchTile = new BranchTile(branches_tile);
+        listeners.add(branchTile);
 
         topRowPane = new FlowGridPane(2, 1, scheduler_tile, nodeTree_tile);
         topRowPane.setVgap(5);
@@ -150,7 +155,6 @@ public class Visualizer extends Application implements AlgorithmListener {
     @Override
     public void bestScheduleUpdated(ISchedule schedule) {
         Platform.runLater(() -> {
-            schedule.debug();
             topRowPane.getChildren().remove(scheduler_tile);
             remakeChart(schedule);
             topRowPane.getChildren().add(0, scheduler_tile);
