@@ -40,6 +40,7 @@ public class Visualizer extends Application implements AlgorithmListener {
     private FlowGridPane wholePane, topRowPane, bottomRowPane;
     private Stage _primaryStage;
     private Scene _scene;
+    private boolean zoomActive;
 
     @Override public void init(){
         List<AlgorithmListener> listeners = new ArrayList<>();
@@ -156,10 +157,12 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .build();
 
         scheduler_tile.setOnMouseClicked(e -> {
+                    zoomActive = true;
                     remakeChart(schedule);
                     FlowGridPane schedulerFlowPane = new FlowGridPane(1, 1, scheduler_tile);
                     scheduler_tile.setPrefSize(1200, 650);
                     scheduler_tile.setOnMouseClicked(e2 -> {
+                        zoomActive = false;
                         System.out.println("hello");
                         remakeChart(schedule);
                         scheduler_tile.setPrefSize(600, 325);
@@ -200,6 +203,43 @@ public class Visualizer extends Application implements AlgorithmListener {
             topRowPane.getChildren().remove(scheduler_tile);
             remakeChart(schedule);
             topRowPane.getChildren().add(0, scheduler_tile);
+
+            if (zoomActive) {
+                FlowGridPane schedulerFlowPane = new FlowGridPane(1, 1, scheduler_tile);
+                scheduler_tile.setPrefSize(1200, 650);
+                scheduler_tile.setOnMouseClicked(e2 -> {
+                    zoomActive = false;
+                    System.out.println("hello");
+                    remakeChart(schedule);
+                    scheduler_tile.setPrefSize(600, 325);
+                    topRowPane = new FlowGridPane(2, 1, scheduler_tile, nodeTree_tile);
+                    topRowPane.setVgap(5);
+                    topRowPane.setHgap(5);
+
+                    bottomRowPane = new FlowGridPane(3, 1, time_tile, branches_tile, memory_tile);
+                    bottomRowPane.setVgap(5);
+                    bottomRowPane.setHgap(5);
+                    wholePane = new FlowGridPane(1,2,
+                            topRowPane, bottomRowPane);
+
+
+                    wholePane.setHgap(5);
+                    wholePane.setVgap(5);
+                    wholePane.setPadding(new Insets(5));
+                    wholePane.setBackground(new Background(new BackgroundFill(Tile.BACKGROUND.darker(), CornerRadii.EMPTY, Insets.EMPTY)));
+
+                    _scene = new Scene(wholePane);
+
+                    _primaryStage.setTitle("Optimal Scheduler GUI");
+                    _primaryStage.setResizable(false);
+                    _primaryStage.setScene(_scene);
+                    _primaryStage.show();
+
+                });
+                Scene schedulerScene = new Scene(schedulerFlowPane);
+                _primaryStage.setScene(schedulerScene);
+                _primaryStage.show();
+            }
         });
         try {
             Thread.sleep(1000);
