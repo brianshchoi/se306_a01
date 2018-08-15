@@ -55,6 +55,10 @@ public class TaskModel {
         return graphId;
     }
 
+    public int getTaskModelSize(){
+        return tasks.size();
+    }
+
     public void computeBottomLevels(Task task) {
         if (task.getChildren().size() == 0) {
             task.setBottomLevel(task.getWeight());
