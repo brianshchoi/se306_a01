@@ -1,8 +1,5 @@
 package view.ganttChart;
 
-import app.IAlgorithm;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -11,7 +8,6 @@ import javafx.scene.paint.Color;
 import scheduleModel.IProcessor;
 import scheduleModel.ISchedule;
 import taskModel.Task;
-import view.listeners.AlgorithmListener;
 import view.nodeTree.NodeColor;
 
 import java.util.ArrayList;
