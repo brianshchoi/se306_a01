@@ -89,6 +89,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
                 // Go through each of the unique created schedules at this level
                 for (ISchedule currentSchedule : schedules) {
                     numBranches++;
+                    fire(EventType.NUM_BRANCHES_CHANGED);
                     depth++;
 
                     // Check if bad schedule
@@ -164,6 +165,11 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
             case ALGORTHIM_FINISHED:
                 for (AlgorithmListener listener: listeners) {
                     listener.algorithmFinished();
+                }
+                break;
+            case NUM_BRANCHES_CHANGED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.numberOfBranchesChanged(numBranches);
                 }
                 break;
         }
