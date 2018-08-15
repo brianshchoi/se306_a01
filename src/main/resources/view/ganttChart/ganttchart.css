@@ -1,22 +1,88 @@
-.shape{
-    }
-
+.status-black {
+       -fx-background-color:rgba(0,0,0,0.7);
+       -fx-border-width: 1;
+       -fx-border-insets: 1;
+       -fx-border-color : rgba(255,255,255,0.7);
+       -fx-text-fill: white;
+       -fx-font-size: 16pt;
+   }
 .status-red {
     -fx-background-color:rgba(128,0,0,0.7);
     -fx-border-width: 1;
     -fx-border-insets: 1;
-    -fx-border-color : rgba(255,255,255, 0.7);;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-orange {
+    -fx-background-color: rgba(255,165,0,0.7);
+    -fx-border-width: 1;
+    -fx-border-insets: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-yellow {
+    -fx-background-color:rgba(255,255,0,0.7);
+    -fx-border-width: 1;
+    -fx-border-insets: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
 }
 .status-green {
     -fx-background-color:rgba(0,128,0,0.7);
     -fx-border-insets: 1;
     -fx-border-width: 1;
-    -fx-border-color : rgba(255,255,255, 0.7);;
-
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: rgba(255,255,255,0.7);
+    -fx-font-size: 16pt;
 }
 .status-blue {
-    -fx-background-color:rgba(0,0,128,0.7);
+    -fx-background-color: rgba(0,0,128,0.7);
     -fx-border-insets: 1;
     -fx-border-width: 1;
-    -fx-border-color : rgba(255,255,255, 0.7);;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-indigo {
+    -fx-background-color: rgba(37,0,65, 0.7);
+    -fx-border-insets: 1;
+    -fx-border-width: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-violet {
+    -fx-background-color:rgba(119,65,119,0.7);
+    -fx-border-insets: 1;
+    -fx-border-width: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-cyan {
+    -fx-background-color:rgba(0,128,128,0.7);
+    -fx-border-insets: 1;
+    -fx-border-width: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: white;
+    -fx-font-size: 16pt;
+}
+.status-magenta {
+    -fx-background-color:rgba(128,0,128,0.7);
+    -fx-border-insets: 1;
+    -fx-border-width: 1;
+    -fx-border-color : rgba(255,255,255,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
+}
+.status-white {
+    -fx-background-color:rgba(255,255,255,0.7);
+    -fx-border-insets: 1;
+    -fx-border-width: 1;
+    -fx-border-color : rgba(0,0,0,0.7);
+    -fx-text-fill: black;
+    -fx-font-size: 16pt;
 }

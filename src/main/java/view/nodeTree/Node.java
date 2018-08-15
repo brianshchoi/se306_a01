@@ -34,10 +34,6 @@ public class Node {
     // TODO: Change switch statement to enum, and add more colours
     private void setColor(NodeColor color){
         switch(color){
-            case BLACK:
-                _circle.setFill(Color.BLACK);
-                _text.setFill(Color.WHITE);
-                break;
             case RED:
                 _circle.setFill(Color.RED);
                 _text.setFill(Color.WHITE);
@@ -88,5 +84,13 @@ public class Node {
 
     public StackPane getStackPane(){
         return _stack;
+    }
+
+    public static void main(String[] args){
+        System.out.println(Color.ORANGE.toString());
+        System.out.println(Color.YELLOW.toString());
+        System.out.println(Color.VIOLET.toString());
+        System.out.println(Color.CYAN.toString());
+        System.out.println(Color.GREEN.toString());
     }
 }

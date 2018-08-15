@@ -48,7 +48,7 @@ public class GanttChartScheduler implements AlgorithmListener{
 
         _chart.setTitle("Task Schedule");
         _chart.setLegendVisible(false);
-        _chart.setBlockHeight( 50 - _processors.size() * 1.3);
+        _chart.setBlockHeight( 50 - _processors.size() * 1.8);
 
         // Make series list then add to chart
         List<XYChart.Series> seriesList = makeSeriesList(processorNames);
