@@ -79,7 +79,7 @@ public class Node {
     }
 
     private Circle createCircle (int size){
-        return new Circle(0,0,30 - size * 1.3);
+        return new Circle(0,0,(20 + (20 / size)));
     }
 
     public StackPane getStackPane(){
