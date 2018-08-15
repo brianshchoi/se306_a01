@@ -161,4 +161,9 @@ public class Visualizer extends Application implements AlgorithmListener {
     public void algorithmFinished() {
 
     }
+
+    @Override
+    public void numberOfBranchesChanged(int numBranches) {
+        // do nothing
+    }
 }

@@ -1,7 +1,5 @@
 package app;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;

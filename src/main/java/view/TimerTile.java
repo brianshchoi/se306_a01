@@ -74,4 +74,9 @@ public class TimerTile implements AlgorithmListener {
         System.out.println("event fired");
         _finished = true;
     }
+
+    @Override
+    public void numberOfBranchesChanged(int numBranches) {
+        // do nothing
+    }
 }
