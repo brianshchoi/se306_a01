@@ -65,26 +65,29 @@ public class NodeTreeGenerator {
     }
 
     public Pane getGraphicPane() {
+        // Draw Nodes
         for (Task task: _taskModel.getTasks()){
             // create a graphical node that is represented by a pane
             Pane taskNode = createNode(task);
             // Add the 'node' pane onto the tree pane.
             _graphicPane.getChildren().add((taskNode));
 
-
             taskMap.put(task.getName(), taskNode);
+        }
 
+        // Draw edges
+        for (Task task: _taskModel.getTasks()) {
             if (task.getParents().size() > 0) {
                 List<Task> parentsInOrderByName = new ArrayList<>(task.getParents());
                 Collections.sort(parentsInOrderByName);
                 for (Task parent : parentsInOrderByName) {
+                    Pane childNode = taskMap.get(task.getName());
                     Pane parentNode = taskMap.get(parent.getName());
 
-                    createEdge(parentNode, taskNode);
+                    createEdge(parentNode, childNode);
                 }
             }
         }
-
         return _graphicPane;
     }
 
