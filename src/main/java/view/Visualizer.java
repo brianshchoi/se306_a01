@@ -155,29 +155,41 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .running(true)
                 .build();
 
-        scheduler_tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            int toggle = 0;
-            @Override
-            public void handle(MouseEvent event) {
-                if (toggle == 0) {
+        scheduler_tile.setOnMouseClicked(e -> {
+                    remakeChart(schedule);
                     FlowGridPane schedulerFlowPane = new FlowGridPane(1, 1, scheduler_tile);
                     scheduler_tile.setPrefSize(1200, 650);
+                    scheduler_tile.setOnMouseClicked(e2 -> {
+                        System.out.println("hello");
+                        remakeChart(schedule);
+                        scheduler_tile.setPrefSize(600, 325);
+                        topRowPane = new FlowGridPane(2, 1, scheduler_tile, nodeTree_tile);
+                        topRowPane.setVgap(5);
+                        topRowPane.setHgap(5);
+
+                        bottomRowPane = new FlowGridPane(3, 1, time_tile, branches_tile, memory_tile);
+                        bottomRowPane.setVgap(5);
+                        bottomRowPane.setHgap(5);
+                        wholePane = new FlowGridPane(1,2,
+                                topRowPane, bottomRowPane);
+
+
+                        wholePane.setHgap(5);
+                        wholePane.setVgap(5);
+                        wholePane.setPadding(new Insets(5));
+                        wholePane.setBackground(new Background(new BackgroundFill(Tile.BACKGROUND.darker(), CornerRadii.EMPTY, Insets.EMPTY)));
+
+                        _scene = new Scene(wholePane);
+
+                        _primaryStage.setTitle("Optimal Scheduler GUI");
+                        _primaryStage.setResizable(false);
+                        _primaryStage.setScene(_scene);
+                        _primaryStage.show();
+
+                    });
                     Scene schedulerScene = new Scene(schedulerFlowPane);
                     _primaryStage.setScene(schedulerScene);
                     _primaryStage.show();
-                    toggle = 1;
-                }
-                else{
-                    topRowPane.getChildren().remove(scheduler_tile);
-                    remakeChart(schedule);
-                    topRowPane.getChildren().add(0, scheduler_tile);
-                    scheduler_tile.setPrefSize(600, firstLayerHeight);
-                    _primaryStage.setScene(_scene);
-                    _primaryStage.show();
-                    toggle = 0;
-                }
-
-            }
         });
 
     }
@@ -189,6 +201,11 @@ public class Visualizer extends Application implements AlgorithmListener {
             remakeChart(schedule);
             topRowPane.getChildren().add(0, scheduler_tile);
         });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
