@@ -89,13 +89,14 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .build();
 
         branches_tile = TileBuilder.create()
+                .skinType(Tile.SkinType.NUMBER)
                 .prefSize(400, secondLayerHeight)
-                .skinType(Tile.SkinType.SMOOTH_AREA_CHART)
                 .title("Branches Explored")
-                .unit("Branches")
-                .animated(true)
-                .running(true)
+                .value(0)
+                .maxValue(Double.MAX_VALUE)
+                .textVisible(true)
                 .build();
+
 
         BranchTile branchTile = new BranchTile(branches_tile);
         listeners.add(branchTile);

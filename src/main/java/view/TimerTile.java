@@ -71,7 +71,6 @@ public class TimerTile implements AlgorithmListener {
 
     @Override
     public void algorithmFinished() {
-        System.out.println("event fired");
         _finished = true;
     }
 
