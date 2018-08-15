@@ -147,7 +147,7 @@ public class Visualizer extends Application implements AlgorithmListener {
             schedule.debug();
             pane.getChildren().remove(scheduler_tile);
             remakeChart(schedule);
-            pane.getChildren().add(scheduler_tile);
+            pane.getChildren().add(0, scheduler_tile);
         });
     }
 }
