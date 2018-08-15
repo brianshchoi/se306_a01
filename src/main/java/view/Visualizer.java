@@ -60,20 +60,6 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .running(true)
                 .build();
 
-        GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
-        listeners.add(ganttChart);
-        listeners.add(this);
-
-        scheduler_tile = TileBuilder.create()
-                .prefSize(800, firstLayerHeight)
-                .skinType(Tile.SkinType.CUSTOM)
-                .title("Parallel Scheduler")
-                .graphic(ganttChart.getChart())
-                .dateVisible(true)
-                .locale(Locale.US)
-                .running(true)
-                .build();
-
         time_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.CUSTOM)
                 .prefSize(800, secondLayerHeight)
@@ -95,6 +81,20 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .build();
 
         MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
+
+        GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
+        listeners.add(ganttChart);
+        listeners.add(this);
+
+        scheduler_tile = TileBuilder.create()
+                .prefSize(800, firstLayerHeight)
+                .skinType(Tile.SkinType.CUSTOM)
+                .title("Parallel Scheduler")
+                .graphic(ganttChart.getChart())
+                .dateVisible(true)
+                .locale(Locale.US)
+                .running(true)
+                .build();
 
         pane = new FlowGridPane(2,2,
                 scheduler_tile, nodeTree_tile, time_tile, memory_tile);
