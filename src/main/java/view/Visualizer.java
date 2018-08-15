@@ -36,7 +36,7 @@ public class Visualizer extends Application implements AlgorithmListener {
     private Tile time_tile;
     private Tile memory_tile;
     private Tile branches_tile;
-    private TimerTile _timeTile;
+    private TimerTile timerTile;
     private FlowGridPane wholePane, topRowPane, bottomRowPane;
     private Stage _primaryStage;
     private Scene _scene;
@@ -44,7 +44,7 @@ public class Visualizer extends Application implements AlgorithmListener {
     @Override public void init(){
         List<AlgorithmListener> listeners = new ArrayList<>();
         NodeTreeGenerator nodeTreeGenerator = new NodeTreeGenerator(taskModel, 500, firstLayerHeight);
-        _timeTile = new TimerTile();
+        timerTile = new TimerTile();
 
         nodeTree_tile = TileBuilder.create()
                 .prefSize(600, firstLayerHeight)
@@ -61,11 +61,11 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .prefSize(400, secondLayerHeight)
                 .title("Time Taken")
                 .textSize(Tile.TextSize.BIGGER)
-                .graphic(_timeTile.makeTimer())
+                .graphic(timerTile.makeTimer())
                 /*.description("0.000s")
                 .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
-
+        listeners.add(timerTile);
         Runtime runtime = Runtime.getRuntime();
         memory_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
@@ -79,7 +79,6 @@ public class Visualizer extends Application implements AlgorithmListener {
         MemoryGauge memoryGauge = new MemoryGauge(memory_tile);
 
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
-        listeners.add(ganttChart);
         listeners.add(this);
 
         scheduler_tile = TileBuilder.create()
@@ -93,11 +92,17 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .build();
 
         branches_tile = TileBuilder.create()
+                .skinType(Tile.SkinType.NUMBER)
                 .prefSize(400, secondLayerHeight)
-                .skinType(Tile.SkinType.BAR_CHART)
                 .title("Branches Explored")
-                .running(true)
+                .value(0)
+                .maxValue(Double.MAX_VALUE)
+                .textVisible(true)
                 .build();
+
+
+        BranchTile branchTile = new BranchTile(branches_tile);
+        listeners.add(branchTile);
 
         topRowPane = new FlowGridPane(2, 1, scheduler_tile, nodeTree_tile);
         topRowPane.setVgap(5);
@@ -180,10 +185,19 @@ public class Visualizer extends Application implements AlgorithmListener {
     @Override
     public void bestScheduleUpdated(ISchedule schedule) {
         Platform.runLater(() -> {
-            schedule.debug();
             topRowPane.getChildren().remove(scheduler_tile);
             remakeChart(schedule);
             topRowPane.getChildren().add(0, scheduler_tile);
         });
+    }
+
+    @Override
+    public void algorithmFinished() {
+
+    }
+
+    @Override
+    public void numberOfBranchesChanged(int numBranches) {
+        // do nothing
     }
 }

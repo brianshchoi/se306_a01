@@ -1,7 +1,5 @@
 package app;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import scheduleModel.*;
 import taskModel.Task;
 import taskModel.TaskModel;
@@ -38,7 +36,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
         run(freeTasks, depth, schedule, pTasks, null);
         System.out.println("Number of branches: " + numBranches);
-
+        fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
 
@@ -91,6 +89,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
                 // Go through each of the unique created schedules at this level
                 for (ISchedule currentSchedule : schedules) {
                     numBranches++;
+                    fire(EventType.NUM_BRANCHES_CHANGED);
                     depth++;
 
                     // Check if bad schedule
@@ -156,10 +155,21 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     @Override
     public void fire(EventType eventType) {
+        if (!CLI.isVisualisation()) return;
         switch (eventType) {
             case BEST_SCHEDULE_UPDATED:
                 for (AlgorithmListener listener: listeners) {
                     listener.bestScheduleUpdated(bestSchedule);
+                }
+                break;
+            case ALGORTHIM_FINISHED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.algorithmFinished();
+                }
+                break;
+            case NUM_BRANCHES_CHANGED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.numberOfBranchesChanged(numBranches);
                 }
                 break;
         }
