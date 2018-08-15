@@ -15,7 +15,7 @@ public class Node {
     private StackPane _stack;
 
     public Node(Task task, NodeColor color, int numofTasks) {
-        // Create new StackPane and style with node.css
+        // Create new StackPane
         _stack = new StackPane();
 
         // Elements needed for a node
