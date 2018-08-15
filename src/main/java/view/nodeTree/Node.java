@@ -21,6 +21,16 @@ public class Node {
         setColor(color);
     }
 
+    public Node(Task task, NodeColor color, int numofTasks){
+        _circle = createCircle(numofTasks);
+        _text = new Text(task.getName() + "\n\n" + task.getWeight());
+
+        _stack = new StackPane();
+        _stack.getChildren().addAll(_circle, _text);
+        setColor(color);
+    }
+
+
     // TODO: Change switch statement to enum, and add more colours
     private void setColor(NodeColor color){
         switch(color){
@@ -70,6 +80,10 @@ public class Node {
                 _text.setFill(Color.BLACK);
                 break;
         }
+    }
+
+    private Circle createCircle (int size){
+        return new Circle(0,0,30 - size * 1.3);
     }
 
     public StackPane getStackPane(){
