@@ -102,7 +102,7 @@ public class NodeTreeGenerator {
             int count = 0;
                 for (Task task : layeredTasks) {
                     int y = (int) Math.ceil(layer * ((_tileHeight * 0.9)/_totalLayers));
-                    int x = (int) Math.ceil(_tileWidth/layeredTasks.size()/2 + count * _tileWidth/layeredTasks.size() - 50);
+                    int x = (int) Math.ceil(_tileWidth/layeredTasks.size()/2 + count * _tileWidth/layeredTasks.size());
                     _nodePositionY.put(task, y);
                     _nodePositionX.put(task, x);
 
