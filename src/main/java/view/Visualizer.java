@@ -6,8 +6,10 @@ import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -36,7 +38,8 @@ public class Visualizer extends Application implements AlgorithmListener {
     private Tile branches_tile;
     private TimerTile _timeTile;
     private FlowGridPane wholePane, topRowPane, bottomRowPane;
-
+    private Stage _primaryStage;
+    private Scene _scene;
 
     @Override public void init(){
         List<AlgorithmListener> listeners = new ArrayList<>();
@@ -112,18 +115,19 @@ public class Visualizer extends Application implements AlgorithmListener {
 
     @Override
     public void start(Stage primaryStage) {
+        _primaryStage = primaryStage;
 
         wholePane.setHgap(5);
         wholePane.setVgap(5);
         wholePane.setPadding(new Insets(5));
         wholePane.setBackground(new Background(new BackgroundFill(Tile.BACKGROUND.darker(), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Scene scene = new Scene(wholePane);
+        _scene = new Scene(wholePane);
 
-        primaryStage.setTitle("Optimal Scheduler GUI");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        _primaryStage.setTitle("Optimal Scheduler GUI");
+        _primaryStage.setResizable(false);
+        _primaryStage.setScene(_scene);
+        _primaryStage.show();
     }
 
     public static void launch(TaskModel tm, ISchedule sch) {
@@ -133,7 +137,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         launch();
     }
 
-    private void remakeChart(ISchedule schedule){
+    private void remakeChart(ISchedule schedule) {
         GanttChartScheduler ganttChart = new GanttChartScheduler(schedule);
 
         scheduler_tile = TileBuilder.create()
@@ -145,6 +149,31 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .locale(Locale.US)
                 .running(true)
                 .build();
+
+        scheduler_tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            int toggle = 0;
+            @Override
+            public void handle(MouseEvent event) {
+                if (toggle == 0) {
+                    FlowGridPane schedulerFlowPane = new FlowGridPane(1, 1, scheduler_tile);
+                    scheduler_tile.setPrefSize(1200, 650);
+                    Scene schedulerScene = new Scene(schedulerFlowPane);
+                    _primaryStage.setScene(schedulerScene);
+                    _primaryStage.show();
+                    toggle = 1;
+                }
+                else{
+                    topRowPane.getChildren().remove(scheduler_tile);
+                    remakeChart(schedule);
+                    topRowPane.getChildren().add(0, scheduler_tile);
+                    scheduler_tile.setPrefSize(600, firstLayerHeight);
+                    _primaryStage.setScene(_scene);
+                    _primaryStage.show();
+                    toggle = 0;
+                }
+
+            }
+        });
 
     }
 
