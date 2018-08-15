@@ -78,10 +78,10 @@ public class NodeTreeGenerator {
         // Draw edges
         for (Task task: _taskModel.getTasks()) {
             if (task.getParents().size() > 0) {
+                Pane childNode = taskMap.get(task.getName());
                 List<Task> parentsInOrderByName = new ArrayList<>(task.getParents());
                 Collections.sort(parentsInOrderByName);
                 for (Task parent : parentsInOrderByName) {
-                    Pane childNode = taskMap.get(task.getName());
                     Pane parentNode = taskMap.get(parent.getName());
 
                     createEdge(parentNode, childNode);
