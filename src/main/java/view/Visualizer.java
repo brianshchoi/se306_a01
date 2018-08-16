@@ -6,10 +6,8 @@ import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.tools.FlowGridPane;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -225,7 +223,7 @@ public class Visualizer extends Application implements AlgorithmListener {
     }
 
     @Override
-    public void numberOfBranchesChanged(int numBranches) {
+    public void numberOfBranchesChanged() {
         // do nothing
     }
 }

@@ -36,11 +36,11 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         Set<Task> pTasks = new HashSet<>();
 
         pool = new ForkJoinPool(5);
-        DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel);
+        DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel, listeners);
         pool.invoke(task);
 
         System.out.println("Number of branches: " + numBranches);
-
+        fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
 
@@ -49,7 +49,7 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         return bestSchedule;
     }
 
-    static class DFSAlgorithmTask extends RecursiveAction {
+    static class DFSAlgorithmTask extends RecursiveAction implements AlgorithmObservable {
 
         private List<Task> freeTasks;
         private int depth;
@@ -58,14 +58,17 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         private IProcessor previousProcessor;
         private Scheduler scheduler;
         private TaskModel taskModel;
+        private int numBranches = 0;
+        private List<AlgorithmListener> listeners;
 
-        public DFSAlgorithmTask(List<Task> freeTasks, int depth, ISchedule schedule, Set<Task> cleanPreviousTasks, IProcessor pProc, TaskModel taskModel) {
+        public DFSAlgorithmTask(List<Task> freeTasks, int depth, ISchedule schedule, Set<Task> cleanPreviousTasks, IProcessor pProc, TaskModel taskModel, List<AlgorithmListener> listeners) {
             this.taskModel = taskModel;
             this.freeTasks = freeTasks;
             this.depth = depth;
             this.schedule = schedule;
             this.previousProcessor = pProc;
             this.cleanPreviousTasks = cleanPreviousTasks;
+            this.listeners = listeners;
             scheduler = new Scheduler();
         }
 
@@ -97,19 +100,20 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
                     List<DFSAlgorithmTask> tasks = new ArrayList<>();
                     for (ISchedule currentSchedule : schedules) {
                         depth++;
-
+                        fire(EventType.NUM_BRANCHES_CHANGED);
                         if (cost(currentSchedule) < bound) {
                             int numTasks = taskModel.getTasks().size();
                             if (depth == numTasks) {
                                 bound = currentSchedule.getFinishTime();
                                 try {
                                     bestSchedule = (ISchedule) ((Schedule) currentSchedule).clone();
+                                    if (CLI.isVisualisation()) fire(EventType.BEST_SCHEDULE_UPDATED);
                                 } catch (CloneNotSupportedException e){
                                     e.printStackTrace();
                                 }
                             } else if (depth < numTasks) {
                                 List<Task> newFreeTasks = getFreeTasks(currentSchedule, taskModel.getTasks());
-                                DFSAlgorithmTask dTask = new DFSAlgorithmTask(newFreeTasks, depth, currentSchedule, previousTasks, currentSchedule.getProcessorOf(currentTask), taskModel);
+                                DFSAlgorithmTask dTask = new DFSAlgorithmTask(newFreeTasks, depth, currentSchedule, previousTasks, currentSchedule.getProcessorOf(currentTask), taskModel, listeners);
                                 tasks.add(dTask);
                                 dTask.fork();
                             }
@@ -129,6 +133,32 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
             costFunctionOutputs.add(((double) schedule.f1()));
             costFunctionOutputs.add(schedule.f2(taskModel));
             return costFunctionOutputs.last();
+        }
+
+        @Override
+        public void addAlgorithmListener(AlgorithmListener listener) {
+            this.listeners.add(listener);
+        }
+
+        @Override
+        public void removeAlgorithmListener(AlgorithmListener listener) {
+            this.listeners.remove(listener);
+        }
+
+        @Override
+        public void fire(EventType eventType) {
+            switch (eventType) {
+                case BEST_SCHEDULE_UPDATED:
+                    for (AlgorithmListener listener : listeners) {
+                        listener.bestScheduleUpdated(bestSchedule);
+                    }
+                    break;
+                case NUM_BRANCHES_CHANGED:
+                    for (AlgorithmListener listener: listeners) {
+                        listener.numberOfBranchesChanged();
+                    }
+                    break;
+            }
         }
     }
 
@@ -161,10 +191,11 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
 
     @Override
     public void fire(AlgorithmObservable.EventType eventType) {
+        if (!CLI.isVisualisation()) return;
         switch (eventType) {
-            case BEST_SCHEDULE_UPDATED:
-                for (AlgorithmListener listener : listeners) {
-                    listener.bestScheduleUpdated(bestSchedule);
+            case ALGORTHIM_FINISHED:
+                for (AlgorithmListener listener: listeners) {
+                    listener.algorithmFinished();
                 }
                 break;
         }

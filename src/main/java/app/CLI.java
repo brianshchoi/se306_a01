@@ -122,7 +122,7 @@ public class CLI {
 
     public static void visualizerReady(List<AlgorithmListener> listeners) {
         // Set algorithm
-        IAlgorithm algorithm = new DFSAlgorithm(taskModel, numOfProcessors);
+        IAlgorithm algorithm = new DFSAlgorithmFork(taskModel, numOfProcessors);
 
         if (visualisation) {
             for (AlgorithmListener listener: listeners) {

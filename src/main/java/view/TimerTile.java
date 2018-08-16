@@ -2,12 +2,8 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -75,7 +71,7 @@ public class TimerTile implements AlgorithmListener {
     }
 
     @Override
-    public void numberOfBranchesChanged(int numBranches) {
+    public void numberOfBranchesChanged() {
         // do nothing
     }
 }

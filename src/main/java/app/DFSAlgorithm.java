@@ -168,7 +168,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
                 break;
             case NUM_BRANCHES_CHANGED:
                 for (AlgorithmListener listener: listeners) {
-                    listener.numberOfBranchesChanged(numBranches);
+                    listener.numberOfBranchesChanged();
                 }
                 break;
         }

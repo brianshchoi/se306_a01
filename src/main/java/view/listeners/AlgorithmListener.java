@@ -5,5 +5,5 @@ import scheduleModel.ISchedule;
 public interface AlgorithmListener {
     void bestScheduleUpdated(ISchedule schedule);
     void algorithmFinished();
-    void numberOfBranchesChanged(int numBranches);
+    void numberOfBranchesChanged();
 }
