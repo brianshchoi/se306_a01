@@ -21,10 +21,12 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
 
     private int numBranches = 0;
     private List<AlgorithmListener> listeners = new ArrayList<>();
+    private int numberOfCores;
 
-    public DFSAlgorithmFork(TaskModel taskModel, int numOfProcessors) {
+    public DFSAlgorithmFork(TaskModel taskModel, int numOfProcessors, int numberOfCores) {
         this.taskModel = taskModel;
         this.numOfProcessors = numOfProcessors;
+        this.numberOfCores = numberOfCores;
         scheduler = new Scheduler();
     }
 
@@ -35,7 +37,7 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
         Set<Task> pTasks = new HashSet<>();
 
-        pool = new ForkJoinPool(5);
+        pool = new ForkJoinPool(numberOfCores);
         DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel, listeners);
         pool.invoke(task);
 

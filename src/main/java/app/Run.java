@@ -18,15 +18,15 @@ public class Run {
 
     private static final String FILENAME = NODES_FORK; // SET INPUT HERE
     private static final int NUM_PROCESSORS = 2; // SET PROCESSORS HERE
+    private static final int NUM_CORES = 4; // SET PARALLELS HERE
 
     public  static void main(String[] args) throws FileNotFoundException, URISyntaxException, CloneNotSupportedException {
         // Start timing algorithm
         final double start = System.currentTimeMillis();
 
-        // Run algorithm
         //new DFSAlgorithm(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
 
-        new DFSAlgorithmFork(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
+        new DFSAlgorithmFork(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS, NUM_CORES).run().debug();
 
         // Stop timing algorithm
         final double end = System.currentTimeMillis();

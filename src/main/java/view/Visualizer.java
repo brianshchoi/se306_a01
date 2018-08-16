@@ -174,11 +174,6 @@ public class Visualizer extends Application implements AlgorithmListener {
                 doZoom();
             }
         });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void doZoom() {
@@ -219,7 +214,7 @@ public class Visualizer extends Application implements AlgorithmListener {
 
     @Override
     public void algorithmFinished() {
-
+        // do nothing
     }
 
     @Override
