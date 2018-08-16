@@ -58,7 +58,7 @@ public class Visualizer extends Application implements AlgorithmListener {
         time_tile = TileBuilder.create()
                 .skinType(Tile.SkinType.CUSTOM)
                 .prefSize(400, secondLayerHeight)
-                .title("Time Taken")
+                .title("Time Elapsed")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(timerTile.makeTimer())
                 /*.description("0.000s")
@@ -214,7 +214,7 @@ public class Visualizer extends Application implements AlgorithmListener {
 
     @Override
     public void algorithmFinished() {
-        // do nothing
+        time_tile.setTitle("Finished");
     }
 
     @Override
