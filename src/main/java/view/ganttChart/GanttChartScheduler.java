@@ -58,7 +58,7 @@ public class GanttChartScheduler {
     private String[] makeProcessorNames() {
         String[] processorNames = new String[_processors.size()];
         for(int i = 0; i < _processors.size(); i++){
-            processorNames[i] = "processor_" + _processors.get(i).getId();
+            processorNames[i] = "P" + _processors.get(i).getId();
         }
         return processorNames;
     }
@@ -67,19 +67,24 @@ public class GanttChartScheduler {
         // for each processors
         List<XYChart.Series> seriesList = new ArrayList<>();
         List<NodeColor> colors = Arrays.asList(NodeColor.values());
+        int colorIndex = 0;
         for(int i = 0; i < _processors.size(); i++){
             XYChart.Series series = new XYChart.Series<>();
             // add each task to series
             List<Task> listOfTasks = _processors.get(i).getTasks();
             for(Task t : listOfTasks) {
                 int startTime = _processors.get(i).getStartTimeOf(t);
-                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), colors.get(i), t);
+                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), colors.get(colorIndex), t);
                 XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], ganttChart);
     //            displayLabelForData(taskData, t, ganttChart);
                 series.getData().add(taskData);
 
             }
             seriesList.add(series);
+            colorIndex++;
+            if (colorIndex == colors.size()) {
+                colorIndex = 0;
+            }
         }
         return seriesList;
     }
