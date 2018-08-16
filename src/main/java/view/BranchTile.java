@@ -1,10 +1,8 @@
 package view;
 
 import eu.hansolo.tilesfx.Tile;
-import eu.hansolo.tilesfx.chart.ChartData;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import scheduleModel.ISchedule;
 import view.listeners.AlgorithmListener;
@@ -34,7 +32,7 @@ public class BranchTile implements AlgorithmListener {
     }
 
     @Override
-    public void numberOfBranchesChanged(int numBranches) {
-        this.numBranches = numBranches;
+    public void numberOfBranchesChanged() {
+        numBranches++;
     }
 }
