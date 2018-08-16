@@ -58,7 +58,7 @@ public class GanttChartScheduler {
     private String[] makeProcessorNames() {
         String[] processorNames = new String[_processors.size()];
         for(int i = 0; i < _processors.size(); i++){
-            processorNames[i] = "processor_" + _processors.get(i).getId();
+            processorNames[i] = "P" + _processors.get(i).getId();
         }
         return processorNames;
     }
