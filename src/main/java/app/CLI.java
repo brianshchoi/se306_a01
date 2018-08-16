@@ -73,8 +73,11 @@ public class CLI {
         inputFilename = argsList.get(0);
         try {
             numOfProcessors = Integer.parseInt(argsList.get(1));
+            if (numOfProcessors < 0) throw new NumberFormatException();
         } catch (NumberFormatException e){
-            System.out.println("Not a valid integer for the number of processors");
+            System.out.println("Not a valid integer for the number of processors. See usage below:\n");
+            System.out.println(USAGE);
+            return;
         }
 
         // Check for visualisation (off by default)
@@ -87,8 +90,11 @@ public class CLI {
             String N = argsList.get(argsList.indexOf("-p") + 1);
             try {
                 algorithmCores = Integer.parseInt(N);
+                if (algorithmCores < 0) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                System.out.println("Not a valid integer for the number of algorithm cores");
+                System.out.println("Not a valid integer for the number of algorithm cores.  See usage below:\n");
+                System.out.println(USAGE);
+                return;
             }
         }
 
@@ -134,8 +140,8 @@ public class CLI {
         // Get optimal schedule
         ISchedule schedule = algorithm.run();
 
-        // Validate
-        new ScheduleValidator(schedule).validate(taskModel);
+        // Uncomment to run validator
+        // new ScheduleValidator(schedule).validate(taskModel);
 
         //Write out to file
         DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);
