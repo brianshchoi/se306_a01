@@ -94,7 +94,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
                     depth++;
 
                     // Check if bad schedule
-                    if (currentSchedule.getFinishTime() < bound) {
+                    if (cost(currentSchedule) < bound) {
                         int numTasks = taskModel.getTasks().size();
                         if (depth == numTasks) { // Update the best schedule
                             try {
@@ -107,9 +107,8 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
                         } else if (depth < numTasks) { // Keep building the schedule
                             // Set new list of free tasks
                             List<Task> newFreeTasks = getFreeTasks(currentSchedule, taskModel.getTasks());
-                            if (cost(currentSchedule) < bound) {
-                                run(newFreeTasks, depth, currentSchedule, previousTasks, currentSchedule.getProcessorOf(currentTask));
-                            }
+                            run(newFreeTasks, depth, currentSchedule, previousTasks, currentSchedule.getProcessorOf(currentTask));
+
                         }
                     }
                     // Start backtracking
@@ -158,7 +157,7 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
     public void fire(EventType eventType) {
         switch (eventType) {
             case BEST_SCHEDULE_UPDATED:
-                for (AlgorithmListener listener: listeners) {
+                for (AlgorithmListener listener : listeners) {
                     listener.bestScheduleUpdated(bestSchedule);
                 }
                 break;

@@ -16,7 +16,7 @@ public class Run {
     private static final String NODES_FORK_JOIN = "2p_Fork_Join_Nodes_10_CCR_1.01_WeightType_Random.dot";
     private static final String NODES_FORK = "2p_Fork_Nodes_10_CCR_0.10_WeightType_Random.dot";
 
-    private static final String FILENAME = NODES_11; // SET INPUT HERE
+    private static final String FILENAME = NODES_FORK; // SET INPUT HERE
     private static final int NUM_PROCESSORS = 2; // SET PROCESSORS HERE
 
     public  static void main(String[] args) throws FileNotFoundException, URISyntaxException, CloneNotSupportedException {
@@ -24,7 +24,9 @@ public class Run {
         final double start = System.currentTimeMillis();
 
         // Run algorithm
-        new DFSAlgorithm(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
+        //new DFSAlgorithm(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
+
+        new DFSAlgorithmFork(new FileParser(new File(Run.class.getResource(FILENAME).toURI())).getTaskModelFromFile(), NUM_PROCESSORS).run().debug();
 
         // Stop timing algorithm
         final double end = System.currentTimeMillis();
