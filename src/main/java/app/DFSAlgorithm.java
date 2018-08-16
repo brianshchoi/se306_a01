@@ -35,7 +35,6 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
         Set<Task> pTasks = new HashSet<>();
 
         run(freeTasks, depth, schedule, pTasks, null);
-        System.out.println("Number of branches: " + numBranches);
         fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }

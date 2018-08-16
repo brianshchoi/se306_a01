@@ -41,7 +41,6 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel, listeners);
         pool.invoke(task);
 
-        System.out.println("Number of branches: " + numBranches);
         fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
