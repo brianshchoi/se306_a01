@@ -105,7 +105,8 @@ public class CLI {
         try {
             fileParser = new FileParser(new File(inputFilename));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("The file could not be found.");
+            return;
         }
 
         // Parse the file
@@ -139,6 +140,7 @@ public class CLI {
         //Write out to file
         DotGraph dotGraph = new DotGraph(outputFilename, taskModel.getGraphId(), schedule, taskModel);
         dotGraph.render();
+        System.out.println(outputFilename + " has been saved.");
     }
 
     public static boolean isVisualisation() {
