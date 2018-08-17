@@ -9,7 +9,7 @@ import java.util.*;
 public class TaskModel {
     private Map<String, Task> tasks = new HashMap<>();
     private String graphId;
-    private int computationalLoad = 0;
+    private int computationalLoad = 0; // Total weight of all tasks
 
     public TaskModel(String graphId) {
         this.graphId = graphId;
@@ -24,9 +24,13 @@ public class TaskModel {
         computationalLoad += task.getWeight();
     }
 
+    /**
+     * Get task from the model
+     * @param taskName
+     * @return
+     */
     public Task get(String taskName) {
         if (!tasks.containsKey(taskName)) throw new TaskNotFoundException();
-
         return tasks.get(taskName);
     }
 
@@ -41,13 +45,15 @@ public class TaskModel {
         child.insertLinkToParent(parent, cost);
     }
 
+    /**
+     * Get all the tasks in the model
+     * @return
+     */
     public List<Task> getTasks() {
         List<Task> output = new ArrayList<>();
-
         for (Task task: tasks.values()) {
             output.add(task);
         }
-
         return output;
     }
 
@@ -59,6 +65,9 @@ public class TaskModel {
         return tasks.size();
     }
 
+    /**
+     * Compute the bottom levels recursively
+     */
     public void computeBottomLevels(Task task) {
         if (task.getChildren().size() == 0) {
             task.setBottomLevel(task.getWeight());

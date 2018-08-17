@@ -100,6 +100,11 @@ public class Task implements  Comparable<Task> {
         return this.name;
     }
 
+    /**
+     * Compare tasks by their bottom levels (in decreasing order)
+     * @param task
+     * @return
+     */
     @Override
     public int compareTo(Task task) {
         return Integer.compare(task.bottomLevel, this.bottomLevel);
@@ -113,6 +118,11 @@ public class Task implements  Comparable<Task> {
         return bottomLevel;
     }
 
+    /**
+     * Returns true if and only if both tasks have the same name.
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object){
         if (!(object instanceof Task)){
@@ -131,6 +141,12 @@ public class Task implements  Comparable<Task> {
         return  name.hashCode();
     }
 
+    /**
+     * Returns the name as a number - may throw a NumberFormatException.
+     * The client code using this class should handle a NumberFormatException in the case
+     * where the names of the tasks are letters rather than numbers.
+     * @return
+     */
     public int getId() {
         return Integer.parseInt(name);
     }

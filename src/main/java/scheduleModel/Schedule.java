@@ -12,6 +12,7 @@ public class Schedule implements ISchedule, Cloneable {
   //  public Map<Task, IProcessor> _tasksToProcessor = new HashMap<>();
 
     public Schedule(int numOfProcessors) {
+        // Create processors
         for (int i = 1; i <= numOfProcessors; i++) {
             _processors.add(new Processor(i));
         }
@@ -19,14 +20,14 @@ public class Schedule implements ISchedule, Cloneable {
 
     private Schedule() {} // for cloning
 
+    // Create deep copy of Schedule
     @Override
     public Object clone() throws CloneNotSupportedException {
         Schedule schedule = new Schedule();
-
+        // Clone the processors
         for (IProcessor processor: _processors) {
             schedule._processors.add((IProcessor) ((Processor) processor).clone());
         }
-
         return schedule;
     }
 
@@ -60,7 +61,6 @@ public class Schedule implements ISchedule, Cloneable {
     @Override
     public void remove(Task task) {
         boolean taskRemoved = false;
-
         //get processor task is scheduled in
         for (IProcessor processor : _processors){
             if (processor.contains(task)){
@@ -120,7 +120,6 @@ public class Schedule implements ISchedule, Cloneable {
 
     @Override
     public boolean contains(Task task) {
-
         for (IProcessor processor: _processors) {
             if (processor.contains(task)) return true;
         }

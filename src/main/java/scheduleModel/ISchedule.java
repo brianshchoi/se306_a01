@@ -55,15 +55,33 @@ public interface ISchedule {
      */
     List<Task> getTasks();
 
+    /**
+     * Returns true if this schedule contains the task.
+     * @param task
+     * @return
+     */
     boolean contains(Task task);
 
+    /**
+     * Get the amount of free time between tasks on this schedule.
+     * Any time available after the last tasks scheduled on each processor is ignored.
+     * @return
+     */
     int getIdleTime();
 
+    /**
+     * Give a rough printout of the schedule.
+     */
     void debug();
 
     // Cost functions
     int f1();
     double f2(TaskModel taskModel);
 
+    /**
+     * Returns true if this schedule contains that processor.
+     * @param processor
+     * @return
+     */
     boolean containsProcessor(IProcessor processor);
 }

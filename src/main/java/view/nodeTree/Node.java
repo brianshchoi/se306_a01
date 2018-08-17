@@ -7,11 +7,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import taskModel.Task;
 
+/* This class creates the individual tasks that are rendered on the input graph.
+* Each task has it's weight and it's task name. It is also rendered a certain colour
+* depending on which processor it is currently scheduled to.*/
 public class Node {
 
-    private Circle _circle;
-    private Text _taskName;
-    private Text _taskWeight;
+    // Fields
+    private Circle circle;
+    private Text taskName;
+    private Text taskWeight;
     private StackPane _stack;
 
     public Node(Task task, NodeColor color, int numofTasks) {
@@ -19,15 +23,15 @@ public class Node {
         _stack = new StackPane();
 
         // Elements needed for a node
-        _circle = createCircle(numofTasks);
-        _taskName = new Text(task.getName());
-        _taskName.setFont(new Font(25));
-        _taskWeight = new Text(Integer.toString(task.getWeight()));
-        _taskWeight.setFont(new Font(10));
+        circle = createCircle(numofTasks);
+        taskName = new Text(task.getName());
+        taskName.setFont(new Font(25));
+        taskWeight = new Text(Integer.toString(task.getWeight()));
+        taskWeight.setFont(new Font(10));
 
-        _stack.getChildren().add(_circle);              // Index 0 of _stack
-        _stack.getChildren().add(_taskName);            // Index 1 of _stack
-        _stack.getChildren().add(_taskWeight);          // Index 2 of _stack
+        _stack.getChildren().add(circle);              // Index 0 of _stack
+        _stack.getChildren().add(taskName);            // Index 1 of _stack
+        _stack.getChildren().add(taskWeight);          // Index 2 of _stack
 
         // Move taskName up a little
         _stack.getChildren().get(1).setTranslateY(-6);
@@ -40,55 +44,55 @@ public class Node {
     private void setColor(NodeColor color){
         switch(color){
             case RED:
-                _circle.setFill(Color.RED);
-                _taskName.setFill(Color.WHITE);
-                _taskWeight.setFill(Color.WHITE);
+                circle.setFill(Color.RED);
+                taskName.setFill(Color.WHITE);
+                taskWeight.setFill(Color.WHITE);
                 break;
             case ORANGE:
-                _circle.setFill(Color.ORANGE);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.ORANGE);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
             case YELLOW:
-                _circle.setFill(Color.YELLOW);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.YELLOW);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
             case GREEN:
-                _circle.setFill(Color.GREEN);
-                _taskName.setFill(Color.WHITE);
-                _taskWeight.setFill(Color.WHITE);
+                circle.setFill(Color.GREEN);
+                taskName.setFill(Color.WHITE);
+                taskWeight.setFill(Color.WHITE);
                 break;
             case BLUE:
-                _circle.setFill(Color.BLUE);
-                _taskName.setFill(Color.WHITE);
-                _taskWeight.setFill(Color.WHITE);
+                circle.setFill(Color.BLUE);
+                taskName.setFill(Color.WHITE);
+                taskWeight.setFill(Color.WHITE);
                 break;
             case INDIGO:
-                _circle.setFill(Color.INDIGO);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.INDIGO);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
             case VIOLET:
-                _circle.setFill(Color.VIOLET);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.VIOLET);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
             case CYAN:
-                _circle.setFill(Color.CYAN);
-                _taskName.setFill(Color.WHITE);
-                _taskWeight.setFill(Color.WHITE);
+                circle.setFill(Color.CYAN);
+                taskName.setFill(Color.WHITE);
+                taskWeight.setFill(Color.WHITE);
                 break;
             case MAGENTA:
-                _circle.setFill(Color.MAGENTA);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.MAGENTA);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
             default:
             case WHITE:
-                _circle.setFill(Color.WHITE);
-                _taskName.setFill(Color.BLACK);
-                _taskWeight.setFill(Color.BLACK);
+                circle.setFill(Color.WHITE);
+                taskName.setFill(Color.BLACK);
+                taskWeight.setFill(Color.BLACK);
                 break;
         }
     }
@@ -101,13 +105,5 @@ public class Node {
 
     public StackPane getStackPane(){
         return _stack;
-    }
-
-    public static void main(String[] args){
-        System.out.println(Color.ORANGE.toString());
-        System.out.println(Color.YELLOW.toString());
-        System.out.println(Color.VIOLET.toString());
-        System.out.println(Color.CYAN.toString());
-        System.out.println(Color.GREEN.toString());
     }
 }

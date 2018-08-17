@@ -9,7 +9,6 @@ import javafx.scene.chart.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import taskModel.Task;
 import view.nodeTree.NodeColor;
@@ -21,23 +20,26 @@ import java.util.List;
 // A lot of stuff here is inspired by Roland on Stack Overflow.
 // We used his ideas and modified it.  See link below:
 // https://stackoverflow.com/questions/27975898/gantt-chart-from-scratch
+
+/* This class does all the rendering of the Gantt Chart.
+* After being given the extra parameters required such as the weight of a task,
+* the colour that the task/processor should be and the actual task, it renders
+* the task on a particular position on the chart relating to which processor
+* and the starting time of the task.*/
 public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     private Rectangle rectangle;
+    private double blockHeight = 10;
 
+    // Extra parameters for rendering a task
     public static class ExtraData {
 
-        public long length;
-        public String styleClass;
-        public Task _task;
+        // Fields
+        private long length;
+        private String styleClass;
+        private Task task;
 
-        public ExtraData(long lengthMs, String styleClass, Task task) {
-            super();
-            this.length = lengthMs;
-            this.styleClass = styleClass;
-            this._task = task;
-        }
-
+        // Passes in the extra data each processor needs to be rendered for the chart
         public ExtraData(long lengthMs, NodeColor color, Task task) {
             super();
             switch (color) {
@@ -74,10 +76,11 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                     break;
             }
             this.length = lengthMs;
-            this._task = task;
+            this.task = task;
         }
+
         public Task getTask(){
-            return _task;
+            return task;
         }
 
         public long getLength() {
@@ -86,6 +89,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         public void setLength(long length) {
             this.length = length;
         }
+
         public String getStyleClass() {
             return styleClass;
         }
@@ -94,48 +98,42 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         }
     }
 
-    private double blockHeight = 10;
-
     public GanttChart(@NamedArg("xAxis") Axis<X> xAxis, @NamedArg("yAxis") Axis<Y> yAxis) {
-        this(xAxis, yAxis, FXCollections.<Series<X, Y>>observableArrayList());
-    }
-
-    public GanttChart(@NamedArg("xAxis") Axis<X> xAxis, @NamedArg("yAxis") Axis<Y> yAxis, @NamedArg("data") ObservableList<Series<X,Y>> data) {
-        super(xAxis, yAxis);
-        if (!(xAxis instanceof ValueAxis && yAxis instanceof CategoryAxis)) {
-            throw new IllegalArgumentException("Axis type incorrect, X and Y should both be NumberAxis");
-        }
-        setData(data);
+        super(xAxis,yAxis);
+        setData(FXCollections.<Series<X,Y>>observableArrayList());
     }
 
     private static String getStyleClass( Object obj) {
         return ((ExtraData) obj).getStyleClass();
     }
-
     private static double getLength( Object obj) {
         return ((ExtraData) obj).getLength();
     }
-
     private static Task getTask( Object obj) {
         return ((ExtraData) obj).getTask();
     }
 
+    public double getBlockHeight() {
+        return blockHeight;
+    }
+    public void setBlockHeight( double blockHeight) {
+        this.blockHeight = blockHeight;
+    }
+
+    // Place all the tasks on the bar for each processor
     @Override protected void layoutPlotChildren() {
-
         for (int seriesIndex=0; seriesIndex < getData().size(); seriesIndex++) {
-
             Series<X,Y> series = getData().get(seriesIndex);
-
             Iterator<Data<X,Y>> iter = getDisplayedDataIterator(series);
             while(iter.hasNext()) {
                 Data<X,Y> item = iter.next();
+
+                // Find the position to layout the X and Y axes
                 double x = getXAxis().getDisplayPosition(item.getXValue());
                 double y = getYAxis().getDisplayPosition(item.getYValue());
-                if (Double.isNaN(x) || Double.isNaN(y)) {
-                    continue;
-                }
+
+                // Get the shape of the rectangle to be drawn
                 Node block = item.getNode();
-          //      Rectangle rectangle;
                 if (block != null) {
                     if (block instanceof StackPane) {
                         StackPane region = (StackPane)item.getNode();
@@ -146,11 +144,13 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                         } else {
                             return;
                         }
+
+                        // Set the size of the rectangle block for each task. Height is dependent on the number
+                        // of processors and width is dependent on the task weight
                         rectangle.setWidth( getLength( item.getExtraValue()) * ((getXAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getXAxis()).getScale()) : 1));
                         rectangle.setHeight(getBlockHeight() * ((getYAxis() instanceof NumberAxis) ? Math.abs(((NumberAxis)getYAxis()).getScale()) : 1));
                         y -= getBlockHeight() / 2.0;
 
-                        // Note: workaround for RT-7689 - saw this in ProgressControlSkin
                         // The region doesn't update itself when the shape is mutated in place, so we
                         // null out and then restore the shape in order to force invalidation.
                         region.setShape(null);
@@ -162,6 +162,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                         block.setLayoutX(x);
                         block.setLayoutY(y);
 
+                        // Set the text for the weight of each task to the center of the rectangle
                         Text text = new Text(getTask(item.getExtraValue()).getName());
                         text.setFill(Color.WHITE);
                         Group group = new Group(text);
@@ -175,12 +176,41 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         }
     }
 
-    public double getBlockHeight() {
-        return blockHeight;
+// Put the rectangle in a node container to be styled
+    private Node createContainer(Series<X, Y> series, int seriesIndex, final Data<X,Y> item, int itemIndex) {
+        Node container = item.getNode();
+        if (container == null) {
+            container = new StackPane();
+            item.setNode(container);
+        }
+        container.getStyleClass().add( getStyleClass( item.getExtraValue()));
+
+        return container;
     }
 
-    public void setBlockHeight( double blockHeight) {
-        this.blockHeight = blockHeight;
+    // Change the range of the axis depending on the makespan of the schedule
+    @Override protected void updateAxisRange() {
+        final Axis<X> xa = getXAxis();
+        final Axis<Y> ya = getYAxis();
+        List<X> xData = null;
+        List<Y> yData = null;
+        if(xa.isAutoRanging()) xData = new ArrayList<X>();
+        if(ya.isAutoRanging()) yData = new ArrayList<Y>();
+        if(xData != null || yData != null) {
+            for(Series<X,Y> series : getData()) {
+                for(Data<X,Y> data: series.getData()) {
+                    if(xData != null) {
+                        xData.add(data.getXValue());
+                        xData.add(xa.toRealValue(xa.toNumericValue(data.getXValue()) + getLength(data.getExtraValue())));
+                    }
+                    if(yData != null){
+                        yData.add(data.getYValue());
+                    }
+                }
+            }
+            if(xData != null) xa.invalidateRange(xData);
+            if(yData != null) ya.invalidateRange(yData);
+        }
     }
 
     @Override protected void dataItemAdded(Series<X,Y> series, int itemIndex, Data<X,Y> item) {
@@ -211,46 +241,6 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
             getPlotChildren().remove(container);
         }
         removeSeriesFromDisplay(series);
-
-    }
-
-
-    private Node createContainer(Series<X, Y> series, int seriesIndex, final Data<X,Y> item, int itemIndex) {
-
-        Node container = item.getNode();
-
-        if (container == null) {
-            container = new StackPane();
-            item.setNode(container);
-        }
-
-        container.getStyleClass().add( getStyleClass( item.getExtraValue()));
-
-        return container;
-    }
-
-    @Override protected void updateAxisRange() {
-        final Axis<X> xa = getXAxis();
-        final Axis<Y> ya = getYAxis();
-        List<X> xData = null;
-        List<Y> yData = null;
-        if(xa.isAutoRanging()) xData = new ArrayList<X>();
-        if(ya.isAutoRanging()) yData = new ArrayList<Y>();
-        if(xData != null || yData != null) {
-            for(Series<X,Y> series : getData()) {
-                for(Data<X,Y> data: series.getData()) {
-                    if(xData != null) {
-                        xData.add(data.getXValue());
-                        xData.add(xa.toRealValue(xa.toNumericValue(data.getXValue()) + getLength(data.getExtraValue())));
-                    }
-                    if(yData != null){
-                        yData.add(data.getYValue());
-                    }
-                }
-            }
-            if(xData != null) xa.invalidateRange(xData);
-            if(yData != null) ya.invalidateRange(yData);
-        }
     }
 
 }

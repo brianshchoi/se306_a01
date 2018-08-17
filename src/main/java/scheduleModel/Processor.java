@@ -15,6 +15,7 @@ public class Processor implements IProcessor, Cloneable {
         this.id = id;
     }
 
+    // Make a copy of this processor
     @Override
     public Object clone() throws CloneNotSupportedException {
         Processor processor = new Processor(this.id);
@@ -39,11 +40,11 @@ public class Processor implements IProcessor, Cloneable {
 
     public Map.Entry<Task, Integer> getLatestTask(){
         Map.Entry<Task, Integer> latestTask = taskMap.entrySet().iterator().next();
-
+        // Find the task which starts the latest.
         for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
             int taskFinishTime = entry.getValue() + entry.getKey().getWeight();
             int latestTaskFinish = latestTask.getValue() + latestTask.getKey().getWeight();
-
+            // Update
             if (taskFinishTime > latestTaskFinish) {
                 latestTask = entry;
             }
@@ -55,11 +56,12 @@ public class Processor implements IProcessor, Cloneable {
     @Override
     public int getFinishTime() {
         int finishTime = 0;
+        // Find the maximum finishing time
         for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
             int taskFinishTime = entry.getValue() + entry.getKey().getWeight();
+            // Update
             if (taskFinishTime > finishTime) finishTime = taskFinishTime;
         }
-
         return finishTime;
     }
 
@@ -105,12 +107,14 @@ public class Processor implements IProcessor, Cloneable {
         if (processor.taskMap.size() != taskMap.size()) return false;
         for (Map.Entry<Task, Integer> entry: taskMap.entrySet()) {
             if (!(processor.taskMap.containsKey(entry.getKey()))) return false;
+            // Check if the tasks start times are the same since it passed previous checks
             if (entry.getValue().intValue() != processor.taskMap.get(entry.getKey()).intValue()) return false;
         }
 
         return true;
     }
 
+    // Check if both processors are equal - that is, they have the same tasks
     @Override
     public boolean equals(Object object){
         if (!(object instanceof Processor)){

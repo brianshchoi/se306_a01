@@ -22,6 +22,12 @@ import java.util.concurrent.RecursiveAction;
  * Advances in Optimal Task Scheduling
  * Oliver Sinnen
  */
+
+/**
+ * Parallelization of the algorithm was inspired by examples from these sources:
+ * https://www.concretepage.com/java/jdk7/example-of-recursiveaction-in-java
+ * https://blog.codecentric.de/en/2012/11/java-forkjoin-improve-performance/
+ */
 public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
     private TaskModel taskModel;
     private int numOfProcessors;
