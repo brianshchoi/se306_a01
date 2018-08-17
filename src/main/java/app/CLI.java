@@ -144,6 +144,7 @@ public class CLI {
         }
 
         // Get optimal schedule
+        System.out.println("Running algorithm...");
         ISchedule schedule = algorithm.run();
 
         // Uncomment to run validator
