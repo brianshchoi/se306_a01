@@ -53,19 +53,6 @@
 </p>
 <h1>How to Build</h1>
 <p>
-    To run the project, download the jar which is provided under releases.  Make sure that your input DOT file is in the same
-    directory in the jar, and open up a terminal in this directory.  Execute the jar using the following format:
-</p>
-<code>java -jar schedular.jar INPUT.dot P [OPTION]</code><br/>
-<br/>
-<code>INPUT.dot is an input file</code><br/>
-<code>P is the number of processors to schedule the tasks on</code><br/>
-<code>Options:</code><br/>
-<code>-o OUTPUT names the file as OUTPUT (by default it is INPUT-output.dot)</code><br/>
-<code>-v runs the visualizer</code><br/>
-<code>-p N causes the algorithm to be parallelised on N cores (default is sequential)</code><br/>
-<br/>
-<p>
     <b>To download and build the project:</b>
 </p>
 <ol>
@@ -88,6 +75,29 @@
         which is in the app package.  You will need to setup a run configuration that passes in the appropriate
         arguments</li>
 </ol>
+<h1>How to Run</h1>
+<p>
+    To run the project, download the jar which is provided under releases.  Alternatively, you can run the Gradle "jar" task
+    after downloading/cloning the project:
+</p>
+    <code>./gradlew jar</code> (Linux)<br/>
+    <code>gradlew.bat jar</code> (Windows)<br/>
+<p>
+    If you create the jar using Gradle, it will be produced in the folder <code>build/libs/</code>
+</p>
+<p> 
+    Make sure that your input DOT file is in the same directory as the jar, and open
+    up a terminal in this directory.  Execute the jar using the following format:
+</p>
+<code>java -jar schedular.jar INPUT.dot P [OPTION]</code><br/>
+<br/>
+<code>INPUT.dot is an input file</code><br/>
+<code>P is the number of processors to schedule the tasks on</code><br/>
+<code>Options:</code><br/>
+<code>-o OUTPUT names the file as OUTPUT (by default it is INPUT-output.dot)</code><br/>
+<code>-v runs the visualizer</code><br/>
+<code>-p N causes the algorithm to be parallelised on N cores (default is sequential)</code><br/>
+<br/>
 <h1>Locating Information</h1>
 <p>
     Our WBS, Network Diagram and Gantt Chart can be found at the top level of the repository ("Team 2 Project Plan.pdf").
