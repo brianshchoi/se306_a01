@@ -9,6 +9,7 @@ import taskModel.Task;
 
 public class Node {
 
+    // Fields
     private Circle circle;
     private Text taskName;
     private Text taskWeight;

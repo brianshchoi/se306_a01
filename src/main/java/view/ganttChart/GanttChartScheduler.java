@@ -16,23 +16,24 @@ import java.util.List;
 
 public class GanttChartScheduler {
 
-    private List<IProcessor> _processors;
-    private GanttChart<Number,String> _chart;
+    private List<IProcessor> processors;
+    private GanttChart<Number,String> chart;
 
+    // Assigns the schedule that is going to be charted to the constructor
     public GanttChartScheduler(ISchedule schedule){
-        _processors = schedule.getProcessors();
+        processors = schedule.getProcessors();
         createChart();
     }
 
     private void createChart(){
-        final NumberAxis xAxis = new NumberAxis();
-        final CategoryAxis yAxis = new CategoryAxis();
-
         // Makes List of processor names
         String[] processorNames = makeProcessorNames();
 
         // Chart set up
-        _chart = new GanttChart<>(xAxis, yAxis);
+        final NumberAxis xAxis = new NumberAxis();
+        final CategoryAxis yAxis = new CategoryAxis();
+
+        chart = new GanttChart<>(xAxis, yAxis);
         xAxis.setLabel("");
         xAxis.setTickLabelFill(Color.WHITE);
         xAxis.setMinorTickCount(4);
@@ -42,47 +43,56 @@ public class GanttChartScheduler {
         yAxis.setTickLabelGap(10);
         yAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(processorNames)));
 
-        _chart.setTitle("Click to zoom");
-        _chart.setLegendVisible(false);
-        _chart.setBlockHeight( 20 + (10 / _processors.size()));
+        chart.setTitle("Click to zoom");
+        chart.setLegendVisible(false);
+
+        // Variable block height depending on the number of processors so blocks don't overlap
+        chart.setBlockHeight( 20 + (10 / processors.size()));
 
         // Make series list then add to chart
         List<XYChart.Series> seriesList = makeSeriesList(processorNames);
-        for(XYChart.Series s : seriesList){
-          _chart.getData().add(s);
+        for(XYChart.Series series : seriesList){
+          chart.getData().add(series);
         }
 
-        _chart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+        // Retrieves style sheet for colouring the processors
+        chart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
     }
 
+    // Creates the names of the processors to be labelled on the Y-axis
     private String[] makeProcessorNames() {
-        String[] processorNames = new String[_processors.size()];
-        for(int i = 0; i < _processors.size(); i++){
-            processorNames[i] = "P" + _processors.get(i).getId();
+        String[] processorNames = new String[processors.size()];
+        for(int i = 0; i < processors.size(); i++){
+            processorNames[i] = "P" + processors.get(i).getId();
         }
         return processorNames;
     }
 
-    private List<XYChart.Series> makeSeriesList(String[] procName){
-        // for each processors
+    private List<XYChart.Series> makeSeriesList(String[] processorNames){
+        // for each processor
         List<XYChart.Series> seriesList = new ArrayList<>();
         List<NodeColor> colors = Arrays.asList(NodeColor.values());
+
+        // Select the colour of the processor from the NodeColour Enum
         int colorIndex = 0;
-        for(int i = 0; i < _processors.size(); i++){
+        for(int i = 0; i < processors.size(); i++){
             XYChart.Series series = new XYChart.Series<>();
             // add each task to series
-            List<Task> listOfTasks = _processors.get(i).getTasks();
-            for(Task t : listOfTasks) {
-                int startTime = _processors.get(i).getStartTimeOf(t);
-                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( t.getWeight(), colors.get(colorIndex), t);
-                XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, procName[i], ganttChart);
-    //            displayLabelForData(taskData, t, ganttChart);
+            List<Task> listOfTasks = processors.get(i).getTasks();
+            for(Task task : listOfTasks) {
+
+                // Pass in the data the chart is required for each task
+                int startTime = processors.get(i).getStartTimeOf(task);
+                GanttChart.ExtraData ganttChart = new GanttChart.ExtraData( task.getWeight(), colors.get(colorIndex), task);
+                XYChart.Data<Number, String> taskData = new XYChart.Data<>(startTime, processorNames[i], ganttChart);
                 series.getData().add(taskData);
 
             }
             seriesList.add(series);
+
+            // Loops through the NodeColor Enum if there are more processors than colors
             colorIndex++;
-            if (colorIndex == colors.size()) {
+            if (colorIndex == colors.size() - 1) {
                 colorIndex = 0;
             }
         }
@@ -90,6 +100,6 @@ public class GanttChartScheduler {
     }
     
     public GanttChart getChart() {
-        return _chart;
+        return chart;
     }
 }
