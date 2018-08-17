@@ -14,27 +14,31 @@ import view.listeners.AlgorithmListener;
 
 public class TimerTile implements AlgorithmListener {
 
-    private Label _time;
-    private Boolean _finished = false;
+    private Label time;
+    private Boolean finished = false;
 
     // add more fields if you want to show more information like how many nodes, processors, etc
     TimerTile() {
         makeTimer();
     }
 
+    /**
+     * Set up the custom tile
+     * @return node
+     */
     public Node makeTimer() {
 
-        _time = new Label();
-        _time.setTextFill(Color.WHITE);
-        _time.setFont(Font.font(28));
-        _time.setTextAlignment(TextAlignment.RIGHT);
-        _time.setText("0.000s");
+        time = new Label();
+        time.setTextFill(Color.WHITE);
+        time.setFont(Font.font(28));
+        time.setTextAlignment(TextAlignment.RIGHT);
+        time.setText("0.000s");
 
         // comment this out when integrating with the actual algorithm
         doTime(System.currentTimeMillis());
 
         VBox box = new VBox(2);
-        box.getChildren().add(_time);
+        box.getChildren().add(time);
 
         return box;
     }
@@ -42,12 +46,15 @@ public class TimerTile implements AlgorithmListener {
     public void doTime(double starTime) {
         Timeline time = new Timeline();
         time.setCycleCount(Timeline.INDEFINITE);
+        // Update time every 1ms
         KeyFrame frame = new KeyFrame(Duration.millis(1), event -> {
-            if (!_finished) {
+            if (!finished) {
+                // calculating time elapsed
                 double currentTime  = System.currentTimeMillis();
                 double timeElapsed = (currentTime - starTime)/1000;
-                _time.setText( timeElapsed +"s");
-                _time.setTextAlignment(TextAlignment.RIGHT);
+                // update time on GUI
+                this.time.setText( timeElapsed +"s");
+                this.time.setTextAlignment(TextAlignment.RIGHT);
             }
         });
         time.getKeyFrames().add(frame);
@@ -56,7 +63,7 @@ public class TimerTile implements AlgorithmListener {
 
     // use this somewhere to end the time
     public void setTimeFinished(){
-        _finished = true;
+        finished = true;
     }
 
 
@@ -67,7 +74,7 @@ public class TimerTile implements AlgorithmListener {
 
     @Override
     public void algorithmFinished() {
-        _finished = true;
+        finished = true;
     }
 
     @Override

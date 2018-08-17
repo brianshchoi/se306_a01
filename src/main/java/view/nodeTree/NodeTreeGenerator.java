@@ -1,13 +1,10 @@
 package view.nodeTree;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import scheduleModel.ISchedule;
 import taskModel.Task;
 import taskModel.TaskModel;
-import view.nodeTree.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,31 +17,41 @@ import java.util.List;
 public class NodeTreeGenerator {
 
     private HashMap<String, Pane> taskMap = new HashMap<>();
-    private TaskModel _taskModel;
+    private TaskModel taskModel;
 //    private ISchedule _schedule;
-    private Pane _graphicPane;
-    private HashMap<Task, Integer> _nodePositionX = new HashMap<>();
-    private HashMap<Task, Integer> _nodePositionY = new HashMap<>();
-    private double _tileWidth;
-    private double _tileHeight;
-    private int _totalLayers;
+    private Pane graphicPane;
+    private HashMap<Task, Integer> nodePositionX = new HashMap<>();
+    private HashMap<Task, Integer> nodePositionY = new HashMap<>();
+    private double tileWidth;
+    private double tileHeight;
+    private int totalLayers;
 
     public NodeTreeGenerator(TaskModel taskModel, double tileWidth, double tileHeight) {
-        _taskModel = taskModel;
-        this._tileWidth = tileWidth;
-        this._tileHeight = tileHeight;
+        this.taskModel = taskModel;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
 
         makeNodePosition();
-        _graphicPane = new Pane();
+        graphicPane = new Pane();
     }
 
+    /**
+     * Takes a task object and make a node in right position
+     * @param task
+     * @return Pane
+     */
     private Pane createNode (Task task){
-        Pane node = new Node(task, NodeColor.GREEN, _taskModel.getTaskModelSize()).getStackPane();
-        node.setLayoutX(_nodePositionX.get(task));
-        node.setLayoutY(_nodePositionY.get(task));
+        Pane node = new Node(task, NodeColor.GREEN, taskModel.getTaskModelSize()).getStackPane();
+        node.setLayoutX(nodePositionX.get(task));
+        node.setLayoutY(nodePositionY.get(task));
         return node;
     }
 
+    /**
+     * Takes the Parent and Child node and create a line between them
+     * @param parent
+     * @param child
+     */
     private void createEdge (Pane parent, Pane child){
         Line edge = new Line();
 
@@ -62,22 +69,26 @@ public class NodeTreeGenerator {
         edge.setStroke(Color.AQUA);
 
         // Add the edge to parent pane
-        _graphicPane.getChildren().add(edge);
+        graphicPane.getChildren().add(edge);
     }
 
+    /**
+     * Render the Nodes and Edges on a Pane
+     * @return Pane
+     */
     public Pane getGraphicPane() {
         // Draw Nodes
-        for (Task task: _taskModel.getTasks()){
+        for (Task task: taskModel.getTasks()){
             // create a graphical node that is represented by a pane
             Pane taskNode = createNode(task);
             // Add the 'node' pane onto the tree pane.
-            _graphicPane.getChildren().add((taskNode));
+            graphicPane.getChildren().add((taskNode));
 
             taskMap.put(task.getName(), taskNode);
         }
 
         // Draw edges
-        for (Task task: _taskModel.getTasks()) {
+        for (Task task: taskModel.getTasks()) {
             if (task.getParents().size() > 0) {
                 Pane childNode = taskMap.get(task.getName());
                 List<Task> parentsInOrderByName = new ArrayList<>(task.getParents());
@@ -89,24 +100,25 @@ public class NodeTreeGenerator {
                 }
             }
         }
-        return _graphicPane;
+        return graphicPane;
     }
 
-
+    /**
+     * Calculates and set the X and Y position of each node to HashMaps
+     */
     public void makeNodePosition(){
         List<Task> scheduledTasks = new ArrayList<>();
         countLayers();
         int layer = 0;
-        while(scheduledTasks.size() != _taskModel.getTasks().size()){
-            List<Task> layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
-
+        while(scheduledTasks.size() != taskModel.getTasks().size()){
+            List<Task> layeredTasks = layerTasks(scheduledTasks, taskModel.getTasks());
+            // Divide each layer with number of nodes and place them accordingly
             int count = 0;
                 for (Task task : layeredTasks) {
-                    int y = (int) Math.ceil(layer * ((_tileHeight * 0.9)/_totalLayers));
-                    int x = (int) Math.ceil(_tileWidth/layeredTasks.size()/2 + count * _tileWidth/layeredTasks.size());
-                    _nodePositionY.put(task, y);
-                    _nodePositionX.put(task, x);
-
+                    int y = (int) Math.ceil(layer * ((tileHeight * 0.9)/ totalLayers));
+                    int x = (int) Math.ceil(tileWidth /layeredTasks.size()/2 + count * tileWidth /layeredTasks.size());
+                    nodePositionY.put(task, y);
+                    nodePositionX.put(task, x);
                     count++;
                 }
             layer++;
@@ -114,16 +126,27 @@ public class NodeTreeGenerator {
         }
     }
 
+    /**
+     * Count the depth of the input graph
+     */
     private void countLayers() {
         List<Task> scheduledTasks = new ArrayList<>();
-        _totalLayers = 0;
-        while(scheduledTasks.size() != _taskModel.getTasks().size()){
-            List<Task> layeredTasks = layerTasks(scheduledTasks, _taskModel.getTasks());
-            _totalLayers++;
+        totalLayers = 0;
+        while(scheduledTasks.size() != taskModel.getTasks().size()){
+            List<Task> layeredTasks = layerTasks(scheduledTasks, taskModel.getTasks());
+            totalLayers++;
             scheduledTasks.addAll(layeredTasks);
         }
     }
 
+    /**
+     * Takes list of currently placed tasks and all tasks to find out
+     * the next free list of nodes that should be place in the next depth
+     * of the input graph
+     * @param schedule
+     * @param allTasks
+     * @return List<Task>
+     */
     private List<Task> layerTasks(List<Task> schedule, List<Task> allTasks){
         List<Task> newLayerTasks = new ArrayList<>();
         // Create list of tasks which haven't been scheduled yet

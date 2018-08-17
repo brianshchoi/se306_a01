@@ -5,36 +5,41 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class MemoryGauge {
 
-    private Tile _memoryTile;
-    private Boolean _finished = false;
+    private Tile memoryTile;
+    private Boolean finished = false;
 
     MemoryGauge(Tile memoryTile){
-        this._memoryTile = memoryTile;
+        this.memoryTile = memoryTile;
         showMemoryUsage();
     }
 
+    /**
+     * Every 100ms it recalculates the current Java VM memory used
+     * and updates it of the GUI
+     */
     private void showMemoryUsage(){
         Timeline time = new Timeline();
         if(time!=null){
             time.stop();
         }
 
+        // every 100ms execute the frame
         time.setCycleCount(Timeline.INDEFINITE);
         KeyFrame frame = new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
+                // calculate the memory usage
                 Runtime runtime = Runtime.getRuntime();
                 double currentMemory = runtime.maxMemory() - runtime.freeMemory();
                 double toMegabytes = 1000000;
-                _memoryTile.setValue(currentMemory/toMegabytes);
-                if(_finished) {
-                    _finished = false;
+                memoryTile.setValue(currentMemory/toMegabytes);
+                if(finished) {
+                    finished = false;
                     time.stop();
                 }
             }
@@ -44,7 +49,7 @@ public class MemoryGauge {
     }
 
     public void stopMemoryUsageDisplay(){
-        _finished = true;
+        finished = true;
     }
 
 }
