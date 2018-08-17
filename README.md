@@ -3,9 +3,9 @@
 <h2>Team 2 - Fob Coders</h2>
 <table style="width: 100%; border: 1px solid black">
 <tr>
-    <td>NAME</td>
-    <td>GITHUB USERNAME</td>
-    <td>UPI</td>
+    <th>NAME</th>
+    <th>GITHUB USERNAME</th>
+    <th>UPI</th>
 </tr>
 <tr>
 <tr>
