@@ -127,10 +127,16 @@ public class CLI {
         }
     }
 
+    /**
+     * This method is called by the Visualizer wants it has initialized, so that the appropriate visual
+     * components can be then registered on the algorithm as listeners.
+     * @param listeners
+     */
     public static void visualizerReady(List<AlgorithmListener> listeners) {
         // Set algorithm
         IAlgorithm algorithm = new DFSAlgorithmFork(taskModel, numOfProcessors, algorithmCores);
 
+        // Register listeners with algorithm
         if (visualisation) {
             for (AlgorithmListener listener: listeners) {
                 ((AlgorithmObservable) algorithm).addAlgorithmListener(listener);

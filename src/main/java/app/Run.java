@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
+/**
+ * Convenience class used for testing algorithm without file IO
+ */
 public class Run {
     private static final String NODES_7 = "Nodes_7_OutTree.dot";
     private static final String NODES_8 = "Nodes_8_Random.dot";

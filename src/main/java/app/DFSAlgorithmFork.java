@@ -10,37 +10,59 @@ import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
+/**
+ * Our algorithm was based on pseudocode from the following source:
+ * Venugopalan, S., & Sinnen, O. (2016). Memory limited algorithms for optimal
+ task scheduling on parallel systems. Journal of Parallel and Distributed
+ Computing, 92, 35-49. doi:10.1016/j.jpdc.2016.03.003
+ */
+
+/**
+ * We attempted some pruning techniques described in slides by Oliver Sinnen:
+ * Advances in Optimal Task Scheduling
+ * Oliver Sinnen
+ */
 public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
     private TaskModel taskModel;
-    private IScheduler scheduler;
     private int numOfProcessors;
 
     private static ForkJoinPool pool;
-    private static ISchedule bestSchedule; // Stores current best schedule
+    private static ISchedule bestSchedule;
     private static int bound = Integer.MAX_VALUE;
 
-    private int numBranches = 0;
     private List<AlgorithmListener> listeners = new ArrayList<>();
     private int numberOfCores;
 
+    /**
+     * This class is used to parallelize our algorithm.  The non-parallelized version
+     * of our algorithm can be found in DFSAlgorithm.java.  This class has to nest
+     * the original class so that it can extend RecursiveAction and be passed to a
+     * ForkJoinPool instance.
+     * @param taskModel
+     * @param numOfProcessors
+     * @param numberOfCores
+     */
     public DFSAlgorithmFork(TaskModel taskModel, int numOfProcessors, int numberOfCores) {
         this.taskModel = taskModel;
         this.numOfProcessors = numOfProcessors;
         this.numberOfCores = numberOfCores;
-        scheduler = new Scheduler();
     }
 
     @Override
     public ISchedule run() {
-        int depth = 0; // Stores depth of schedule
+        int depth = 0;
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
         Set<Task> pTasks = new HashSet<>();
 
+        // Create thread pool
         pool = new ForkJoinPool(numberOfCores);
-        DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel, listeners);
-        pool.invoke(task);
 
+        // Create task and start on thread from thread pool
+        DFSAlgorithmTask task = new DFSAlgorithmTask(freeTasks, depth, schedule, pTasks, null, taskModel, listeners);
+        pool.invoke(task); // Start the task (the RecursiveAction) and wait for it to be done
+
+        // Inform GUI that algorithm is done
         fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
@@ -50,8 +72,8 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         return bestSchedule;
     }
 
+    // The DFS branch and bound algorithm.
     static class DFSAlgorithmTask extends RecursiveAction implements AlgorithmObservable {
-
         private List<Task> freeTasks;
         private int depth;
         private ISchedule schedule;
@@ -59,7 +81,6 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         private IProcessor previousProcessor;
         private Scheduler scheduler;
         private TaskModel taskModel;
-        private int numBranches = 0;
         private List<AlgorithmListener> listeners;
 
         public DFSAlgorithmTask(List<Task> freeTasks, int depth, ISchedule schedule, Set<Task> cleanPreviousTasks, IProcessor pProc, TaskModel taskModel, List<AlgorithmListener> listeners) {
@@ -73,17 +94,30 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
             scheduler = new Scheduler();
         }
 
+        // The task that gets scheduled on the thread.
         @Override
         protected void compute() {
             if (!freeTasks.isEmpty()) {
+                // Get previous tasks
                 Set<Task> previousTasks = new HashSet<>(cleanPreviousTasks);
+
+                // Iterate through each task in this layer of tasks
                 for (Task currentTask : freeTasks) {
+
+                    // If the task we are currently scheduling
+                    // has been already scheduled in the past after scheduling
+                    // some other task in this layer, then this task has already been
+                    // tried on all the processors.  There is no point trying this task
+                    // on all the processors again - we should just stick them on the same
+                    // processor as that is the only thing that can give us something different.
                     Set<IProcessor> processors = new HashSet<>();
                     if (previousTasks.contains(currentTask)) {
                         processors.add(previousProcessor);
                     } else {
-                        processors.addAll(schedule.getProcessors());
+                        processors.addAll(schedule.getProcessors()); // Otherwise we need to try it on all processors
                     }
+
+                    // Try scheduling task on each processor and add copy to set of unique schedules
                     Set<ISchedule> schedules = new HashSet<>();
                     for (IProcessor currentProcessor : processors) {
                         scheduler.schedule(currentTask, currentProcessor, schedule);
@@ -95,16 +129,24 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
                         scheduler.remove(currentTask, schedule);
                     }
 
+                    // Remember that we have scheduled this task.
+                    // When we come back from the recursive call and go onto the
+                    // next currentTask, we know from previousTasks that THIS currentTask has been
+                    // tried on all the processors.
                     previousTasks.add(currentTask);
 
-                   // System.out.println(pool.getActiveThreadCount());
+                    // Stores which tasks will be pursued recursively in parallel with each other
                     List<DFSAlgorithmTask> tasks = new ArrayList<>();
+
+                    // Go through each of the unique created schedules at this level
                     for (ISchedule currentSchedule : schedules) {
                         depth++;
                         fire(EventType.NUM_BRANCHES_CHANGED);
+
+                        // Check if bad schedule
                         if (cost(currentSchedule) < bound) {
                             int numTasks = taskModel.getTasks().size();
-                            if (depth == numTasks) {
+                            if (depth == numTasks) { // Update the best schedule
                                 bound = currentSchedule.getFinishTime();
                                 try {
                                     bestSchedule = (ISchedule) ((Schedule) currentSchedule).clone();
@@ -112,15 +154,21 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
                                 } catch (CloneNotSupportedException e){
                                     e.printStackTrace();
                                 }
-                            } else if (depth < numTasks) {
+                            } else if (depth < numTasks) { // Keep building the schedule
+                                // Set new list of tasks
                                 List<Task> newFreeTasks = getFreeTasks(currentSchedule, taskModel.getTasks());
+                                // Create next task
                                 DFSAlgorithmTask dTask = new DFSAlgorithmTask(newFreeTasks, depth, currentSchedule, previousTasks, currentSchedule.getProcessorOf(currentTask), taskModel, listeners);
+                                // Remember that we created this task
                                 tasks.add(dTask);
+                                // Do this task asynchronously
                                 dTask.fork();
                             }
                         }
+                        // Backtracking
                         depth--;
                     }
+                    // Once all the baby schedules have been done, join the tasks together
                     for (DFSAlgorithmTask task : tasks){
                         task.join();
                     }
@@ -146,6 +194,7 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
             this.listeners.remove(listener);
         }
 
+        // Fire events that need to be fired while the algorithm is running
         @Override
         public void fire(EventType eventType) {
             switch (eventType) {
@@ -190,6 +239,7 @@ public class DFSAlgorithmFork implements IAlgorithm, AlgorithmObservable {
         listeners.remove(listener);
     }
 
+    // Fire events that need to be scheduled once the algorithm is done
     @Override
     public void fire(AlgorithmObservable.EventType eventType) {
         if (!CLI.isVisualisation()) return;

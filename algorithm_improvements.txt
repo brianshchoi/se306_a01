@@ -1,4 +1,0 @@
-- node identity
-- bubbling
-- removing mirrors locally
-- removing identical schedules (global)

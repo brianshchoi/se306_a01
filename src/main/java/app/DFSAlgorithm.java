@@ -8,17 +8,37 @@ import view.listeners.AlgorithmObservable;
 
 import java.util.*;
 
+/**
+ * This was our initial algorithm we made before we parallelized it.
+ * We have kept this class even though it is not currently used by the CLI.
+ * This is because it is a convenient class to run tests on where it can be
+ * isolated from the parallelization code (and is easier to modify for experimenting
+ * with optimizations).
+ */
+
+/**
+ * Our algorithm was based on pseudocode from the following source:
+ * Venugopalan, S., & Sinnen, O. (2016). Memory limited algorithms for optimal
+ task scheduling on parallel systems. Journal of Parallel and Distributed
+ Computing, 92, 35-49. doi:10.1016/j.jpdc.2016.03.003
+ */
+
+/**
+ * We attempted some pruning techniques described in slides by Oliver Sinnen:
+ * Advances in Optimal Task Scheduling
+ * Oliver Sinnen
+ */
 public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     private TaskModel taskModel;
     private IScheduler scheduler;
     private int numOfProcessors;
-    private int recursionLevel = 0;
+    private int recursionLevel = 0; // debugging
 
     private int bound = Integer.MAX_VALUE; // Stores current best finish time
     private ISchedule bestSchedule; // Stores current best schedule
 
-    private int numBranches = 0;
+    private int numBranches = 0; // debugging
     private List<AlgorithmListener> listeners = new ArrayList<>();
 
     public DFSAlgorithm(TaskModel taskModel, int numOfProcessors) {
@@ -29,12 +49,14 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     @Override
     public ISchedule run() {
-        int depth = 0; // Stores depth of schedule
+        int depth = 0;
+        // Create a blank schedule
         Schedule schedule = new Schedule(numOfProcessors);
         List<Task> freeTasks = getFreeTasks(schedule, taskModel.getTasks());
-        Set<Task> pTasks = new HashSet<>();
+        Set<Task> previousTasks = new HashSet<>();
 
-        run(freeTasks, depth, schedule, pTasks, null);
+        // Make initial call
+        run(freeTasks, depth, schedule, previousTasks, null);
         fire(EventType.ALGORTHIM_FINISHED);
         return bestSchedule;
     }
@@ -44,6 +66,15 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
         return bestSchedule;
     }
 
+    /**
+     * The depth-first-search-branch-and-bound algorithm.
+     * Recursively creates a schedule tree, with pruning, to find the optimal schedule
+     * @param freeTasks
+     * @param depth
+     * @param schedule
+     * @param cleanPreviousTasks
+     * @param previousProcessor
+     */
     private void run(List<Task> freeTasks, int depth, ISchedule schedule, Set<Task> cleanPreviousTasks, IProcessor previousProcessor) {
         recursionLevel++;
 
@@ -151,9 +182,10 @@ public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
         listeners.remove(listener);
     }
 
+    // Fire an event to GUI listeners
     @Override
     public void fire(EventType eventType) {
-        if (!CLI.isVisualisation()) return;
+        if (!CLI.isVisualisation()) return; // ignore if user didn't want visualization
         switch (eventType) {
             case BEST_SCHEDULE_UPDATED:
                 for (AlgorithmListener listener : listeners) {
