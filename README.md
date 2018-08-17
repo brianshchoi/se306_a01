@@ -58,13 +58,12 @@
 </p>
 <code>java -jar schedular.jar INPUT.dot P [OPTION]</code>
 <br/>
-<code>INPUT.dot is an input file</code>
-<code>P is the number of processors to schedule the tasks on</code>
-<br/>
-<code>Options:</code>
-<code>-o OUTPUT names the file as OUTPUT (by default it is INPUT-output.dot)</code>
-<code>-v runs the visualizer</code>
-<code>-p N causes the algorithm to be parallelised on N cores (default is sequential)</code>
+<code>INPUT.dot is an input file</code><br/>
+<code>P is the number of processors to schedule the tasks on</code><br/>
+<code>Options:</code><br/>
+<code>-o OUTPUT names the file as OUTPUT (by default it is INPUT-output.dot)</code><br/>
+<code>-v runs the visualizer</code><br/>
+<code>-p N causes the algorithm to be parallelised on N cores (default is sequential)</code><br/>
 <br/>
 <p>
     <b>To download and build the project:</b>
