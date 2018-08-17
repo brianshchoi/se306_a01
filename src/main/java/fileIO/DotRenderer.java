@@ -7,10 +7,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Helper class used to render DOT files
+ */
 public class DotRenderer {
-
     private static final String NEWLINE = String.format("%n");
-
     private static final String TAB = "\t";
 
     protected DotRenderer(){

@@ -11,6 +11,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility object used to transform an ISchedule instance
+ * into a DOT file.
+ */
 public class DotGraph {
 
     private static final String OUTPUT_PREFIX = "output";
@@ -59,7 +63,6 @@ public class DotGraph {
 
         // Append closing brace
         output.append(DotRenderer.closeGraph());
-
         writeDotFile(output.toString());
     }
 

@@ -14,6 +14,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+/**
+ * Reads in the DOT file and creates a TaskModel object.
+ */
 public class FileParser {
     private FileInputStream fileInputStream;
     private TaskModel taskModel;
@@ -50,6 +53,8 @@ public class FileParser {
             taskModel.addDependency(parent, child, cost);
         }
 
+        // Compute the bottom levels for all the tasks
+        // (used for cost function later)
         for (Task task: taskModel.getTasks()) {
             if (task.getParents().size() == 0) {
                 taskModel.computeBottomLevels(task);
