@@ -15,6 +15,19 @@ import java.util.*;
  * isolated from the parallelization code (and is easier to modify for experimenting
  * with optimizations).
  */
+
+/**
+ * Our algorithm was based on pseudocode from the following source:
+ * Venugopalan, S., & Sinnen, O. (2016). Memory limited algorithms for optimal
+ task scheduling on parallel systems. Journal of Parallel and Distributed
+ Computing, 92, 35-49. doi:10.1016/j.jpdc.2016.03.003
+ */
+
+/**
+ * We attempted some pruning techniques described in slides by Oliver Sinnen:
+ * Advances in Optimal Task Scheduling
+ * Oliver Sinnen
+ */
 public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     private TaskModel taskModel;
