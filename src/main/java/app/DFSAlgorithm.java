@@ -8,6 +8,13 @@ import view.listeners.AlgorithmObservable;
 
 import java.util.*;
 
+/**
+ * This was our initial algorithm we made before we parallelized it.
+ * We have kept this class even though it is not currently used by the CLI.
+ * This is because it is a convenient class to run tests on where it can be
+ * isolated from the parallelization code (and is easier to modify for experimenting
+ * with optimizations).
+ */
 public class DFSAlgorithm implements IAlgorithm, AlgorithmObservable {
 
     private TaskModel taskModel;
