@@ -56,7 +56,7 @@
     To run the project, download the jar which is provided under releases.  Make sure that your input DOT file is in the same
     directory in the jar, and open up a terminal in this directory.  Execute the jar using the following format:
 </p>
-<code>java -jar schedular.jar INPUT.dot P [OPTION]</code>
+<code>java -jar schedular.jar INPUT.dot P [OPTION]</code><br/>
 <br/>
 <code>INPUT.dot is an input file</code><br/>
 <code>P is the number of processors to schedule the tasks on</code><br/>
