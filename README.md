@@ -70,7 +70,8 @@
 </p>
 <ol>
     <li>Clone/download this repository</li>
-    <li>Run the following command:</li>
+    <li>Make sure you have set a system environment variable called JAVA_HOME which points to the JDK directory on your system</li>
+    <li>Run the following command in a terminal which is in the se306_a01 repository folder:</li>
     <code>./gradlew build</code> (for Linux)
     <br/>
     <code>gradlew.bat build</code> (for Windows)
