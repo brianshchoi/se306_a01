@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
 
+/**
+ * The tile which shows memory usage.
+ */
 public class MemoryGauge {
 
     private Tile memoryTile;

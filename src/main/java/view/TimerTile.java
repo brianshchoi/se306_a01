@@ -12,6 +12,9 @@ import javafx.util.Duration;
 import scheduleModel.ISchedule;
 import view.listeners.AlgorithmListener;
 
+/**
+ * The tile which shows the time elapsed
+ */
 public class TimerTile implements AlgorithmListener {
 
     private Label time;

@@ -7,8 +7,10 @@ import javafx.util.Duration;
 import scheduleModel.ISchedule;
 import view.listeners.AlgorithmListener;
 
+/**
+ * The tile which shows the number of branches
+ */
 public class BranchTile implements AlgorithmListener {
-
     private int numBranches;
 
     /**

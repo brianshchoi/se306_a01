@@ -1,7 +1,10 @@
 package view.listeners;
 
+/**
+ * Observable in the observer pattern -
+ * the Algorithm to be observed and register listeners with.
+ */
 public interface AlgorithmObservable {
-
     enum EventType {
         BEST_SCHEDULE_UPDATED,
         ALGORTHIM_FINISHED,
@@ -9,7 +12,7 @@ public interface AlgorithmObservable {
     }
 
     /**
-     * add listener
+     * Add listener
      * @param listener
      */
     void addAlgorithmListener(AlgorithmListener listener);
@@ -21,7 +24,7 @@ public interface AlgorithmObservable {
     void removeAlgorithmListener(AlgorithmListener listener);
 
     /**
-     * Notify the event
+     * Fire an event
      * @param eventType
      */
     void fire(EventType eventType);

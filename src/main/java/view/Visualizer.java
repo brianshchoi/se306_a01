@@ -22,6 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * This is the main JavaFX class that builds the visualizer GUI,
+ * starts it, and handles some events (but not all).  We used
+ * TilesFX a lot here.  For more information on TilesFX see:
+ * https://github.com/HanSolo/tilesfx
+ */
 public class Visualizer extends Application implements AlgorithmListener {
     // General GUI size
     private static final double firstLayerHeight = 325;
@@ -70,8 +76,6 @@ public class Visualizer extends Application implements AlgorithmListener {
                 .title("Time Elapsed")
                 .textSize(Tile.TextSize.BIGGER)
                 .graphic(timerTileMaker.makeTimer())
-                /*.description("0.000s")
-                .descriptionAlignment(Pos.TOP_RIGHT)*/
                 .build();
         listeners.add(timerTileMaker);
 
