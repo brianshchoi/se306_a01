@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/* This class passes in the necessary information to the GanttChart to render the chart.
+* It finds the number of processors, what tasks are on which processor  and the color
+* to be rendered for the processor. */
 public class GanttChartScheduler {
 
     private List<IProcessor> processors;

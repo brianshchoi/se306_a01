@@ -7,6 +7,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import taskModel.Task;
 
+/* This class creates the individual tasks that are rendered on the input graph.
+* Each task has it's weight and it's task name. It is also rendered a certain colour
+* depending on which processor it is currently scheduled to.*/
 public class Node {
 
     // Fields
