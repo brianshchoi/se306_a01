@@ -68,7 +68,6 @@ public class CLI {
             return;
         }
 
-
         // Get mandatory arguments
         inputFilename = argsList.get(0);
         try {
@@ -104,7 +103,6 @@ public class CLI {
         } else {
             outputFilename = inputFilename.replace(".dot", "") + "-output.dot";
         }
-
 
         // Create file parser
         FileParser fileParser = null;
@@ -156,6 +154,10 @@ public class CLI {
         System.out.println(outputFilename + " has been saved.");
     }
 
+    /**
+     * For other parties to know if visualization is turned on.
+     * @return true if visualization is on
+     */
     public static boolean isVisualisation() {
         return visualisation;
     }
